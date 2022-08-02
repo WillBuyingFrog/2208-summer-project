@@ -1,84 +1,92 @@
 <template>
-  <el-container
-      class="register"
-      :style="{boxShadow: `var(--el-box-shadow)`}">
-    <el-aside class="register-left-pane" width="250px">
-      <div class="to-home">
-        <p @click="goHome">返回首页</p>
-      </div>
-    </el-aside>
-    <el-main class="register-right-pane">
-      <div class="register-fill">
-        <div class="register-box">
-          <div class="form">
-            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
-              <el-form-item prop="username">
-                <el-input
-                    placeholder="username"
-                    type="username"
-                    v-model="ruleForm.username"
-                    autocomplete="off"
-                    @keyup.enter="register('ruleForm')"
-                    class="register-input"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="realName">
-                <el-input
-                    placeholder="real name"
-                    type="realName"
-                    v-model="ruleForm.realName"
-                    autocomplete="off"
-                    @keyup.enter="register('ruleForm')"
-                    class="register-input"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="pass">
-                <el-input
-                    placeholder="password"
-                    type="password"
-                    v-model="ruleForm.pass"
-                    autocomplete="off"
-                    @keyup.enter="register('ruleForm')"
-                    class="register-input"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="checkPass">
-                <el-input
-                    placeholder="confirm password"
-                    type="password"
-                    v-model="ruleForm.checkPass"
-                    autocomplete="off"
-                    @keyup.enter="register('ruleForm')"
-                    class="register-input"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="email">
-                <el-input
-                    placeholder="email"
-                    type="email"
-                    v-model="ruleForm.email"
-                    autocomplete="off"
-                    @keyup.enter="register('ruleForm')"
-                    class="register-input"
-                ></el-input>
-              </el-form-item>
-              <el-form-item class="register-btn">
-                <el-button color="#626aef" :dark="isDark" plain @click="register('ruleForm')">注 册</el-button>
-              </el-form-item>
-            </el-form>
-            <div class="to-login">
-              <p @click="gotoLogin">去登录></p>
+  <div class="register-bg">
+    <el-container
+        class="register"
+        :style="{boxShadow: `var(--el-box-shadow)`}">
+      <el-aside class="register-left-pane" width="250px">
+        <div class="to-home">
+          <p @click="goHome">返回首页</p>
+        </div>
+      </el-aside>
+      <el-main class="register-right-pane">
+        <div class="register-fill">
+          <div class="register-box">
+            <div class="form">
+              <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                <el-form-item prop="username">
+                  <el-input
+                      placeholder="username"
+                      type="username"
+                      v-model="ruleForm.username"
+                      autocomplete="off"
+                      @keyup.enter="register('ruleForm')"
+                      class="register-input"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item prop="realName">
+                  <el-input
+                      placeholder="real name"
+                      type="realName"
+                      v-model="ruleForm.realName"
+                      autocomplete="off"
+                      @keyup.enter="register('ruleForm')"
+                      class="register-input"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item prop="pass">
+                  <el-input
+                      placeholder="password"
+                      type="password"
+                      v-model="ruleForm.pass"
+                      autocomplete="off"
+                      @keyup.enter="register('ruleForm')"
+                      class="register-input"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item prop="checkPass">
+                  <el-input
+                      placeholder="confirm password"
+                      type="password"
+                      v-model="ruleForm.checkPass"
+                      autocomplete="off"
+                      @keyup.enter="register('ruleForm')"
+                      class="register-input"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item prop="email">
+                  <el-input
+                      placeholder="email"
+                      type="email"
+                      v-model="ruleForm.email"
+                      autocomplete="off"
+                      @keyup.enter="register('ruleForm')"
+                      class="register-input"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item class="register-btn">
+                  <el-button color="#626aef" :dark="isDark" plain @click="register('ruleForm')">注 册</el-button>
+                </el-form-item>
+              </el-form>
+              <div class="to-login">
+                <p @click="gotoLogin">去登录></p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </el-main>
-  </el-container>
-
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 
 <style scoped>
+.register-bg {
+  background-image: url("../../assets/images/sign-bg.jpg");
+  background-position:center;
+  background-size: 100% auto;
+  min-height: 800px;
+  overflow: hidden;
+}
 .register {
   margin: 130px auto auto;
   width: 595px;
@@ -93,7 +101,8 @@
   overflow: hidden;
 }
 .register-left-pane {
-  background-image: url("../../assets/images/homepage_bk.png");
+  background-image: url("../../assets/images/sign-box-bg.jpg");
+  background-size: contain;
   background-repeat: repeat-y;
   overflow: revert;
   border-radius: 20px 0px 0px 20px;
@@ -138,7 +147,7 @@
   color:#999;
   cursor: pointer;
   float: right;
-  margin: 362px 170px 0 0;
+  margin: 367px 180px 0 0;
   text-shadow: 3px 3px 10px #bebebe;
 }
 .to-home:hover {
@@ -151,7 +160,7 @@
   color:#999;
   cursor: pointer;
   float: right;
-  margin-right: 25px;
+  margin: 5px 15px 0 0;
   text-shadow: 3px 3px 10px #bebebe;
 }
 .to-login:hover {
