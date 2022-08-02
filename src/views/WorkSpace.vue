@@ -112,10 +112,19 @@ export default {
 </script>
 
 <style scoped>
+.workspace {
+  background-image: url("../assets/images/homepage_bk.png");
+  background-repeat: repeat-y;
+  min-height: 800px;
+  overflow: hidden;
+  background-position:center;
+  background-size: 100% auto;
+}
 .workspace .el-header{
     height: 67px;
     padding: 0;
     border-bottom: 1px solid #EFEFEF;
+    background-color: rgba(255, 255, 255, 0.62);
 }
 .logo {
     padding-top: 15px;
@@ -127,7 +136,7 @@ export default {
 }
 .el-card {
     margin: 30px 30px 0 30px;
-    background-color: rgba(242, 242, 242, 0.62);
+    background-color: rgba(242, 242, 242, 0.72);
     border-radius: 1ch;
     box-shadow: 14px 15px 19px -15px #000;
 }
@@ -135,13 +144,13 @@ export default {
     margin-left: 15px;
 }
 .title{
-    width: 120px;
+    width: 110px;
     margin-left: 50px;
-    margin-top: 25px;
-    padding-bottom: 10px;
+    margin-top: 20px;
+    padding-bottom: 5px;
     font-size: 22px;
     color: rgb(64,158,255);
-    border-bottom:3px solid #1390ca;
+    border-bottom:4px solid  rgb(64,158,255);
     font-weight: 600;
     }
 .head{
