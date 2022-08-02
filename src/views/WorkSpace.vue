@@ -5,7 +5,7 @@
         <el-row>
             <el-col :span="1">
                 <div>
-                    <img class="logo" src="..\assets\logo.png" height="45">
+                    <img class="logo" src="..\assets\images\logo.png" height="45">
                 </div>
             </el-col>         
             <el-col :span="4">
@@ -154,7 +154,7 @@ export default {
 
 <style scoped>
 .workspace {
-  background-image: url("../assets/images/homepage_bk.png");
+  background-image: url("../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
   overflow: hidden;
