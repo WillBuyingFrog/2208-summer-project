@@ -1,5 +1,34 @@
 <template>
-    <div class="project"></div>
+    <div class="project">
+        <el-container>
+        <el-header>Header</el-header>
+        <el-container>
+            <el-aside width="200px">
+        <h5 class="mb-2">Default colors</h5>
+        <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+        >
+            <el-menu-item index="1">
+            <el-icon><icon-menu /></el-icon>
+            <span>Navigator Two</span>
+            </el-menu-item>
+            <el-menu-item index="2" disabled>
+            <el-icon><document /></el-icon>
+            <span>Navigator Three</span>
+            </el-menu-item>
+            <el-menu-item index="3">
+            <el-icon><setting /></el-icon>
+            <span>Navigator Four</span>
+            </el-menu-item>
+        </el-menu>
+    </el-aside>
+            <el-main>Main</el-main>
+        </el-container>
+        </el-container>
+    </div>
 </template>
 
 <script>
@@ -10,13 +39,6 @@ export default {
         return {
             dialogVisible: false,
             firstChar: "S",//用户名首字母
-            team:{
-                team_name: "团队名",
-                leader: "someone",
-                teammate:"123等",
-                create_time: "2022/08/02 15:28",
-                team_info: "小学期乱杀"
-            },
             proNum: 4,//项目总数
             newone:{
                 name: "",
@@ -33,3 +55,9 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.project .el-header{
+    height: 60px;
+}
+</style>
