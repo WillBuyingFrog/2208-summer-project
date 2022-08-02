@@ -1,0 +1,54 @@
+<template >
+    <div style="background-color:rgba(250, 250, 250, 0.9);">
+        <el-row >
+            <el-col :span="4">
+            <span style="float:left"> <img src="../assets/images/inkbook.jpg" height="60"/></span>    
+            </el-col>
+            <el-col :span="6">
+                <el-menu
+                    :default-active="2"
+                    class="el-menu-demo"
+                    style="background:unset"
+                    mode="horizontal"
+                    router>
+                    <el-menu-item index="0">
+                        <el-icon><DataLine/></el-icon>
+                        <span style="font-size: 16px;">项目管理</span>
+                    </el-menu-item>
+                    <el-menu-item index="/team" style="margin-left:80px">
+                        <el-icon><Coordinate/></el-icon>
+                        <span style="font-size: 16px;">团队管理</span>
+                    </el-menu-item>
+                </el-menu>
+            </el-col>
+            <el-col :span="2" :offset="7">
+                <el-menu
+                    class="space"
+                    style="background:unset;"
+                    mode="horizontal"
+                    router>
+                    <el-menu-item index="0" style="padding:0 0 ;">
+                        <el-icon><Menu/></el-icon>
+                        <span style="font-size: 16px;">工作空间</span>
+                    </el-menu-item>
+                </el-menu>    
+            </el-col>
+            <el-col :span="1" :offset="1">
+                 <el-badge :value="12" class="item" style="margin-top:15px">
+                    <el-button icon="ChatDotRound">消息</el-button>
+                </el-badge>
+            </el-col>
+            <el-col :span="1">
+                <el-avatar :size="36" :src="circleUrl" style="margin-top:12px" />
+            </el-col>
+        </el-row>
+    </div>
+</template>
+
+
+<style scoped>
+
+  .space{
+    border-bottom: 0;
+  }
+  </style>
