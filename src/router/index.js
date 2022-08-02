@@ -5,6 +5,15 @@ const routes = [
         path: '/',
         name: 'Homepage',
         component: () => import('../views/homepage/HomePage')
+    },{
+        path: '/team',
+        name: 'TeamInfo',
+        component: () => import('../views/TeamManage/TeamInfo.vue')
+    },{
+        path: '/team/member',
+        name: 'MemberInfo',
+        component: () => import('../views/TeamManage/MemberInfo.vue')
+
     },
     {
         path: '/workspace',
@@ -33,6 +42,12 @@ const routes = [
         path: '/allproject',
         name: '/allproject',
         component: () => import('../views/AllProject'),
+    },
+    {
+        path: '/project',
+        name: 'project',
+        props: true,
+        component: () => import('../views/Project'),
     }
 
 ]

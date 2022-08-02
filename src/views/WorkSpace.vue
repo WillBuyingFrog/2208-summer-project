@@ -5,7 +5,7 @@
         <el-row>
             <el-col :span="1">
                 <div>
-                    <img class="logo" src="..\assets\images\logo.png" height="45">
+                    <img class="logo" src="..\assets\images\logo.png" height="60">
                 </div>
             </el-col>         
             <el-col :span="4">
@@ -113,7 +113,7 @@
         <template #footer>
         <span class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newTeam">确定</el-button>
+            <el-button type="primary" @click="newTeam">立即创建</el-button>
         </span>
         </template>
     </el-dialog>
@@ -165,10 +165,9 @@ export default {
     height: 67px;
     padding: 0;
     border-bottom: 1px solid #EFEFEF;
-    background-color: rgba(255, 255, 255, 0.62);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 .logo {
-    padding-top: 15px;
     padding-left: 10px;
 }
 .el-space {
