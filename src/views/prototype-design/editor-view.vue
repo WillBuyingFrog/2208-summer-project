@@ -1,3 +1,18 @@
+<template>
+  <div :class="`ds-editor ${this.parentId ? 'nest-editor' : 'root-editor'}`">
+    <div class="ds-editor-canvas" ref="editor">
+      <CellWrapper v-for="item in value"
+                   :item="item"
+                   :key="item.id"
+                   />
+      <slot>
+      </slot>
+      <PluginDrop :parentId="this.parentId" :length="this.value.length" />
+    </div>
+  </div>
+</template>
+
+
 <script>
 import {computed} from 'vue'
 
@@ -7,6 +22,7 @@ import CellWrapper from "@/views/prototype-design/cell-wrapper"
 export default {
   name: "editor-view",
   components: {
+    CellWrapper,
     PluginDrop
   },
   props:{
@@ -25,23 +41,6 @@ export default {
   },
   methods: {
       // 由于Vue3特性，原版本中唯一的methods已空
-  },
-
-  render(){
-    return (
-        <div class={`ds-editor ${this.parentId ? 'nest-editor' : 'root-editor'}`}>
-          <div class="ds-editor-canvas" ref="editor">
-            {
-              this.value.map((item) => {
-                return <CellWrapper item={item} key={item.id}/>
-              })
-            }
-            {/**Inject Plugins here**/}
-            {this.$slots.default}
-            <PluginDrop parentId={this.parentId} length={this.value.length}/>
-          </div>
-        </div>
-    )
   }
 }
 </script>

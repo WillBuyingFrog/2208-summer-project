@@ -6,6 +6,10 @@ import {EVENT_COMPONENT_ADD} from "@/views/prototype-design/event-enum";
 
 export default {
   name: "plugin-drop",
+  props: {
+    length: Number,
+    parentId: String,
+  },
   inject: ['editorDOM'],
   methods: {
     handleDropOver(e) {
