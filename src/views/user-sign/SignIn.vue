@@ -49,7 +49,7 @@
 
 <style scoped>
 .login-bg {
-  background-image: url("../../assets/images/sign-bg.png");
+  background-image: url("../../assets/images/sign-bg.jpg");
   background-position:center;
   background-size: 100% auto;
   min-height: 800px;
@@ -69,7 +69,7 @@
   overflow: hidden;
 }
 .login-left-pane {
-  background-image: url("../../assets/images/sign-box-bg.png");
+  background-image: url("../../assets/images/sign-box-bg.jpg");
   background-size: contain;
   background-repeat: repeat-y;
   overflow: revert;
