@@ -1,5 +1,5 @@
 <template>
-  <div class="workspace">
+  <div class="allproject">
     <el-container>
       <el-header>
       </el-header>
@@ -9,7 +9,7 @@
             <el-tab-pane label="回收站" name="1"></el-tab-pane>
         </el-tabs>
         <el-space wrap size="large">
-            <el-card :key="i" class="box-card" style="width: 300px">
+            <el-card :key="i" class="box-card" style="width: 300px" v-if="status==0">
                 <template #header>
                     <div class="card-header">
                         <span class="pname">
@@ -30,40 +30,46 @@
                 <template #header>
                     <div class="card-header">
                         <span class="pname">
-                            <User style="width: 0.8em; height: 0.8em;"/>
-                            <User style="width: 0.5em; height: 0.5em; margin-left:-6px"/>
-                            {{}}
+                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
+                            {{}}项目名
                         </span>
-                    <el-button class="button" type="primary" plain>进入团队</el-button>
+                    <el-button class="button" type="primary" plain v-if="status==0">进入项目</el-button>
                     <div class="clear"></div>
                     </div>
                 </template>
                 <div class="text item">
-                    <el-form :model="project" label-width="120px" label-position="left">
+                    <el-form :model="project" label-width="140px" label-position="left">
                         <el-form-item>
                             <template #label>  
-                                <div class="label1"><el-icon><Avatar /></el-icon> 组长:</div>
+                                <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                             </template>
                             <span>{{}}</span>
                         </el-form-item>
-                        <el-form-item>
-                            <template #label>  
-                                <div class="label1"><el-icon><User /></el-icon> 成员:</div>
-                            </template>
-                            <span>{{}}</span>
-                        </el-form-item>      
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                             </template>
                             <span>{{}}</span>
+                        </el-form-item>      
+                        <el-form-item>
+                            <template #label>  
+                                <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
+                            </template>
+                            <span>2022/08/02 21:46{{}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>  
-                                <div class="label1"><el-icon><InfoFilled /></el-icon> 团队简介:</div>
+                                <div class="label1"><el-icon><User /></el-icon> 最后编辑者:</div>
                             </template>
                             <span>{{}}</span>
-                        </el-form-item>                     
+                        </el-form-item>   
+                        <div class="button1" v-if="status == 0">
+                            <el-button type="primary" @click="rename">重命名</el-button>
+                            <el-button type="danger" @click="deletePro">删&nbsp;除</el-button> 
+                        </div>  
+                        <div class="button1" v-if="status == 1">
+                            <el-button type="danger" @click="recover">恢&nbsp;复</el-button>    
+                        </div>                                      
                     </el-form>
                 </div>
             </el-card>
@@ -71,6 +77,30 @@
         </el-space>
       </el-main>
     </el-container>
+    <el-dialog
+        v-model="dialogVisible"
+        width="35%">
+        <template #header>
+                    <div class="card-header">
+                        <span class="title" style="margin-left: 10px; color: black">
+                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
+                            新建项目
+                        </span>
+                    <div class="clear"></div>
+                    </div>
+                </template>
+        <el-form :model="newone" label-width="80px">
+            <el-form-item label="项目名称">
+                <el-input :v-model="name"></el-input>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+        <span class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="newProject">立即创建</el-button>
+        </span>
+        </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -80,16 +110,28 @@ export default {
     name: "allProject",
     data() {
         return {
+            dialogVisible: false,
             status: "0",
             proNum: 4,
             project:{},
-            newpro:{
-
+            newone:{
+                name: "",
             }
         }
     },
     methods: {
-        
+        newProject(){
+            this.dialogVisible = false;
+        },
+        rename(){
+
+        },
+        deletePro(){
+
+        },
+        recover(){
+
+        }
     }
 
 }
@@ -97,7 +139,7 @@ export default {
 </script>
 
 <style scoped>
-.workspace {
+.allproject {
   background-image: url("../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
@@ -105,7 +147,7 @@ export default {
   background-position:center;
   background-size: 100% auto;
 }
-.workspace .el-header{
+.allproject .el-header{
     height: 67px;
     padding: 0;
     border-bottom: 1px solid #EFEFEF;
@@ -130,7 +172,7 @@ export default {
     box-shadow: 14px 15px 19px -15px #000;
 }
 .el-card .el-form{
-    margin-left: 15px;
+    margin-left: 10px;
 }
 .el-dialog .el-form{
     margin-left:50px;
@@ -138,6 +180,11 @@ export default {
 }
 .dialog-footer {
     float: calc();
+}
+.button1 .el-button{
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 20px;
 }
 .title{
     width: 120px;
@@ -179,13 +226,13 @@ export default {
     float: right;
 }
 .new .el-button{
-    margin-top:20px;
-    margin-bottom: 30px;
-    height: 120px;
-    width: 120px;
+    margin-top: 25px;
+    margin-bottom: 37px;
+    height: 150px;
+    width: 150px;
 }
 
 .hint{
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 </style>

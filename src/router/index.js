@@ -33,6 +33,12 @@ const routes = [
         path: '/allproject',
         name: '/allproject',
         component: () => import('../views/AllProject'),
+    },
+    {
+        path: '/project',
+        name: 'project',
+        props: true,
+        component: () => import('../views/Project'),
     }
 
 ]
