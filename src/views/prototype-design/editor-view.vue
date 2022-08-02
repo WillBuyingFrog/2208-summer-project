@@ -50,8 +50,12 @@ export default {
 .ds-editor{
   color: black;
 }
+.root-editor{
+  min-height: 60vh;
+}
 .root-editor > .ds-editor-canvas {
   transform: scale(1);
   transform-origin: top left;
+  min-height: 60vh;
 }
 </style>

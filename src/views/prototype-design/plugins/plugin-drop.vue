@@ -6,7 +6,7 @@ import {EVENT_COMPONENT_ADD} from "@/views/prototype-design/event-enum";
 
 export default {
   name: "plugin-drop",
-  inject: ['editorDOM', 'test2'],
+  inject: ['editorDOM'],
   methods: {
     handleDropOver(e) {
       e.preventDefault()
@@ -22,6 +22,7 @@ export default {
       })
     },
     async handleDrop(e) {
+      console.log("Hello!")
       e.preventDefault()
       e.stopPropagation()
       // file drop
@@ -30,12 +31,13 @@ export default {
       let comstr = ''
       // 该功能给所有编辑视图提供，包括嵌套的编辑视图。
       // App.vue中添加到<EditorView></EditorView> 的插件仅提供给应用的顶层编辑视图
-      let rect = this.editorDOM.getBoundingClientRect()
+      let rect = this.editorDOM.value.getBoundingClientRect()
       let coords = {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       }
-
+      console.log("Full dataTransfer:")
+      console.log(e.dataTransfer)
       if (files.length > 0) {
         for (let index = 0; index < files.length; index++) {
           const element = files[index]
@@ -49,6 +51,7 @@ export default {
           })
         }
       } else if ((comstr = e.dataTransfer.getData('text/component'))) {
+        console.log("Detected text/component!")
         let com = JSON.parse(comstr)
         com = { ...com, ...coords }
 
@@ -60,8 +63,8 @@ export default {
   mounted(){
     let element = this.editorDOM.value
     console.log(element)
-    element.addEventListener('dragover')
-    element.addEventListener('drop')
+    element.addEventListener('dragover', this.handleDropOver, false)
+    element.addEventListener('drop', this.handleDrop, false)
   },
   render(){
     return (

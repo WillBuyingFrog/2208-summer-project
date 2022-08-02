@@ -111,7 +111,7 @@ export default {
       } else {
         controls = this.controls.concat(newComponents)
       }
-
+      console.log(controls)
       this.setControls(controls)
 
       // 默认选中最后一个
