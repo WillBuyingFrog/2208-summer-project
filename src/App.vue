@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <router-link to="/homepage">to homepage</router-link>
     <router-view></router-view>
 <!--    <el-container style="padding: 2vh;">-->
 <!--      <el-header style="font-size: 24px">-->
