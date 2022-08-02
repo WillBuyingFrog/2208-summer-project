@@ -28,6 +28,11 @@ const routes = [
             requireNotAuth: true,
             noNav: true
         }
+    },
+    {
+        path: '/allproject',
+        name: '/allproject',
+        component: () => import('../views/AllProject'),
     }
 
 ]

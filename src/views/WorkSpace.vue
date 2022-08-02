@@ -21,6 +21,24 @@
       </el-header>
       <el-main>
         <el-space wrap size="large">
+            <el-card :key="i" class="box-card" style="width: 300px">
+                <template #header>
+                    <div class="card-header">
+                        <span class="pname">
+                            <User style="width: 0.8em; height: 0.8em;"/>
+                            <User style="width: 0.5em; height: 0.5em; margin-left:-6px"/>
+                            新建团队
+                        </span>
+                    <div class="clear"></div>
+                    </div>
+                </template>
+                <div class="new">
+                    <el-button @click="dialogVisible = true">
+                        <div><Plus style="width: 1em; height: 1em;"/></div>
+                    </el-button>
+                </div>
+                <div class="hint">快来创建你的专属团队吧！</div>
+            </el-card>
             <el-card v-for="i in proNum" :key="i" class="box-card" style="width: 300px">
                 <template #header>
                     <div class="card-header">
@@ -66,10 +84,16 @@
                     </el-form>
                 </div>
             </el-card>
-            <el-card :key="i" class="box-card" style="width: 300px">
-                <template #header>
+            <div class="clear"></div>
+        </el-space>
+      </el-main>
+    </el-container>
+    <el-dialog
+        v-model="dialogVisible"
+        width="35%">
+        <template #header>
                     <div class="card-header">
-                        <span class="pname">
+                        <span class="title" style="margin-left: 10px; color: black">
                             <User style="width: 0.8em; height: 0.8em;"/>
                             <User style="width: 0.5em; height: 0.5em; margin-left:-6px"/>
                             新建团队
@@ -77,15 +101,22 @@
                     <div class="clear"></div>
                     </div>
                 </template>
-                <div class="new">
-                    <el-button><div><Plus style="width: 1em; height: 1em;"/></div></el-button>
-                </div>
-                <div class="hint">快来创建你的专属团队吧！</div>
-            </el-card>
-            <div class="clear"></div>
-        </el-space>
-      </el-main>
-    </el-container>
+        <el-form :model="newone" label-width="80px">
+            <el-form-item label="团队名称">
+                <el-input :v-model="name"></el-input>
+            </el-form-item>
+            <el-form-item label="团队简介">
+                <el-input :v-model="info" :autosize="{ minRows: 3, maxRows: 6 }" 
+                type="textarea"></el-input>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+        <span class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="newTeam">确定</el-button>
+        </span>
+        </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -95,6 +126,7 @@ export default {
     name: "workSpace",
     data() {
         return {
+            dialogVisible: false,
             firstChar: "S",//用户名首字母
             team:{
                 team_name: "团队名",
@@ -104,8 +136,17 @@ export default {
                 team_info: "小学期乱杀"
             },
             proNum: 4,//项目总数
+            newone:{
+                name: "",
+                info: ""
+            }
         }
-  },
+    },
+    methods: {
+        newTeam(){
+            this.dialogVisible = false;
+        }
+    }
 
 }
 
@@ -136,15 +177,22 @@ export default {
 }
 .el-card {
     margin: 30px 30px 0 30px;
-    background-color: rgba(242, 242, 242, 0.72);
+    background-color:  rgba(255, 255, 255, 0.62);
     border-radius: 1ch;
     box-shadow: 14px 15px 19px -15px #000;
 }
 .el-card .el-form{
     margin-left: 15px;
 }
+.el-dialog .el-form{
+    margin-left:50px;
+    margin-right: 100px;
+}
+.dialog-footer {
+    float: calc();
+}
 .title{
-    width: 110px;
+    width: 120px;
     margin-left: 50px;
     margin-top: 20px;
     padding-bottom: 5px;
@@ -152,6 +200,7 @@ export default {
     color: rgb(64,158,255);
     border-bottom:4px solid  rgb(64,158,255);
     font-weight: 600;
+    float: left;
     }
 .head{
     border-radius: 100%;
@@ -187,6 +236,7 @@ export default {
     height: 120px;
     width: 120px;
 }
+
 .hint{
     margin-bottom: 10px;
 }
