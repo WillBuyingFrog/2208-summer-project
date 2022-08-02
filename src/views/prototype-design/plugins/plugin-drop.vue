@@ -26,7 +26,6 @@ export default {
       })
     },
     async handleDrop(e) {
-      console.log("Hello!")
       e.preventDefault()
       e.stopPropagation()
       // file drop

@@ -95,7 +95,6 @@ export default {
   },
   methods: {
     handleDrag(e, item) {
-      console.log("hello!")
       e.dataTransfer.dropEffect = 'copy'
       // 这一项之后将会在drop事件中传给PluginDrop
       e.dataTransfer.setData('text/component', JSON.stringify(item))
@@ -104,7 +103,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .ds-components {
   width: 200px;
   border-right: 1px solid #ececec;

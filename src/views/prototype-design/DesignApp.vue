@@ -11,7 +11,7 @@
         </DesignEditorView>
       </el-col>
       <el-col :span="4">
-
+        <PropInspector @change="this.handleChange" :controlled="this.controlled" />
       </el-col>
     </el-row>
 
@@ -24,6 +24,7 @@ import DesignAppFooter from "@/views/prototype-design/DesignAppFooter";
 import DesignAppHeader from "@/views/prototype-design/DesignAppHeader";
 import DesignAppComponents from "@/views/prototype-design/DesignAppComponents";
 import DesignEditorView from "@/views/prototype-design/editor-view"
+import PropInspector from "@/views/prototype-design/prop-inspector"
 
 import {
   // 一些有关全局操作的常量
@@ -64,7 +65,7 @@ export default {
   },
   components:{
     DesignAppHeader, DesignAppFooter, DesignAppComponents,
-    DesignEditorView
+    DesignEditorView, PropInspector
   },
   methods: {
     getComponents(components, parentId) {
@@ -341,13 +342,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less">
 .ds-app{
   color: black;
+  .component-impl,
+  .match-parent {
+    width: 100%;
+    height: 100%;
+    min-width: 50px;
+    display: block;
+  }
 }
-.match-parent {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+
 </style>

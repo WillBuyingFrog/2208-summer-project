@@ -77,7 +77,7 @@ const Select = {
     },
     render() {
         return (
-            <select class="match-parent" type={this.params.type} value={this.params.url}>
+            <select class="match-parent" value={this.params.url}>
                 {this.params.options.map((item) => (
                     <option value={item.value} key={item.value}>
                         {item.label}

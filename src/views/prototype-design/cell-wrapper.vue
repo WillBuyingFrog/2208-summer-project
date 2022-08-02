@@ -100,8 +100,8 @@ export default {
             key={item.id}
             id={item.id}
             draggable={item.draggable}
-            rotatable={item.rotatable}
-            resizable={item.resizable}
+            rotatable={item.draggable}
+            resizable={item.draggable}
             parent={item.parent}
             acceptRatio={item.acceptRatio}
             resizeHandler={item.resizeHandler}
@@ -127,7 +127,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .component-impl {
   position: absolute;
   user-select: none;
