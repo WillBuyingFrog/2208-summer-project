@@ -6,14 +6,14 @@ const routes = [
     //     name: 'Home',
     //     component: () => import('../components/HomeComponent')
     // },
-    {
-        path: '/test1',
-        name: 'Test1',
-        component: () => import('../components/TestComponent')
-    },
+    // {
+    //     path: '/test1',
+    //     name: 'Test1',
+    //     component: () => import('../components/TestComponent')
+    // },
     {
         path: '/',
-        name: 'homepage',
+        name: 'Homepage',
         component: () => import('../views/homepage/HomePage')
     }
 
