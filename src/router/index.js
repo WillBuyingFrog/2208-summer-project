@@ -10,7 +10,7 @@ const routes = [
         path: '/workspace',
         name: 'workSpace',
         component: () => import('../views/WorkSpace')
-    }
+    },
     {
         path: '/login',
         name: 'SignIn',
