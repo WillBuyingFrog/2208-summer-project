@@ -11,17 +11,20 @@ export default {
   },
   props:{
     value: Array,
+    // 由于EditorView可能不只有一个，有的是拖拽生成的div，
+    // 所以需要parentId记录当前EditorView所属的父元素是谁
     parentId: String,
     parent: Object
   },
   provide(){
     return {
+      // Vue2 -> Vue3
       // 在子组件中使用inject: ['editorDOM']
       editorDOM: computed(() => this.$refs.editor)
     }
   },
   methods: {
-
+      // 由于Vue3特性，原版本中唯一的methods已空
   },
 
   render(){
@@ -30,7 +33,7 @@ export default {
           <div class="ds-editor-canvas" ref="editor">
             {
               this.value.map((item) => {
-                return <CellWrapper item={item} />
+                return <CellWrapper item={item} key={item.id}/>
               })
             }
             {/**Inject Plugins here**/}
@@ -46,5 +49,9 @@ export default {
 <style scoped>
 .ds-editor{
   color: black;
+}
+.root-editor > .ds-editor-canvas {
+  transform: scale(1);
+  transform-origin: top left;
 }
 </style>
