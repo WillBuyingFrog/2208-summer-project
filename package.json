@@ -10,9 +10,12 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "element-plus": "^2.2.11",
+    "less": "^4.1.3",
+    "less-loader": "^11.0.0",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.2.13",
-    "vue-router": "^4.1.3"
+    "vue-router": "^4.1.3",
+    "yoyoo-ddr-vue3": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

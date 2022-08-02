@@ -13,6 +13,7 @@ import {
 } from './helper'
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'ddr',
   props: {
     value: {

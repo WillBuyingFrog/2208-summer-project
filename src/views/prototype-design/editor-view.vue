@@ -1,6 +1,14 @@
 <script>
+import {computed} from 'vue'
+
+import PluginDrop from "@/views/prototype-design/plugins/plugin-drop"
+import CellWrapper from "@/views/prototype-design/cell-wrapper"
+
 export default {
   name: "editor-view",
+  components: {
+    PluginDrop
+  },
   props:{
     value: Array,
     parentId: String,
@@ -9,7 +17,7 @@ export default {
   provide(){
     return {
       // 在子组件中使用inject: ['editorDOM']
-      editorDOM: this.$refs.editor
+      editorDOM: computed(() => this.$refs.editor)
     }
   },
   methods: {
@@ -21,8 +29,13 @@ export default {
         <div class={`ds-editor ${this.parentId ? 'nest-editor' : 'root-editor'}`}>
           <div class="ds-editor-canvas" ref="editor">
             {
-              // TODO: 抄CellWrapperVue
+              this.value.map((item) => {
+                return <CellWrapper item={item} />
+              })
             }
+            {/**Inject Plugins here**/}
+            {this.$slots.default}
+            <PluginDrop parentId={this.parentId} length={this.value.length}/>
           </div>
         </div>
     )
