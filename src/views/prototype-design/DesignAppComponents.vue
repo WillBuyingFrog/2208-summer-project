@@ -24,7 +24,7 @@ export default {
       elements: [
         {
           type: 'label',
-          value: 'Hi~我是一段文本',
+          value: '一段文本',
           name: 'Label',
           width: 150,
           height: 30,

@@ -3,7 +3,8 @@ import eventBus from "@/views/prototype-design/utils/eventBus";
 
 import ComponentImpl from "@/views/prototype-design/component-impl"
 
-import DragCell from "@/views/prototype-design/libs/ddr"
+import DragCell from 'yoyoo-ddr-vue3'
+import 'yoyoo-ddr-vue3/dist/yoyoo-ddr-vue3.css'
 
 import {
   EVENT_COMPONENT_SELECT,
