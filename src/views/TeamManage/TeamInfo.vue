@@ -73,7 +73,7 @@ export default {
 
 <style scoped>
   .hp-fill {
-  background-image: url("../../assets/images/homepage_bk.png");
+  background-image: url("../../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
   overflow: hidden;

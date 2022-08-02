@@ -1,16 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
-    // {
-    //     path: '/',
-    //     name: 'Home',
-    //     component: () => import('../components/HomeComponent')
-    // },
-    // {
-    //     path: '/test1',
-    //     name: 'Test1',
-    //     component: () => import('../components/TestComponent')
-    // },
     {
         path: '/',
         name: 'Homepage',
@@ -23,6 +13,35 @@ const routes = [
         path: '/team/member',
         name: 'MemberInfo',
         component: () => import('../views/TeamManage/MemberInfo.vue')
+
+    },
+    {
+        path: '/workspace',
+        name: 'workSpace',
+        component: () => import('../views/WorkSpace')
+    },
+    {
+        path: '/login',
+        name: 'SignIn',
+        component: () => import('../views/user-sign/SignIn.vue'),
+        meta: {
+            requireNotAuth: true,
+            noNav: true
+        }
+    },
+    {
+        path: '/register',
+        name: 'SignUp',
+        component: () => import('../views/user-sign/SignUp.vue'),
+        meta: {
+            requireNotAuth: true,
+            noNav: true
+        }
+    },
+    {
+        path: '/allproject',
+        name: '/allproject',
+        component: () => import('../views/AllProject'),
     }
 
 ]
