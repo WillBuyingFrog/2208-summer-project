@@ -15,6 +15,14 @@ const routes = [
         path: '/',
         name: 'Homepage',
         component: () => import('../views/homepage/HomePage')
+    },{
+        path: '/team',
+        name: 'TeamInfo',
+        component: () => import('../views/TeamManage/TeamInfo.vue')
+    },{
+        path: '/team/member',
+        name: 'MemberInfo',
+        component: () => import('../views/TeamManage/MemberInfo.vue')
     }
 
 ]
