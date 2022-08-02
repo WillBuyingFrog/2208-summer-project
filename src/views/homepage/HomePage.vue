@@ -1,16 +1,24 @@
 <template>
   <div class="hp-fill">
-    <h1>HomePage</h1>
+<!--    <h1>HomePage</h1>-->
     <div class="buttons">
-      <el-button id="register-button" color="#626aef" :dark="isDark" plain>Try Out Now</el-button>
-      <el-button id="sign-in-button" color="#626aef" :dark="isDark" plain>Sign In</el-button>
+      <el-button id="register-button" color="#626aef" :dark="isDark" plain @click="gotoRegister">Try Out Now</el-button>
+      <el-button id="sign-in-button" color="#626aef" :dark="isDark" plain @click="gotoLogin">Sign In</el-button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "homePage"
+  name: "homePage",
+  methods: {
+    gotoLogin() {
+      this.$router.push('/login');
+    },
+    gotoRegister() {
+      this.$router.push('/register');
+    }
+  }
 }
 </script>
 
@@ -28,13 +36,15 @@ export default {
   width: 180px;
   height: 50px;
   font-size: 20px;
+  box-shadow: 3px 3px 10px #bebebe;
+  border-radius: 5px;
 }
 
 .buttons #register-button{
-  margin: 500px 100px 0 0;
+  margin: 600px 100px 0 0;
 }
 
 .buttons #sign-in-button{
-  margin: 500px 0px 0 100px;
+  margin: 600px 0px 0 100px;
 }
 </style>
