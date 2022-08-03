@@ -30,8 +30,7 @@
         cancel-button-text="No, Thanks"
         icon-color="#626AEF"
         title="确认退出登录?"
-        @confirm="logout()"
-    >
+        @confirm="logout()">
       <template #reference>
         <el-button class="log-out" >退出登录</el-button>
       </template>
@@ -53,7 +52,7 @@ export default {
       this.$store.state.user={};
       setTimeout(() => {
         this.$router.push('/')
-      }, 500);
+      }, 1000);
       
     }
   },

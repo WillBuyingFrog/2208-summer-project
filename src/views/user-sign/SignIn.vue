@@ -154,8 +154,7 @@ export default {
   },
 
   methods: {
-    login() {
-      
+    login() {   
       const self = this;
       const formData = new FormData();
       formData.append("username", self.form.username);
@@ -173,8 +172,7 @@ export default {
       //   data: JSON.stringify(formData),
       // })
       else{
-        this.$http
-          .post("/user/login", {
+        this.$http.post("/user/login", {
             username: self.form.username,
             passwd: self.form.password,
           })
