@@ -16,6 +16,7 @@ app.mount('#app')
 app.config.globalProperties.GLOBAL = GlobalInfo
 
 // axios
+app.config.globalProperties.$axios = axios
 app.config.globalProperties.$http = axios
 axios.defaults.baseURL = GlobalInfo.backUrl;
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'

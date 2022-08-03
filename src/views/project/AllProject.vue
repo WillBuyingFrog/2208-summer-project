@@ -39,7 +39,7 @@
                     </div>
                 </template>
                 <div class="text item">
-                    <el-form :model="project" label-width="140px" label-position="left">
+                    <el-form :model="project" label-width="120px" label-position="left">
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
@@ -105,6 +105,7 @@ export default {
     name: "allProject",
     data() {
         return {
+            team_id: '',
             dialogVisible: false,
             status: "0",
             proNum: 4,
@@ -114,7 +115,16 @@ export default {
             }
         }
     },
+    created(){
+        this.getAllProject();
+    },
     methods: {
+        getAllProject(){
+            this.team_id = this.$route.query.id;
+            // this.$axios.post("/project/viewAllProject", {
+            //     team_id: this.team_id
+            // })
+        },
         newProject(){
             this.dialogVisible = false;
         },

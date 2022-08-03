@@ -36,7 +36,9 @@ export default createStore({
             real_name:'',
             email:'',
             info:'',
-        }
+        },
+        teamid: '',
+        projectid: ''
     },
     modules:{
         
