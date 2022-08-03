@@ -172,25 +172,27 @@ export default {
             passwd: self.form.password,
           })
           .then(res => {
-            switch (res.code) {
+            console.log(res.data.code);
+            switch (res.data.code) {
               case 200:
                 // location.reload();
                 // 前端保存用户信息
-                this.$message.success("登录成功");
-                this.$store.dispatch('saveUserInfo', {user: {
-                    'username': this.form.username,
-                    'userID': res.data.user_id,
-                    'confirmed': true,
-                  }});
-                var curr = localStorage.getItem('preRoute');
-                if (curr == null) {
-                  this.$router.push('/index');
-                } else {
-                  this.$router.push({ path: curr });
-                }
+                // this.$message.success("登录成功");
+                this.$router.push('/workspace');
+                // this.$store.dispatch('saveUserInfo', {user: {
+                //     'username': this.form.username,
+                //     'confirmed': true,
+                //   }});
+                // var curr = localStorage.getItem('preRoute');
+                // if (curr == null) {
+                //   this.$router.push('/workspace');
+                // } else {
+                //   this.$router.push({ path: curr });
+                // }
                 break;
               case 500:
-                this.$message.warning(res.message);
+                // this.$message.warning(res.data.message);
+                console.log(res.data.message);
                 break;
               // case 201:
               //   this.$message.warning('用户已登录！');
