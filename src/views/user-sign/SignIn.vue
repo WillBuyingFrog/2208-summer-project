@@ -139,6 +139,8 @@
 </style>
 
 <script>
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
   name: "SignIn",
   data() {
@@ -153,11 +155,15 @@ export default {
 
   methods: {
     login() {
+      
       const self = this;
       const formData = new FormData();
       formData.append("username", self.form.username);
       formData.append("passwd", self.form.password);
-
+      if(self.form.username === '')
+      ElMessage.warning('请输入用户名')
+      else if(self.form.password === '')
+      ElMessage.warning('请输入密码')
       // self.$http({
       //   headers: {
       //     'Content-Type': 'application/json'
@@ -166,7 +172,8 @@ export default {
       //   url: '/user/login',
       //   data: JSON.stringify(formData),
       // })
-      this.$http
+      else{
+        this.$http
           .post("/user/login", {
             username: self.form.username,
             passwd: self.form.password,
@@ -177,8 +184,15 @@ export default {
               case 200:
                 // location.reload();
                 // 前端保存用户信息
-                // this.$message.success("登录成功");
-                this.$router.push('/workspace');
+                this.$store.state.user.id = res.data.data.user_id;
+                this.$store.state.user.name = res.data.data.username;
+                this.$store.state.user.real_name = res.data.data.real_name;
+                this.$store.state.user.email = res.data.data.email;
+                this.$store.state.user.info = res.data.data.user_info;
+                ElMessage.success('登录成功！');
+                setTimeout(() => {
+                    this.$router.push('/workspace');
+                }, 1000);
                 // this.$store.dispatch('saveUserInfo', {user: {
                 //     'username': this.form.username,
                 //     'confirmed': true,
@@ -191,7 +205,7 @@ export default {
                 // }
                 break;
               case 500:
-                // this.$message.warning(res.data.message);
+                ElMessage.error(res.data.message);
                 console.log(res.data.message);
                 break;
               // case 201:
@@ -221,6 +235,8 @@ export default {
           .catch(err => {
             console.log(err);
           })
+      }
+      
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
