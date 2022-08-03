@@ -1,20 +1,38 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import user from "./user";
+// import Vue from 'vue'
+// import Vuex from 'vuex'
+// import user from "./user";
 
-Vue.use(Vuex)
+// Vue.use(Vuex)
 
-export default new Vuex.Store({
-    state: {
+// export default new Vuex.Store({
+//     state: {
+//     },
+//     mutations: {
+//     },
+//     actions: {
+//         clear({ commit }) {
+//             commit("$_removeStorage");
+//         }
+//     },
+//     modules: {
+//         user
+//     }
+// })
+
+
+import {createStore} from 'vuex'
+
+export default createStore({
+    actions:{
+
     },
-    mutations: {
+    mutations:{
+
     },
-    actions: {
-        clear({ commit }) {
-            commit("$_removeStorage");
-        }
+    state:{
+
     },
-    modules: {
-        user
+    modules:{
+        
     }
 })
