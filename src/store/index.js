@@ -1,16 +1,20 @@
-import {createStore} from 'vuex'
+import Vue from 'vue'
+import Vuex from 'vuex'
+import user from "./user";
 
-export default createStore({
-    actions:{
+Vue.use(Vuex)
 
+export default new Vuex.Store({
+    state: {
     },
-    mutations:{
-
+    mutations: {
     },
-    state:{
-        
+    actions: {
+        clear({ commit }) {
+            commit("$_removeStorage");
+        }
     },
-    modules:{
-        
+    modules: {
+        user
     }
 })
