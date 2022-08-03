@@ -202,7 +202,7 @@ export default {
                         user_id: id,
                         team_name: this.newone.name,
                         team_info: this.newone.info
-                    },{withCredentials: true})
+                    })
                 .then(res =>{
                     console.log(res.data.code);
                     switch (res.data.code) {
