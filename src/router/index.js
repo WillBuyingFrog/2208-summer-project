@@ -7,6 +7,11 @@ const routes = [
         component: () => import('../views/homepage/HomePage')
     },
     {
+        path: '/documentEdit',
+        name: 'DocumentEdit',
+        component: () => import('../views/document-edit/DocumentEdit')
+    },
+    {
         path: '/ptest',
         name: 'DesignAppTest',
         component: () => import('../views/prototype-design/DesignApp')
