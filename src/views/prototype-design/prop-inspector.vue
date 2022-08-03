@@ -119,6 +119,7 @@ export default {
   .input-label {
     display: inline-block;
     width: 100px;
+
     color: #555;
   }
   .input-value:not([type='checkbox']) {
