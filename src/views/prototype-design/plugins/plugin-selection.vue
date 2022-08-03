@@ -87,6 +87,8 @@ export default {
       let x1 = []
       let y1 = []
       let ids = []
+      console.log("Selected components:")
+      console.log(this.selectedComponents)
       this.selectedComponents.forEach((item) => {
         ids.push(item.id)
         item = getBoundingRect(item)
@@ -95,6 +97,8 @@ export default {
         x1.push(item.right)
         y1.push(item.bottom)
       })
+      console.log("Get ids:")
+      console.log(ids)
       let left = Math.min(...x)
       let top = Math.min(...y)
       let right = Math.max(...x1)
@@ -110,6 +114,8 @@ export default {
       this.getSelectedComponentRefs(ids, this.selectionTransform)
     },
     getSelectedComponentRefs(ids, { x, y, width, height }) {
+      console.log("componentRefs:")
+      console.log(getComponentRefsById(ids))
       this.componentRefs = getComponentRefsById(ids).map((item) => {
         // 记录组件在选区的位置和宽度百分比
         item._xPercent = (item.transform.x - x) / width
