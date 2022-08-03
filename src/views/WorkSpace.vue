@@ -166,19 +166,23 @@ export default {
     },
     methods: {
         getTeam(){
-            this.$axios.post("/team/get/all", {
-                user_id: this.$store.state.user.id
-            })
-            .then(res =>{
-                console.log(res.data);
-                switch (res.data.code) {
-                    case 200: 
-                        this.allteam = res.data.data;
-                        this.proNum = this.allteam.length;
-                        break;
-                }
-
-            })
+            var id = this.$store.state.user.id;
+            this.$http
+                .post("/team/get/all", {
+                    user_id: id
+                })
+                .then(res =>{
+                    console.log(res.data);
+                    switch (res.data.code) {
+                        case 200: 
+                            this.allteam = res.data.data;
+                            this.proNum = this.allteam.length;
+                            break;
+                    }
+                })
+                .catch(err =>{
+                    console.log(err);
+                })
         },
         AllProject(id){
             this.$router.push({
@@ -211,6 +215,7 @@ export default {
                             this.newone.name = '';
                             this.newone.info = '';
                             this.dialogVisible = false;
+                            this.getTeam();
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
