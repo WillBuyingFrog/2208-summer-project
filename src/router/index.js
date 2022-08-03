@@ -53,13 +53,22 @@ const routes = [
     {
         path: '/allproject',
         name: '/allproject',
-        component: () => import('../views/AllProject'),
+        component: () => import('../views/project/AllProject'),
     },
     {
         path: '/project',
         name: 'project',
-        props: true,
-        component: () => import('../views/Project'),
+        component: () => import('../views/project/Project'),
+        children:[{
+            path:'/projectfile',
+            name:'projectfile',
+            component: () => import('../views/project/ProjectFile'),
+          },{
+            path:'/projectinfo',
+            name:'projectinfo',
+            component: () => import('../views/project/ProjectInfo'),
+          }
+        ]
     },
     {
         path: '/dtest',

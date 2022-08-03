@@ -30,7 +30,15 @@ export default createStore({
 
     },
     state:{
-
+        user:{
+            id:'',
+            name:'',
+            real_name:'',
+            email:'',
+            info:'',
+        },
+        teamid: '',
+        projectid: ''
     },
     modules:{
         

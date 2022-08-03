@@ -170,6 +170,8 @@
 </style>
 
 <script>
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
   name: "SignUp",
   data() {
@@ -282,21 +284,24 @@ export default {
           //   data: formData,
           // })
               .then(res => {
-                switch (res.data.status_code) {
+                console.log(res.data)
+                switch (res.data.code) {
                   case 200:
                     this.$store.dispatch('saveUserInfo', {user: {
                         'username': this.ruleForm.username,
                         'confirmed': false,
                       }});
-                    this.$message.success('注册成功！');
+                    ElMessage.success('注册成功！');
+                    setTimeout(() => {
+                      this.$router.push('/login')
+                    }, 1000);
                     break;
                   // case -1:
                   //   this.$message.warning('请检查填写的内容');
                   //   break;
                   case 500:
-                    this.$message.warning(res.message);
-                    console.log(res.message);
-                    break;
+                    ElMessage.error(res.data.message);
+                  break;
                   // case 3:
                   //   this.$message.error('邮箱已注册或不可用');
                   //   break;
