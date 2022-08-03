@@ -13,15 +13,15 @@
         >
             <el-menu-item index="1">
             <el-icon><icon-menu /></el-icon>
-            <span>Navigator Two</span>
+            <span>原型设计</span>
             </el-menu-item>
-            <el-menu-item index="2" disabled>
+            <el-menu-item index="2">
             <el-icon><document /></el-icon>
-            <span>Navigator Three</span>
+            <span>文档编辑</span>
             </el-menu-item>
             <el-menu-item index="3">
-            <el-icon><setting /></el-icon>
-            <span>Navigator Four</span>
+            <el-icon><Picture /></el-icon>
+            <span>绘制图</span>
             </el-menu-item>
         </el-menu>
     </el-aside>
