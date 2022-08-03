@@ -14,13 +14,6 @@ export default {
   name: "QuillTest",
   data(){
     return {
-      collaborate: {
-        quill: null,
-        ydoc: null,
-        ytext: null,
-        binding: null,
-        provider: null,
-      },
       isReady: false
     }
   },
@@ -30,6 +23,7 @@ export default {
   methods: {
     createQuillBinding(quill){
       handleQuillBinding(quill)
+      this.isReady = true
     }
   }
 }

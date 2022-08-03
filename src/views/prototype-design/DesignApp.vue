@@ -105,6 +105,14 @@ export default {
         extra: item,
         grid: [10, 10],
         axis: 'xy',
+        // 以下属性用作实时协作：
+        usedBy: '__none__'
+      }))
+    },
+    getComponentsFromSaved(components){
+      return components.map((item) => ({
+        ...item,
+        children: item.type === 'container' ? [] : void 0
       }))
     },
     /**
@@ -123,7 +131,6 @@ export default {
       } else {
         controls = this.controls.concat(newComponents)
       }
-      console.log(controls)
       this.setControls(controls)
 
       // 默认选中最后一个
@@ -338,8 +345,27 @@ export default {
       return this.$refs.editor
     },
     exportControlsJson(){
-      console.log(this.$data.controls)
-      parseControls(this.$data.controls)
+      let result = parseControls(this.$data.controls)
+      console.log(result)
+    },
+    parseComponentJSON({componentJSON, parentId}){
+      // 首先清除当前画布上所有的控件
+      this.setControls([])
+      this.clearCurrentComponent()
+      if(parentId === -1){
+        // 当前在root component上遍历
+        componentJSON.map((item) => {
+          this.addControl({components: [item], parentId: item.parentId})
+          if(item.hasChildren === false){
+            // 没有子元素
+            console.log("[ParseJSON] This element has no child component.")
+          }else{
+            // 有子元素
+            let childJSON = item.childrenJSON
+            this.parseComponentJSON({componentJSON: childJSON, parentId: item.id})
+          }
+        })
+      }
     }
   },
   created() {
