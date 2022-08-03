@@ -1,8 +1,9 @@
 <template>
   <div class="allproject">
     <el-container>
-      <el-header>
-      </el-header>
+      <el-header style="padding: 0 0 ;">
+          <TopGuide/>
+        </el-header>
       <el-main>
         <el-tabs v-model="status" class="demo-tabs" @tab-click="handleClick">
             <el-tab-pane label="所有项目" name="0"></el-tab-pane>
@@ -147,12 +148,7 @@ export default {
   background-position:center;
   background-size: 100% auto;
 }
-.allproject .el-header{
-    height: 67px;
-    padding: 0;
-    border-bottom: 1px solid #EFEFEF;
-    background-color: rgba(255, 255, 255, 0.62);
-}
+
 .el-tabs{
     width: 150px;
     margin-left: 50px;
