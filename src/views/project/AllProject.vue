@@ -54,16 +54,10 @@
                         </el-form-item>      
                         <el-form-item>
                             <template #label>  
-                                <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
+                                <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                             </template>
                             <span>2022/08/02 21:46{{}}</span>
                         </el-form-item>
-                        <el-form-item>
-                            <template #label>  
-                                <div class="label1"><el-icon><User /></el-icon> 最后编辑者:</div>
-                            </template>
-                            <span>{{}}</span>
-                        </el-form-item>   
                         <div class="button1" v-if="status == 0">
                             <el-button type="primary" @click="rename">重命名</el-button>
                             <el-button type="danger" @click="deletePro">删&nbsp;除</el-button> 
@@ -141,7 +135,7 @@ export default {
 
 <style scoped>
 .allproject {
-  background-image: url("../assets/images/bg.jpg");
+  background-image: url("../../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
   overflow: hidden;
@@ -224,8 +218,8 @@ export default {
 .new .el-button{
     margin-top: 25px;
     margin-bottom: 37px;
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
 }
 
 .hint{
