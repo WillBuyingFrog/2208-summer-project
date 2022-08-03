@@ -1,5 +1,6 @@
 <template>
-  <div :class="this.parentId ? 'ds-editor nest-editor' : 'ds-editor root-editor'">
+  <div :class="this.parentId ? 'ds-editor nest-editor' : 'ds-editor root-editor'"
+       :id="this.parentId ? 'nested-editor' + this.parentId : 'root-editor-view'">
     <div class="ds-editor-canvas" ref="editor">
       <CellWrapper v-for="item in value"
                    :item="item"

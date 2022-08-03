@@ -1,5 +1,5 @@
 <template>
-  <div class="ds-app">
+  <div class="ds-app" id="frog-design-application">
     <DesignAppHeader />
     <div class="content">
       <el-row :gutter="20">
@@ -44,7 +44,7 @@ import {
   EVENT_COMPONENT_DUPLICATE,
   EVENT_COMPONENT_SELECT,
   EVENT_COMPONENT_TRANSFORM,
-  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON,
+  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON, EVENT_DESIGNER_SAVEIMG,
 } from "@/views/prototype-design/event-enum"
 
 import {
@@ -57,6 +57,8 @@ import {
 } from "@/views/prototype-design/utils"
 
 import eventBus from "@/views/prototype-design/utils/eventBus"
+
+import {getSnapShot} from "@/views/prototype-design/utils/image";
 
 let historys = [[]]
 let historyPointer = 0
@@ -366,6 +368,9 @@ export default {
           }
         })
       }
+    },
+    handleSaveImage(){
+      getSnapShot("root-editor-view")
     }
   },
   created() {
@@ -379,6 +384,8 @@ export default {
     eventBus.$on(EVENT_DESIGNER_UNDO, this.handleUndo)
     eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
     eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
+
+    eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
   }
 
 }

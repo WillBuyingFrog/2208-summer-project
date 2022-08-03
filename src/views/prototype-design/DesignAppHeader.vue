@@ -6,7 +6,8 @@ import {
   EVENT_DESIGNER_UNDO,
   EVENT_DESIGNER_REDO,
   EVENT_DESIGNER_CLEAR,
-  COLLABORATE_EXPORT_JSON
+  COLLABORATE_EXPORT_JSON,
+  EVENT_DESIGNER_SAVEIMG
 } from "@/views/prototype-design/event-enum";
 
 export default {
@@ -50,6 +51,12 @@ export default {
               onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
           >
             导出当前画布的JSON
+          </el-button>
+          <el-button
+              title="导出图片"
+              onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
+          >
+            导出当前画布为图片
           </el-button>
         </div>
     )
