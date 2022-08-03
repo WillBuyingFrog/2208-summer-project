@@ -3,10 +3,27 @@
     <div class="bg-plus">
       <el-container class="outer-container">
         <el-header height="60px" class="header">
-          <div class="logo">
-            <img src="../../assets/images/logo.png" height="60">
-          </div>
-          <p class="name">文档标题</p>
+          <el-row>
+            <el-col>
+              <el-popconfirm
+                  confirm-button-text="Yes"
+                  cancel-button-text="No, Thanks"
+                  icon-color="#626AEF"
+                  title="确认退出编辑?"
+                  class="quit"
+                  @confirm="quit()"
+              >
+                <template #reference>
+                  <div class="logo">
+                    <img src="../../assets/images/logo.png" height="60">
+                  </div>
+                </template>
+              </el-popconfirm>
+            </el-col>
+            <el-col>
+              <p class="name">文档标题</p>
+            </el-col>
+          </el-row>
         </el-header>
         <el-container class="inner-container">
           <el-aside width="100px" class="leftPane">
@@ -33,10 +50,20 @@
 </template>
 
 <script>
+//import { InfoFilled } from '@element-plus/icons-vue';
 import QuillTest from "@/components/QuillTest";
+import {ElMessage} from "element-plus";
 export default {
   name: "DocumentEdit",
-  components: {QuillTest}
+  components: {QuillTest},
+  methods: {
+    quit() {
+      ElMessage.success('即将回到工作空间');
+      setTimeout(() => {
+        this.$router.push('/workspace')
+      }, 1000);
+    }
+  }
 }
 </script>
 
@@ -78,6 +105,13 @@ export default {
   position: center;
   font-size: 20px;
   margin-top: 15px;
+}
+.quit {
+
+}
+.quit-btn {
+  top: 10px;
+  right: -10px;
 }
 .leftPane {
   margin: 0 0 0 20px;
