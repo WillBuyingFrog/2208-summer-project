@@ -89,7 +89,7 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="onSubmit">确定</el-button>
+                    <el-button type="primary" @click="submit1">确定</el-button>
                   </el-form-item>
                 </el-form>
                 <el-form :inline="true" class="demo-form-inline">
@@ -101,7 +101,7 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="onSubmit">确定</el-button>
+                    <el-button type="primary" @click="submit2">确定</el-button>
                   </el-form-item>
                 </el-form>
               </el-dialog>
@@ -112,21 +112,26 @@
 
 
 <script>
+
 export default {
   setup() {
     return{
    
     }
   },
-    data () {
-      return {
+  data () {
+    return {
         dialogVisible: false,
         name:'',
         introduction:''
       };
+  },
+  methods: {
+    submit1(){
+      console.log(this.$store.state.test)
     }
   }
-
+}
 </script>
 
 <style scoped>
