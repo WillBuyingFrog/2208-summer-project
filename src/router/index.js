@@ -61,7 +61,6 @@ const routes = [
         name: 'TextEditorTest',
         component: () => import('../components/QuillTest')
     }
-
 ]
 
 const router = createRouter({
