@@ -1,12 +1,52 @@
-<template>
-  <div class="ds-header">
-    <span class="ds-header-text">这里是原型设计器的页头</span>
-  </div>
-</template>
-
 <script>
+import eventBus from "@/views/prototype-design/utils/eventBus";
+import {
+  EVENT_COMPONENT_DELETE,
+  EVENT_COMPONENT_DUPLICATE,
+  EVENT_DESIGNER_UNDO,
+  EVENT_DESIGNER_REDO,
+  EVENT_DESIGNER_CLEAR
+} from "@/views/prototype-design/event-enum";
+
 export default {
-  name: "DesignAppHeader"
+  name: "DesignAppHeader",
+  render(){
+    return (
+        <div class="ds-header">
+          <span class="ds-header-text">这里是原型设计器的页头</span>
+          <el-button
+              title="删除选定的组件"
+              onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
+          >
+            删除选定的组件
+          </el-button>
+          <el-button
+            title="撤销操作"
+            onClick={() => eventBus.$emit(EVENT_DESIGNER_UNDO)}
+            >
+            撤销
+          </el-button>
+          <el-button
+              title="重做操作"
+              onClick={() => eventBus.$emit(EVENT_DESIGNER_REDO)}
+          >
+            重做
+          </el-button>
+          <el-button
+              title="复制组件"
+              onClick={() => eventBus.$emit(EVENT_COMPONENT_DUPLICATE)}
+          >
+            复制组件
+          </el-button>
+          <el-button
+              title="清屏"
+              onClick={() => eventBus.$emit(EVENT_DESIGNER_CLEAR)}
+          >
+            清屏
+          </el-button>
+        </div>
+    )
+  }
 }
 </script>
 
