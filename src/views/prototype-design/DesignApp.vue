@@ -68,6 +68,8 @@ export default {
       currentId: '',
       currentPath: [],
       controlled: {},
+      designId: -1,
+
     }
   },
   components:{

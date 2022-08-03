@@ -12,7 +12,7 @@ export default {
 
 <style scoped>
 .ds-header{
-  height: 13vh;
+  height: 8vh;
   margin: 1vh 0 1vh 0;
 }
 .ds-header-text{
