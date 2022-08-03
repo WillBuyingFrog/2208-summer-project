@@ -3,19 +3,36 @@
     <el-container>
       <el-header>
         <el-row>
-            <el-col :span="1">
+            <el-col :span="3">
                 <div>
-                    <img class="logo" src="..\assets\images\logo.png" height="60">
+                    <img class="logo" src="..\assets\images\logo-1.png" height="60">
                 </div>
             </el-col>         
-            <el-col :span="4">
+            <el-col :span="1">
                 <div>
                     <span><div class="title">工作空间</div></span> 
                 </div>
             </el-col> 
-            <el-col :span="15"><div/></el-col>
-            <el-col :span="4">
-                <span class="headleft"><div class="head">{{firstChar}}</div></span>
+            <el-col :span="16"><div/></el-col>
+            <el-col :span="1" >
+                 <el-badge :value="12" class="item" style="margin-top:15px;">
+                    <el-button icon="ChatDotRound">消息</el-button>
+                </el-badge>
+            </el-col>
+            <el-col :span="1">
+                <!-- <span class="headleft"><div class="head">{{firstChar}}</div></span> -->
+                <el-popover
+                    placement="bottom"
+                    :width="200"
+                    trigger="click">
+                  <template #reference>
+                    <el-avatar :style="{background:avatarColor}" :size="36" 
+                    :src="circleUrl" style="margin-top:12px;margin-left: 15px;"> 
+                    {{this.$store.state.user.name.slice(0,1)}} 
+                    </el-avatar>
+                  </template>
+                  <UserInfo :avatarColor="avatarColor"></UserInfo>
+                </el-popover>
             </el-col>
         </el-row>
       </el-header>
@@ -123,8 +140,10 @@
 <script>
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
+import UserInfo from "@/views/account/UserInfo";
 export default {
     name: "workSpace",
+    components: {UserInfo},
     data() {
         return {
             dialogVisible: false,
@@ -141,11 +160,9 @@ export default {
             newone:{
                 name: "",
                 info: ""
-            }
+            },
+            avatarColor:'',
         }
-    },
-    created(){
-        this.getTeam();
     },
     methods: {
         getTeam(){
@@ -206,7 +223,14 @@ export default {
             
             
         }
-    }
+    },
+    created(){
+        let R = Math.floor(Math.random() * 130+110);
+        let G = Math.floor(Math.random() * 130+110);
+        let B = Math.floor(Math.random() * 130+110);
+        this.avatarColor = 'rgb(' + R + ',' + G + ',' + B + ', .5)'
+        this.getTeam();
+    },
 
 }
 
