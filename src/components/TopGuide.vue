@@ -39,7 +39,16 @@
                 </el-badge>
             </el-col>
             <el-col :span="1">
-                <el-avatar :size="36" :src="circleUrl" style="margin-top:12px" />
+                <el-popover
+                    placement="bottom"
+                    :width="200"
+                    trigger="click"
+                >
+                  <template #reference>
+                    <el-avatar :size="36" :src="circleUrl" style="margin-top:12px" />
+                  </template>
+                  <UserInfo></UserInfo>
+                </el-popover>
             </el-col>
         </el-row>
     </div>
@@ -47,8 +56,13 @@
 
 
 <style scoped>
-
   .space{
     border-bottom: 0;
   }
-  </style>
+</style>
+<script>
+import UserInfo from "@/views/account/UserInfo";
+export default {
+  components: {UserInfo}
+}
+</script>
