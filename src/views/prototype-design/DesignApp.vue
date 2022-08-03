@@ -1,20 +1,21 @@
 <template>
   <div class="ds-app">
     <DesignAppHeader />
-    <el-row :gutter="20">
-      <el-col :span="4">
-        <DesignAppComponents />
-      </el-col>
-      <el-col :span="16">
-        <DesignEditorView ref="editor" :value="this.controls">
+    <div class="content">
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <DesignAppComponents />
+        </el-col>
+        <el-col :span="16">
+          <DesignEditorView ref="editor" :value="this.controls">
 
-        </DesignEditorView>
-      </el-col>
-      <el-col :span="4">
-        <PropInspector @change="this.handleChange" :controlled="this.controlled" />
-      </el-col>
-    </el-row>
-
+          </DesignEditorView>
+        </el-col>
+        <el-col :span="4">
+          <PropInspector @change="this.handleChange" :controlled="this.controlled" />
+        </el-col>
+      </el-row>
+    </div>
     <DesignAppFooter />
   </div>
 </template>
@@ -344,7 +345,20 @@ export default {
 
 <style lang="less">
 .ds-app{
-  color: black;
+  display: flex;
+  flex-direction: column;
+  min-eight: 60vh;
+
+  .content {
+    .ds-editor {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      overflow: scroll;
+      height: 100%;
+    }
+  }
+
   .component-impl,
   .match-parent {
     width: 100%;

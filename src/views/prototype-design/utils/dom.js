@@ -53,6 +53,7 @@ export class Interaction {
      * @type {(interaction:Interaction)=> void 0}
      */
     moveHanlder = null
+
     /**
      * @private
      * @type {(interaction:Interaction)=> void 0}
