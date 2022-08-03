@@ -1,6 +1,5 @@
 <script>
-import DDrComponent from 'yoyoo-ddr-vue3'
-import 'yoyoo-ddr-vue3/dist/yoyoo-ddr-vue3.css'
+import DDrComponent from "@/views/prototype-design/libs/ddr"
 
 import {EVENT_COMPONENT_UNSELECT} from "@/views/prototype-design/event-enum";
 import eventBus from "@/views/prototype-design/utils/eventBus";

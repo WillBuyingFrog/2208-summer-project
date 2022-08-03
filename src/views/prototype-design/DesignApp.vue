@@ -32,6 +32,7 @@ import PropInspector from "@/views/prototype-design/prop-inspector"
 
 import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
+
 import {
   // 一些有关全局操作的常量
   EVENT_DESIGNER_CLEAR,
