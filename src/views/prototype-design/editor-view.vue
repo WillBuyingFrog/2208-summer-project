@@ -5,7 +5,7 @@
                    :item="item"
                    :key="item.id"
                    />
-      <slot></slot>
+      <slot name="default"></slot>
       <PluginDrop :parentId="this.parentId" :length="this.value.length" />
     </div>
   </div>

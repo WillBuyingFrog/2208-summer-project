@@ -8,7 +8,9 @@
         </el-col>
         <el-col :span="16">
           <DesignEditorView ref="editor" :value="this.controls">
-
+            <template #default>
+              <PluginSelection :application="this" />
+            </template>
           </DesignEditorView>
         </el-col>
         <el-col :span="4">
@@ -23,9 +25,12 @@
 <script>
 import DesignAppFooter from "@/views/prototype-design/DesignAppFooter";
 import DesignAppHeader from "@/views/prototype-design/DesignAppHeader";
+
 import DesignAppComponents from "@/views/prototype-design/DesignAppComponents";
 import DesignEditorView from "@/views/prototype-design/editor-view"
 import PropInspector from "@/views/prototype-design/prop-inspector"
+
+import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
 import {
   // 一些有关全局操作的常量
@@ -66,7 +71,8 @@ export default {
   },
   components:{
     DesignAppHeader, DesignAppFooter, DesignAppComponents,
-    DesignEditorView, PropInspector
+    DesignEditorView, PropInspector,
+    PluginSelection
   },
   methods: {
     getComponents(components, parentId) {
@@ -347,7 +353,7 @@ export default {
 .ds-app{
   display: flex;
   flex-direction: column;
-  min-eight: 60vh;
+  min-height: 60vh;
 
   .content {
     .ds-editor {
