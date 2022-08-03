@@ -59,7 +59,7 @@ const routes = [
     {
         path: '/dtest',
         name: 'TextEditorTest',
-        component: () => import('../views/prototype-design/QuillTest')
+        component: () => import('../components/QuillTest')
     }
 
 ]
