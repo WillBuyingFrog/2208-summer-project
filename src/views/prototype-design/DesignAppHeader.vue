@@ -5,7 +5,8 @@ import {
   EVENT_COMPONENT_DUPLICATE,
   EVENT_DESIGNER_UNDO,
   EVENT_DESIGNER_REDO,
-  EVENT_DESIGNER_CLEAR
+  EVENT_DESIGNER_CLEAR,
+  COLLABORATE_EXPORT_JSON
 } from "@/views/prototype-design/event-enum";
 
 export default {
@@ -43,6 +44,12 @@ export default {
               onClick={() => eventBus.$emit(EVENT_DESIGNER_CLEAR)}
           >
             清屏
+          </el-button>
+          <el-button
+              title="导出JSON"
+              onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
+          >
+            导出当前画布的JSON
           </el-button>
         </div>
     )

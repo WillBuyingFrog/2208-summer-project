@@ -13,3 +13,5 @@ export const EVENT_DESIGNER_UNDO = 'designer:undo'
 export const EVENT_DESIGNER_CLEAR = 'designer:clear'
 
 export const EVENT_FUNCTION_TEST = 'function:test'
+
+export const COLLABORATE_EXPORT_JSON = 'collaborate:export'

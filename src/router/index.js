@@ -55,6 +55,11 @@ const routes = [
         name: 'project',
         props: true,
         component: () => import('../views/Project'),
+    },
+    {
+        path: '/dtest',
+        name: 'TextEditorTest',
+        component: () => import('../views/prototype-design/QuillTest')
     }
 
 ]

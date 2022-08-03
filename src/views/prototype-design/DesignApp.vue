@@ -32,6 +32,7 @@ import PropInspector from "@/views/prototype-design/prop-inspector"
 
 import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
+import {parseControls} from "@/views/prototype-design/utils/collaborate";
 
 import {
   // 一些有关全局操作的常量
@@ -43,7 +44,7 @@ import {
   EVENT_COMPONENT_DUPLICATE,
   EVENT_COMPONENT_SELECT,
   EVENT_COMPONENT_TRANSFORM,
-  EVENT_COMPONENT_UNSELECT,
+  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON,
 } from "@/views/prototype-design/event-enum"
 
 import {
@@ -336,6 +337,10 @@ export default {
     getEditorView() {
       return this.$refs.editor
     },
+    exportControlsJson(){
+      console.log(this.$data.controls)
+      parseControls(this.$data.controls)
+    }
   },
   created() {
     eventBus.$on(EVENT_COMPONENT_ADD, this.addControl)
@@ -347,6 +352,7 @@ export default {
     eventBus.$on(EVENT_DESIGNER_REDO, this.handleRedo)
     eventBus.$on(EVENT_DESIGNER_UNDO, this.handleUndo)
     eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
+    eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
   }
 
 }
