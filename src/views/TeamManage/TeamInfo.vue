@@ -140,11 +140,11 @@ export default {
 }
   .card {
     background-color: rgba(250, 250, 250, 0.7);
-    height: 700px;
+    height: 600px;
     width: 900px;
     border-radius: 30px;
-    margin-left: 300px;
-    margin-top: 40px;
+    margin-left: 280px;
+    margin-top: 20px;
 
   }
   .title{
