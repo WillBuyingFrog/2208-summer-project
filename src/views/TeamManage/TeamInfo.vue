@@ -41,13 +41,70 @@
                   </el-row>
                 </div>
                 <el-descriptions direction="vertical" :column="2" border class="form">
-                  <el-descriptions-item label="组长" :span="2">frog</el-descriptions-item>
-                  <el-descriptions-item label="创建者">18100000000</el-descriptions-item>
-                  <el-descriptions-item label="创建时间" :span="2">2022-8-2 21:06</el-descriptions-item>
-                  <el-descriptions-item label="简介">11111111111111111</el-descriptions-item>
+                  <el-descriptions-item  :span="2">
+                    <template #label>
+                      <div class="cell-item">
+                        <el-icon><user /></el-icon>组长
+                      </div>
+                    </template>
+                    frog
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template #label>
+                      <div class="cell-item">
+                        <el-icon><user /></el-icon>创建者
+                      </div>
+                    </template>
+                    frog
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template #label>
+                      <div class="cell-item">
+                        <el-icon><user /></el-icon>创建时间
+                      </div>
+                    </template>
+                    2022-8-2 21:06
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template #label>
+                      <div class="cell-item">
+                        <el-icon><user /></el-icon>简介
+                      </div>
+                    </template>
+                    2111111106131222222222
+                  </el-descriptions-item>
                 </el-descriptions>
-                <el-button type="primary" icon="Edit" class="edit">修改信息</el-button>
+                <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
               </el-card>
+              <el-dialog
+                title="修改信息"
+                v-model="dialogVisible"
+                width="800px"
+                :before-close="handleClose">
+                <el-form :inline="true" class="demo-form-inline">
+                  <el-form-item label="名称">
+                    <el-input v-model="name"  style="width: 400px;"
+                      type="textarea" maxlength="25" show-word-limit
+                      resize="none">
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="onSubmit">确定</el-button>
+                  </el-form-item>
+                </el-form>
+                <el-form :inline="true" class="demo-form-inline">
+                  <el-form-item label="简介">
+                    <el-input  type="textarea" maxlength="200" show-word-limit
+                         resize="none" :autosize="{ minRows: 6}"
+                         v-model="introduction"
+                         style="width:400px">
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="onSubmit">确定</el-button>
+                  </el-form-item>
+                </el-form>
+              </el-dialog>
           </el-main>
       </el-container>
     </el-container>
@@ -63,8 +120,9 @@ export default {
   },
     data () {
       return {
-        
-        
+        dialogVisible: false,
+        name:'',
+        introduction:''
       };
     }
   }
@@ -95,6 +153,7 @@ export default {
 
   }
   .form{
+    border-radius: 60px;
     margin-top: 50px;
     margin-left: 50px;
     width: 800px;
@@ -104,4 +163,8 @@ export default {
     border-radius: 10px;
     margin-top: 120px;
   }
+  .cell-item {
+  display: flex;
+  align-items: center;
+}
 </style>
