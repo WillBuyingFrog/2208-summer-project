@@ -42,12 +42,14 @@
                 <el-popover
                     placement="bottom"
                     :width="200"
-                    trigger="click"
-                >
+                    trigger="click">
                   <template #reference>
-                    <el-avatar :size="36" :src="circleUrl" style="margin-top:12px;margin-left: 15px;" />
+                    <el-avatar :style="{background:avatarColor}" :size="36" 
+                    :src="circleUrl" style="margin-top:12px;margin-left: 15px;"> 
+                    {{this.$store.state.user.name.slice(0,1)}} 
+                    </el-avatar>
                   </template>
-                  <UserInfo></UserInfo>
+                  <UserInfo :avatarColor="avatarColor"></UserInfo>
                 </el-popover>
             </el-col>
         </el-row>
@@ -63,6 +65,20 @@
 <script>
 import UserInfo from "@/views/account/UserInfo";
 export default {
-  components: {UserInfo}
+  components: {UserInfo},
+  data(){
+    return{
+        avatarColor:''
+    }
+  },
+  created(){
+    let R = Math.floor(Math.random() * 130+110);
+    let G = Math.floor(Math.random() * 130+110);
+    let B = Math.floor(Math.random() * 130+110);
+    this.avatarColor = 'rgb(' + R + ',' + G + ',' + B + ', .5)'
+  },
+  methods: {
+    
+  }
 }
 </script>

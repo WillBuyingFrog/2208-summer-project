@@ -5,10 +5,11 @@
   >
     <el-row>
       <el-avatar
-          :size="60"
-          src="circleUrl"
-      />
-      <p class="username">UserName</p>
+          :size="50"
+          :style="{background:avatarColor}">
+          {{this.$store.state.user.name.slice(0,1)}} 
+      </el-avatar>
+      <p class="username">{{this.$store.state.user.name}}</p>
     </el-row>
     <el-divider class="divider"></el-divider>
     <div>
@@ -20,7 +21,7 @@
       <p
           class="email-content"
       >
-        123456789@qq.com
+        {{this.$store.state.user.email}}
       </p>
     </div>
     <el-divider class="divider"></el-divider>
@@ -29,17 +30,33 @@
         cancel-button-text="No, Thanks"
         icon-color="#626AEF"
         title="确认退出登录?"
+        @confirm="logout()"
     >
       <template #reference>
-        <el-button class="log-out">退出登录</el-button>
+        <el-button class="log-out" >退出登录</el-button>
       </template>
     </el-popconfirm>
   </div>
 </template>
 
 <script>
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
-  name: "UserInfo"
+  name: "UserInfo",
+  props:['avatarColor'],
+  created(){
+  },
+  methods: {
+    logout(){
+      ElMessage.success('退出登录成功');
+      this.$store.state.user={};
+      setTimeout(() => {
+        this.$router.push('/')
+      }, 500);
+      
+    }
+  },
 }
 </script>
 
@@ -48,8 +65,8 @@ export default {
   margin: 5px 0 0 0;
 }
 .username {
-  font-size: 28px;
-  margin: 13px 0 0px 10px;
+  font-size: 22px;
+  margin: 8px 0 0px 10px;
 }
 .email-title {
   font-size: 22px;
@@ -58,11 +75,11 @@ export default {
 .email-content {
   font-size: 18px;
   color: var(--el-color-info);
-  margin: 5px 0 0 10px;
+  margin: 10px 0 0 10px;
 }
 .log-out {
   font-size: 18px;
-  padding: 10px 0;
+  padding: 15px 0;
   height: 20px;
 }
 </style>
