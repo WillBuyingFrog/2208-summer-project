@@ -22,15 +22,15 @@
                     <el-icon><Paperclip /></el-icon>
                     <span>项目信息</span>
                     </el-menu-item>                   
-                    <el-menu-item index="{path:'/projectfile', query:{filetype: '1'}}">
+                    <el-menu-item index="/projectfile?filetype=1">
                     <el-icon><EditPen /></el-icon>
                     <span>原型设计</span>
                     </el-menu-item>
-                    <el-menu-item index="/projectfile">
+                    <el-menu-item index="/projectfile?filetype=0">
                     <el-icon><Document /></el-icon>
                     <span>文档编辑</span>
                     </el-menu-item>
-                    <el-menu-item index="/projectfile">
+                    <el-menu-item index="/projectfile?filetype=2">
                     <el-icon><Picture /></el-icon>
                     <span>绘制图</span>
                     </el-menu-item>
@@ -55,7 +55,7 @@ export default {
         }
     },
     created(){
-
+        
     },
     methods: {
     }
