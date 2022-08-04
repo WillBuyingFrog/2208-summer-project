@@ -1,22 +1,30 @@
 <template>
   <div class="ds-app" id="frog-design-application">
-    <DesignAppHeader />
     <div class="content">
-      <el-row :gutter="20">
-        <el-col :span="4">
+      <el-container>
+        <el-aside width="200px">
           <DesignAppComponents />
-        </el-col>
-        <el-col :span="16">
-            <DesignEditorView ref="editor" :value="this.controls">
-              <template #default>
-                <PluginSelection :application="this" />
-              </template>
-            </DesignEditorView>
-        </el-col>
-        <el-col :span="4">
-          <PropInspector @change="this.handleChange" :controlled="this.controlled" />
-        </el-col>
-      </el-row>
+        </el-aside>
+        <el-main>
+          <el-container>
+            <el-container>
+              <el-header>
+                <DesignAppHeader />
+              </el-header>
+              <el-main>
+                <DesignEditorView ref="editor" :value="this.controls">
+                  <template #default>
+                    <PluginSelection :application="this" />
+                  </template>
+                </DesignEditorView>
+              </el-main>
+            </el-container>
+            <el-aside width="200px">
+              <PropInspector @change="this.handleChange" :controlled="this.controlled" />
+            </el-aside>
+          </el-container>
+        </el-main>
+      </el-container>
     </div>
   </div>
 </template>

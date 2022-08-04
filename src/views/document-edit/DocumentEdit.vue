@@ -15,7 +15,7 @@
               >
                 <template #reference>
                   <div class="logo">
-                    <img src="../../assets/images/logo.png" height="60">
+                    <img src="../../assets/images/logo-1.png" height="60">
                   </div>
                 </template>
               </el-popconfirm>

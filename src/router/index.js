@@ -8,7 +8,11 @@ const routes = [
     },
     {
         path: '/',
-        // documentEdit
+        name: 'PrototypeDesign',
+        component: () => import('../views/prototype-design/PrototypeDesign')
+    },
+    {
+        path: '/documentEdit',
         name: 'DocumentEdit',
         component: () => import('../views/document-edit/DocumentEdit')
     },
