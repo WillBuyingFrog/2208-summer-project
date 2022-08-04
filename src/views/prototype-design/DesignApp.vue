@@ -420,7 +420,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .ds-app{
   display: flex;
   flex-direction: column;
