@@ -5,6 +5,7 @@
         @dragstart="(e) => {this.handleDrag(e, item)}"
         draggable="true"
         :key="index"
+        class="components-item"
     >
       <span>{{item.name}}</span>
     </div>
@@ -105,11 +106,13 @@ export default {
 
 <style>
 .ds-components {
-  width: 200px;
-  border-right: 1px solid #ececec;
+  width: 198px;
   position: relative;
   overflow-y: scroll;
-  background: #f8f8f8;
+  margin: 20px 0 0 0;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.50);
+  box-shadow: 3px 3px 10px #bebebe;
 }
 .components-icon {
   width: 35px;
@@ -117,15 +120,12 @@ export default {
   margin-bottom: 6px;
 }
 .components-item {
-  height: 100px;
-  width: 50%;
-  float: left;
-  display: flex;
-  border-bottom: 1px solid #ececec;
-  align-items: center;
-  justify-content: center;
-  cursor: move;
-  flex-direction: column;
+  height: 30px;
+  width: 100%;
   font-weight: 300;
+  margin: 10px 0 10px 0;
+}
+.components-item :hover {
+  color: #999999;
 }
 </style>

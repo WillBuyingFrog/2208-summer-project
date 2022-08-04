@@ -2,10 +2,10 @@
   <div class="ds-app" id="frog-design-application">
     <div class="content">
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="220px" class="leftpane">
           <DesignAppComponents />
         </el-aside>
-        <el-main>
+        <el-main class="mainPane">
           <el-container>
             <el-container>
               <el-header>
@@ -421,5 +421,11 @@ export default {
     display: block;
   }
 }
-
+.leftPane {
+  margin: 20px 20px 0 0;
+}
+.mainPane {
+  padding: 0;
+  margin: 20px 0 0 0;
+}
 </style>
