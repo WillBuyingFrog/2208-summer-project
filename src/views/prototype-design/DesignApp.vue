@@ -443,20 +443,20 @@ export default {
     min-width: 50px;
     display: block;
   }
-}
-.header {
-  padding: 0;
-}
-.workpane {
-  padding-left: 0;
-}
-.leftPane {
-  margin: 20px 0 0 0;
-}
-.mainPane {
-  padding: 0;
-  margin: 0 0 0 0;
-}
-.rightPane {
+  .header {
+    padding: 0;
+  }
+  .workpane {
+    padding-left: 0;
+  }
+  .leftPane {
+    margin: 20px 0 0 0;
+  }
+  .mainPane {
+    padding: 0;
+    margin: 0 0 0 0;
+  }
+  .rightPane {
+  }
 }
 </style>
