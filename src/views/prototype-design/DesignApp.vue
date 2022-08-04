@@ -357,23 +357,23 @@ export default {
       console.log(result)
     },
     parseComponentJSON({componentJSON, parentId}){
-      // 首先清除当前画布上所有的控件
-      this.setControls([])
-      this.clearCurrentComponent()
+      // 第一次调用（在root editor上遍历）首先清除当前画布上所有的控件
       if(parentId === -1){
-        // 当前在root component上遍历
-        componentJSON.map((item) => {
-          this.addControl({components: [item], parentId: item.parentId})
-          if(item.hasChildren === false){
-            // 没有子元素
-            console.log("[ParseJSON] This element has no child component.")
-          }else{
-            // 有子元素
-            let childJSON = item.childrenJSON
-            this.parseComponentJSON({componentJSON: childJSON, parentId: item.id})
-          }
-        })
+        this.setControls([])
+        this.clearCurrentComponent()
       }
+      componentJSON.map((item) => {
+        this.addControl({components: [item], parentId: item.parentId})
+        if (item.hasChildren === false) {
+          // 没有子元素
+          console.log("[ParseJSON] This element has no child component.")
+        } else {
+          // 有子元素
+          let childJSON = item.childrenJSON
+          this.parseComponentJSON({componentJSON: childJSON, parentId: item.id})
+        }
+      })
+
     },
     handleSaveImage(){
       getSnapShot("root-editor-view")
