@@ -1,7 +1,6 @@
 <template>
   <DesignApp />
 </template>
-
 <script>
 
 import DesignApp from "@/views/prototype-design/DesignApp";

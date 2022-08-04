@@ -18,12 +18,10 @@
         </el-col>
       </el-row>
     </div>
-    <DesignAppFooter />
   </div>
 </template>
 
 <script>
-import DesignAppFooter from "@/views/prototype-design/DesignAppFooter";
 import DesignAppHeader from "@/views/prototype-design/DesignAppHeader";
 
 import DesignAppComponents from "@/views/prototype-design/DesignAppComponents";
@@ -76,7 +74,7 @@ export default {
     }
   },
   components:{
-    DesignAppHeader, DesignAppFooter, DesignAppComponents,
+    DesignAppHeader, DesignAppComponents,
     DesignEditorView, PropInspector,
     PluginSelection
   },
