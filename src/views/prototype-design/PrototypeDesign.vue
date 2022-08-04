@@ -1,40 +1,40 @@
 <template>
-<div class="prototype-bg">
-<div class="bg-plus">
-  <el-container class="outer-container">
-    <el-header height="60px" class="header">
-      <el-row>
-        <el-col>
-          <el-popconfirm
-              confirm-button-text="Yes"
-              cancel-button-text="No, Thanks"
-              icon-color="#626AEF"
-              title="确认退出编辑?"
-              class="quit"
-              @confirm="quit()"
-          >
-            <template #reference>
-              <div class="logo">
-                <img src="../../assets/images/logo-1.png" height="60">
-              </div>
-            </template>
-          </el-popconfirm>
-        </el-col>
-        <el-col>
-          <p class="name">{{this.$store.state.file_name}}</p>
-        </el-col>
-      </el-row>
-    </el-header>
-    <el-container class="inner-container">
-      <el-main class="mainPane">
-        <div class="editor">
-          <DesignApp class="editor"></DesignApp>
-        </div>
-      </el-main>
-    </el-container>
-  </el-container>
-</div>
-</div>
+  <div class="prototype-bg">
+    <div class="bg-plus">
+      <el-container class="outer-container">
+        <el-header height="60px" class="header">
+          <el-row>
+            <el-col>
+              <el-popconfirm
+                  confirm-button-text="Yes"
+                  cancel-button-text="No, Thanks"
+                  icon-color="#626AEF"
+                  title="确认退出编辑?"
+                  class="quit"
+                  @confirm="quit()"
+              >
+                <template #reference>
+                  <div class="logo">
+                    <img src="../../assets/images/logo-1.png" height="60">
+                  </div>
+                </template>
+              </el-popconfirm>
+            </el-col>
+            <el-col>
+              <p class="name">{{this.$store.state.file_name}}</p>
+            </el-col>
+          </el-row>
+        </el-header>
+        <el-container class="inner-container">
+          <el-main class="mainPane">
+            <div class="editor">
+              <DesignApp class="editor"></DesignApp>
+            </div>
+          </el-main>
+        </el-container>
+      </el-container>
+    </div>
+  </div>
 </template>
 
 <script>

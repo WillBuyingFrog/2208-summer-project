@@ -21,7 +21,7 @@
               </el-popconfirm>
             </el-col>
             <el-col>
-              <p class="name">文档标题</p>
+              <p class="name">{{this.$store.state.file_name}}</p>
 <!--              {{this.$store.state.file_name}}-->
             </el-col>
           </el-row>
@@ -109,13 +109,6 @@ export default {
   position: center;
   font-size: 20px;
   margin-top: 15px;
-}
-.quit {
-
-}
-.quit-btn {
-  top: 10px;
-  right: -10px;
 }
 .leftPane {
   margin: 0 0 0 20px;
