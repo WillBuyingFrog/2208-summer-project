@@ -1,6 +1,7 @@
 <template>
   <label for="username">Your username</label>
   <input id="username" type="text" />
+
   <div id="users"></div>
   <QuillEditor
       theme="snow"

@@ -40,7 +40,7 @@
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
                             {{project.project_name}}
                         </span>
-                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_name)">进入项目</el-button>
+                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
                     <div class="clear"></div>
                     </div>
                 </template>
@@ -50,7 +50,7 @@
                             <template #label>  
                                 <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                             </template>
-                            <span>{{project.creator_name}}</span>
+                            <span>{{project.creator}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>  
@@ -244,10 +244,11 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
+                            this.getAllProject();
                             ElMessage.success("创建成功!");
                             this.newone.name = '';
+                            this.newone.info = '';
                             this.dialogVisible = false;
-                            this.getAllProject();
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -279,10 +280,10 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
+                            this.getAllProject();
                             ElMessage.success("重命名成功!");
                             this.newname = '';
                             this.dialogVisible1 = false;
-                            this.getAllProject();
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -305,8 +306,8 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            ElMessage.success(res.data.message);
                             this.getAllProject();
+                            ElMessage.success(res.data.message);
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -328,8 +329,8 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            ElMessage.success(res.data.message);
                             this.getTrashProject();
+                            ElMessage.success(res.data.message);
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -350,8 +351,8 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            ElMessage.success(res.data.message);
                             this.getTrashProject();
+                            ElMessage.success(res.data.message);
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -362,8 +363,9 @@ export default {
                     console.log(err);
                 })
         },
-        toProject(name){
+        toProject(name, id){
             this.$store.state.project_name = name;
+            this.$store.state.project_id = id;
             this.$router.push('/projectinfo');
         }
     },
@@ -381,7 +383,6 @@ export default {
   background-size: 100% auto;
   width: 100%;
   height: 100%;
-  position: fixed;
 }
 
 .el-tabs{

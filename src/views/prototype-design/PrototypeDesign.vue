@@ -21,7 +21,7 @@
           </el-popconfirm>
         </el-col>
         <el-col>
-          <p class="name">文档标题</p>
+          <p class="name">{{this.$store.state.file_name}}</p>
         </el-col>
       </el-row>
     </el-header>
@@ -66,7 +66,6 @@ export default {
   background-size: 100% auto;
   width: 100%;
   height: 100%;
-  position: fixed;
 }
 .bg-plus {
   background-color: rgba(255, 255, 255, 0.50);

@@ -2,7 +2,7 @@
   <div>
     <label for="username">Your username</label>
     <input id="username" type="text" />
-    <div id="users">
+    <div >
       <QuillEditor 
       :options="editorOption"
       @ready="(quill) => this.createQuillBinding(quill)">
@@ -55,7 +55,7 @@ const toolbarOptions = [
 ]
 export default defineComponent( {
   components: {
-    QuillEditor
+    QuillEditor,
   },
   data () {
     return {
@@ -88,7 +88,6 @@ export default defineComponent( {
     }
     return {modules}
   }
-
 })
 </script>
 

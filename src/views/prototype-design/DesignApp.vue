@@ -79,8 +79,8 @@ export default {
       currentId: '',
       currentPath: [],
       controlled: {},
-      designId: -1,
-
+      file_id: "-1",
+      userId: "-1"
     }
   },
   components:{
@@ -357,25 +357,34 @@ export default {
     exportControlsJson(){
       let result = parseControls(this.$data.controls)
       console.log(result)
+      this.$http
+          .post("/summer/prototype/saveJSON",
+              {
+                uuid: "test_uuid",
+                data: result
+              })
+      .then(res => {
+        console.log(res)
+      })
     },
     parseComponentJSON({componentJSON, parentId}){
-      // 首先清除当前画布上所有的控件
-      this.setControls([])
-      this.clearCurrentComponent()
+      // 第一次调用（在root editor上遍历）首先清除当前画布上所有的控件和所有的当前选中状态
       if(parentId === -1){
-        // 当前在root component上遍历
-        componentJSON.map((item) => {
-          this.addControl({components: [item], parentId: item.parentId})
-          if(item.hasChildren === false){
-            // 没有子元素
-            console.log("[ParseJSON] This element has no child component.")
-          }else{
-            // 有子元素
-            let childJSON = item.childrenJSON
-            this.parseComponentJSON({componentJSON: childJSON, parentId: item.id})
-          }
-        })
+        this.setControls([])
+        this.clearCurrentComponent()
       }
+      componentJSON.map((item) => {
+        this.addControl({components: [item], parentId: item.parentId})
+        if (item.hasChildren === false) {
+          // 没有子元素
+          console.log("[ParseJSON] This element has no child component.")
+        } else {
+          // 有子元素
+          let childJSON = item.childrenJSON
+          this.parseComponentJSON({componentJSON: childJSON, parentId: item.id})
+        }
+      })
+
     },
     handleSaveImage(){
       getSnapShot("root-editor-view")
@@ -392,14 +401,26 @@ export default {
     eventBus.$on(EVENT_DESIGNER_UNDO, this.handleUndo)
     eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
     eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
-
     eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
+  },
+  mounted(){
+    // TODO 获取前端传入的数据，向后端验证
+    if(typeof (this.$route.query.file_id) === 'undefined'){
+      alert("文件ID错误！")
+      // TODO 禁用整个原型设计器界面 或者history.back()
+    }
+    this.file_id = this.$route.query.file_id
+
+
+    // TODO 从后端获取指定的designId对应的JSON数据
+
+    // TODO 将JSON数据渲染到App中
   }
 
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .ds-app{
   display: flex;
   flex-direction: column;

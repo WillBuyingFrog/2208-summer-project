@@ -7,7 +7,7 @@
         <el-container>
             <el-aside width="200px">
                 <el-menu router
-                    :default-active="0"
+                    :default-active="activePath"
                     class="el-menu-vertical-demo"
                     background-color="rgba(250, 250, 250, 0.5)"
                     @open="handleOpen"
@@ -22,15 +22,15 @@
                     <el-icon><Paperclip /></el-icon>
                     <span>项目信息</span>
                     </el-menu-item>                   
-                    <el-menu-item index="{path:'/projectfile', query:{filetype: '1'}}">
+                    <el-menu-item index="/projectfile?filetype=1">
                     <el-icon><EditPen /></el-icon>
                     <span>原型设计</span>
                     </el-menu-item>
-                    <el-menu-item index="/projectfile">
+                    <el-menu-item index="/projectfile?filetype=0">
                     <el-icon><Document /></el-icon>
                     <span>文档编辑</span>
                     </el-menu-item>
-                    <el-menu-item index="/projectfile">
+                    <el-menu-item index="/projectfile?filetype=2">
                     <el-icon><Picture /></el-icon>
                     <span>绘制图</span>
                     </el-menu-item>
@@ -54,6 +54,11 @@ export default {
             fileType: "1",
         }
     },
+    computed:{
+        activePath(){   
+        return this.$route;
+        }
+  },
     created(){
 
     },
@@ -74,7 +79,6 @@ export default {
   background-size: 100% auto;
   width: 100%;
   height: 100%;
-  position: fixed;
 }
 .title{
     float: left;
