@@ -19,6 +19,7 @@ export default createStore({
         project_id: '',
         project_name: '',
         file_name: '',
+        file_id: ''
     },
     modules:{
         

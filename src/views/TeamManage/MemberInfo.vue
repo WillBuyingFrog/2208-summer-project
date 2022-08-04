@@ -433,7 +433,6 @@ export default {
   background-size: 100% auto;
   width: 100%;
   height: 100%;
-  position: fixed;
 }
   .card {
     height: 600px;

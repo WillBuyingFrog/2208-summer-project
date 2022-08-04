@@ -7,7 +7,7 @@
         <el-container>
             <el-aside width="200px">
                 <el-menu router
-                    :default-active="0"
+                    :default-active="activePath"
                     class="el-menu-vertical-demo"
                     background-color="rgba(250, 250, 250, 0.5)"
                     @open="handleOpen"
@@ -31,8 +31,10 @@
                     <span>文档编辑</span>
                     </el-menu-item>
                     <el-menu-item index="/projectfile?filetype=2">
-                    <el-icon><Picture /></el-icon>
-                    <span>绘制图</span>
+                      <a href="https://app.diagrams.net" target="_blank" class="uml-link">
+                        <el-icon><Picture /></el-icon>
+                        <span>绘制图</span>
+                      </a >
                     </el-menu-item>
                 </el-menu>
             </el-aside>
@@ -54,8 +56,13 @@ export default {
             fileType: "1",
         }
     },
+    computed:{
+        activePath(){   
+        return this.$route;
+        }
+  },
     created(){
-        
+
     },
     methods: {
     }
@@ -74,7 +81,6 @@ export default {
   background-size: 100% auto;
   width: 100%;
   height: 100%;
-  position: fixed;
 }
 .title{
     float: left;
@@ -82,5 +88,8 @@ export default {
 }
 .clear{
     clear: both;
+}
+.uml-link {
+  text-decoration-line: none;
 }
 </style>

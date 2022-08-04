@@ -22,6 +22,7 @@
             </el-col>
             <el-col>
               <p class="name">{{this.$store.state.file_name}}</p>
+<!--              {{this.$store.state.file_name}}-->
             </el-col>
           </el-row>
         </el-header>
@@ -77,7 +78,6 @@ export default {
   background-size: 100% auto;
   width: 100%;
   height: 100%;
-  position: fixed;
 }
 .bg-plus {
   background-color: rgba(255, 255, 255, 0.50);
@@ -85,6 +85,8 @@ export default {
   overflow: hidden;
   background-position:center;
   background-size: 100% auto;
+  width: 100%;
+  height: 100%;
 }
 .outer-container {
   height: 800px;
@@ -99,7 +101,6 @@ export default {
   background-color: rgba(255, 255, 255, 0.30);
   overflow: hidden;
   box-shadow: 3px 3px 10px #bebebe;
-
 }
 .logo {
   position: absolute;
@@ -108,13 +109,6 @@ export default {
   position: center;
   font-size: 20px;
   margin-top: 15px;
-}
-.quit {
-
-}
-.quit-btn {
-  top: 10px;
-  right: -10px;
 }
 .leftPane {
   margin: 0 0 0 20px;
@@ -130,7 +124,7 @@ export default {
   padding: 0;
 }
 .editor {
-  height: 668px;
+  height: 90%;
 }
 .online-users {
 

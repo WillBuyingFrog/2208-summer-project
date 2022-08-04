@@ -244,11 +244,11 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
+                            this.getAllProject();
                             ElMessage.success("创建成功!");
                             this.newone.name = '';
                             this.newone.info = '';
                             this.dialogVisible = false;
-                            this.getAllProject();
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -280,10 +280,10 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
+                            this.getAllProject();
                             ElMessage.success("重命名成功!");
                             this.newname = '';
                             this.dialogVisible1 = false;
-                            this.getAllProject();
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -306,8 +306,8 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            ElMessage.success(res.data.message);
                             this.getAllProject();
+                            ElMessage.success(res.data.message);
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -329,8 +329,8 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            ElMessage.success(res.data.message);
                             this.getTrashProject();
+                            ElMessage.success(res.data.message);
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -351,8 +351,8 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            ElMessage.success(res.data.message);
                             this.getTrashProject();
+                            ElMessage.success(res.data.message);
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -383,7 +383,6 @@ export default {
   background-size: 100% auto;
   width: 100%;
   height: 100%;
-  position: fixed;
 }
 
 .el-tabs{
