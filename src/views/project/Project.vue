@@ -7,7 +7,7 @@
         <el-container>
             <el-aside width="200px">
                 <el-menu router
-                    :default-active="0"
+                    :default-active="activePath"
                     class="el-menu-vertical-demo"
                     background-color="rgba(250, 250, 250, 0.5)"
                     @open="handleOpen"
@@ -54,8 +54,13 @@ export default {
             fileType: "1",
         }
     },
+    computed:{
+        activePath(){   
+        return this.$route;
+        }
+  },
     created(){
-        
+
     },
     methods: {
     }
