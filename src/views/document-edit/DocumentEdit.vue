@@ -103,6 +103,7 @@ export default {
 }
 .logo {
   position: absolute;
+  float: left;
 }
 .name {
   position: center;

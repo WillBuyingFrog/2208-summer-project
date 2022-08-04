@@ -1,14 +1,14 @@
 <template>
-<!--  <div class="out-div">-->
-<!--    <label for="username">Your username</label>-->
-<!--    <input id="username" type="text" />-->
-<!--    <div class="inner-div">-->
+  <div class="out-div">
+    <label for="username">Your username</label>
+    <input id="username" type="text" />
+    <div class="inner-div">
       <QuillEditor class="quill-editor"
       :options="editorOption"
       @ready="(quill) => this.createQuillBinding(quill)">
       </QuillEditor>
-<!--    </div>-->
-<!--  </div>-->
+    </div>
+  </div>
 </template>
 <script>
 import { defineComponent } from 'vue'
