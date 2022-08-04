@@ -11,7 +11,7 @@
                     </span>
                     <el-button size="small">编辑</el-button>
                     <el-button size="small">重命名</el-button>
-                    <el-button size="small">查看</el-button>
+                    <el-button size="small">删除</el-button>
                     <div class="clear"></div>
                 <el-button class="button" type="primary" plain v-if="status==0">进入项目</el-button>
                 <div class="clear"></div>
@@ -53,14 +53,7 @@
                                 <span>{{}}</span>
                             </el-form-item>
                         </el-col>
-                    </el-row>   
-                    <div class="button1" v-if="status == 0">
-                        <el-button type="primary" @click="rename">重命名</el-button>
-                        <el-button type="danger" @click="deletePro">删&nbsp;除</el-button> 
-                    </div>  
-                    <div class="button1" v-if="status == 1">
-                        <el-button type="danger" @click="recover">恢&nbsp;复</el-button>    
-                    </div>                                      
+                    </el-row>                                    
                 </el-form>
             </div>
         </el-card>
