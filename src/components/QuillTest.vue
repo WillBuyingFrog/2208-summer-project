@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="out-div">
     <label for="username">Your username</label>
     <input id="username" type="text" />
-    <div >
-      <QuillEditor 
+    <div class="inner-div">
+      <QuillEditor class="quill-editor"
       :options="editorOption"
       @ready="(quill) => this.createQuillBinding(quill)">
       </QuillEditor>
@@ -250,5 +250,14 @@ export default defineComponent( {
 
 .ql-size-30px {
     font-size: 30px;
+}
+.out-div {
+  height: 100%;
+}
+.inner-div {
+  height: 100%;
+}
+.quill-editor {
+  height: 100%;
 }
 </style>

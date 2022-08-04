@@ -21,7 +21,8 @@
               </el-popconfirm>
             </el-col>
             <el-col>
-              <p class="name">{{this.$store.state.file_name}}</p>
+              <p class="name">文档标题</p>
+<!--              {{this.$store.state.file_name}}-->
             </el-col>
           </el-row>
         </el-header>
@@ -84,6 +85,8 @@ export default {
   overflow: hidden;
   background-position:center;
   background-size: 100% auto;
+  width: 100%;
+  height: 100%;
 }
 .outer-container {
   height: 800px;
@@ -98,7 +101,6 @@ export default {
   background-color: rgba(255, 255, 255, 0.30);
   overflow: hidden;
   box-shadow: 3px 3px 10px #bebebe;
-
 }
 .logo {
   position: absolute;
@@ -129,7 +131,7 @@ export default {
   padding: 0;
 }
 .editor {
-  height: 668px;
+  height: 90%;
 }
 .online-users {
 
