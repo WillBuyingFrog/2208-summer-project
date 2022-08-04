@@ -106,10 +106,10 @@ export default {
 
 <style>
 .ds-components {
-  width: 198px;
+  width: 178px;
   position: relative;
   overflow-y: scroll;
-  margin: 20px 0 0 0;
+  margin: 20px 10px 10px 10px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.50);
   box-shadow: 3px 3px 10px #bebebe;

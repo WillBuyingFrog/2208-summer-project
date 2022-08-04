@@ -77,7 +77,7 @@ export default {
 }
 .inner-container {
   padding: 10px 0 20px 0;
-  margin: 0 20px 0 20px;
+  margin: 0;
 
 }
 .header {
