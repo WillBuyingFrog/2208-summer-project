@@ -48,11 +48,21 @@ export default {
   },
   methods: {
     logout(){
-      ElMessage.success('退出登录成功');
-      this.$store.state.user={};
-      setTimeout(() => {
-        this.$router.push('/')
-      }, 1000);
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/user/logout'})
+        .then(res=>{
+        console.log(res.data);
+        if(res.data.code == '200'){
+          ElMessage.success('退出登录成功');
+          this.$store.state.user={};
+          setTimeout(() => {
+          this.$router.push('/')
+        }, 1000);
+        }
+      })
+      
       
     }
   },

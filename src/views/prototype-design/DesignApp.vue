@@ -1,29 +1,37 @@
 <template>
   <div class="ds-app" id="frog-design-application">
-    <DesignAppHeader />
     <div class="content">
-      <el-row :gutter="20">
-        <el-col :span="4">
+      <el-container>
+        <el-aside width="200px" class="leftpane">
           <DesignAppComponents />
-        </el-col>
-        <el-col :span="16">
-          <DesignEditorView ref="editor" :value="this.controls">
-            <template #default>
-              <PluginSelection :application="this" />
-            </template>
-          </DesignEditorView>
-        </el-col>
-        <el-col :span="4">
-          <PropInspector @change="this.handleChange" :controlled="this.controlled" />
-        </el-col>
-      </el-row>
+        </el-aside>
+        <el-main class="mainPane">
+          <el-container>
+            <el-container>
+              <el-header class="header">
+                <DesignAppHeader/>
+              </el-header>
+              <el-main class="workpane">
+                <DesignEditorView ref="editor" :value="this.controls">
+                  <template #default>
+                    <PluginSelection :application="this" />
+                  </template>
+                </DesignEditorView>
+              </el-main>
+            </el-container>
+            <el-aside width="240px" class="rightpane">
+              <PropInspector
+                  @change="this.handleChange"
+                  :controlled="this.controlled" />
+            </el-aside>
+          </el-container>
+        </el-main>
+      </el-container>
     </div>
-    <DesignAppFooter />
   </div>
 </template>
 
 <script>
-import DesignAppFooter from "@/views/prototype-design/DesignAppFooter";
 import DesignAppHeader from "@/views/prototype-design/DesignAppHeader";
 
 import DesignAppComponents from "@/views/prototype-design/DesignAppComponents";
@@ -33,6 +41,8 @@ import PropInspector from "@/views/prototype-design/prop-inspector"
 import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
 import {parseControls} from "@/views/prototype-design/utils/collaborate";
+
+import eventBus from "@/views/prototype-design/utils/eventBus"
 
 import {
   // 一些有关全局操作的常量
@@ -56,8 +66,6 @@ import {
   updateTreeIn,
 } from "@/views/prototype-design/utils"
 
-import eventBus from "@/views/prototype-design/utils/eventBus"
-
 import {getSnapShot} from "@/views/prototype-design/utils/image";
 
 let historys = [[]]
@@ -76,7 +84,7 @@ export default {
     }
   },
   components:{
-    DesignAppHeader, DesignAppFooter, DesignAppComponents,
+    DesignAppHeader, DesignAppComponents,
     DesignEditorView, PropInspector,
     PluginSelection
   },
@@ -391,7 +399,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .ds-app{
   display: flex;
   flex-direction: column;
@@ -415,5 +423,19 @@ export default {
     display: block;
   }
 }
-
+.header {
+  padding: 0;
+}
+.workpane {
+  padding-left: 0;
+}
+.leftPane {
+  margin: 20px 0 0 0;
+}
+.mainPane {
+  padding: 0;
+  margin: 0 0 0 0;
+}
+.rightPane {
+}
 </style>

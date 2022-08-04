@@ -40,6 +40,9 @@
                     </el-col>
                   </el-row>
                 </div>
+                <template>
+  <el-skeleton :rows="5" />
+</template>
                 <el-descriptions direction="vertical" :column="2" border class="form">
                   <el-descriptions-item  :span="2">
                     <template #label>
@@ -74,7 +77,18 @@
                     {{info}}
                   </el-descriptions-item>
                 </el-descriptions>
-                <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
+                <div v-if="identity!='0'">
+                  <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
+                </div>
+                <div >
+                  <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
+                  <el-popconfirm title="确认要解散该团队吗？" @confirm="deleteTeam()">
+                    <template #reference>
+                      <el-button type="danger" icon="Delete" class="edit" style="margin-left:60px">解散团队</el-button>
+                    </template>
+                  </el-popconfirm>
+                </div>
+                
               </el-card>
               <el-dialog
                 title="修改信息"
@@ -130,7 +144,8 @@ export default {
         time:'',
         info:'',
         newName:'',
-        newInfo:''
+        newInfo:'',
+        identity:''
       };
   },
   computed:{
@@ -192,10 +207,54 @@ export default {
         this.time = res.data.data.create_time;
         console.log(res.data);
       })
+    },
+    getList(){
+      const self = this;
+      var tableData=[];
+      self.$http({
+        method:'post',
+        url:'/team/member/get',
+        params: {
+          team_id: this.$store.state.teamid
+        },
+      }).then(res=>{
+        tableData = res.data.data
+        console.log(res.data);
+        for(var i=0; i<tableData.length; i++){
+          if(tableData[i].username == this.$store.state.user.name){
+            if(tableData[i].authority == 'member')
+            this.identity = 2
+            else if(tableData[i].authority == 'leader')
+            this.identity = 0
+            else
+            this.identity = 1;
+            break;
+          }
+        }
+        console.log('身份'+this.identity)
+      })
+    },
+    deleteTeam(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/remove',
+        params: {
+          team_id: this.$store.state.teamid
+        },
+      }).then(res=>{
+        console.log(res.data);
+        ElMessage.success("解散团队成功！")
+        setTimeout(() => {
+          this.$router.push('/workspace')
+        }, 1000);
+      })
+
     }
   },
   created(){
     this.getInfo();
+    this.getList();
   },
 }
 </script>
@@ -208,6 +267,9 @@ export default {
   overflow: hidden;
   background-position:center;
   background-size: 100% auto;
+  width: 100%;
+  height: 100%;
+  position: fixed;
 }
   .card {
     background-color: rgba(250, 250, 250, 0.7);

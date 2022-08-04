@@ -15,7 +15,7 @@
               >
                 <template #reference>
                   <div class="logo">
-                    <img src="../../assets/images/logo.png" height="60">
+                    <img src="../../assets/images/logo-1.png" height="60">
                   </div>
                 </template>
               </el-popconfirm>
@@ -75,6 +75,9 @@ export default {
   overflow: hidden;
   background-position:center;
   background-size: 100% auto;
+  width: 100%;
+  height: 100%;
+  position: fixed;
 }
 .bg-plus {
   background-color: rgba(255, 255, 255, 0.50);

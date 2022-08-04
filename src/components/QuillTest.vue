@@ -1,11 +1,16 @@
 <template>
-  <QuillEditor theme="snow" @ready="(quill) => this.createQuillBinding(quill)" />
+  <QuillEditor
+      theme="snow"
+      @ready="(quill) => this.createQuillBinding(quill)"
+      :modules="modules"
+  />
 </template>
 
 <script>
 
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import QuillCursors from 'quill-cursors'
 
 import {handleQuillBinding} from "@/components/scripts/collaborate-text";
 
@@ -25,6 +30,14 @@ export default {
       handleQuillBinding(quill)
       this.isReady = true
     }
+  },
+  setup: () => {
+    const modules = {
+      name: 'quillCursors',
+      module: QuillCursors,
+      options: {}
+    }
+    return {modules}
   }
 }
 </script>

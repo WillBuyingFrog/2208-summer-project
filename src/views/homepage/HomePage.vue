@@ -30,6 +30,9 @@ export default {
   overflow: hidden;
   background-position:center;
   background-size: 100% auto;
+  width: 100%;
+  height: 100%;
+  position: fixed;
 }
 
 .buttons button{
@@ -45,6 +48,6 @@ export default {
 }
 
 .buttons #sign-in-button{
-  margin: 600px 0px 0 100px;
+  margin: 600px 0 0 100px;
 }
 </style>

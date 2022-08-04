@@ -6,7 +6,7 @@ import {
   EVENT_DESIGNER_UNDO,
   EVENT_DESIGNER_REDO,
   EVENT_DESIGNER_CLEAR,
-  COLLABORATE_EXPORT_JSON,
+  // COLLABORATE_EXPORT_JSON,
   EVENT_DESIGNER_SAVEIMG
 } from "@/views/prototype-design/event-enum";
 
@@ -15,49 +15,42 @@ export default {
   render(){
     return (
         <div class="ds-header">
-          <span class="ds-header-text">这里是原型设计器的页头</span>
-          <el-button
-              title="删除选定的组件"
+          <el-icon
+              class="icon-contain"
               onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
           >
-            删除选定的组件
-          </el-button>
-          <el-button
-            title="撤销操作"
-            onClick={() => eventBus.$emit(EVENT_DESIGNER_UNDO)}
-            >
-            撤销
-          </el-button>
-          <el-button
-              title="重做操作"
+            <Delete class="icon"></Delete>
+          </el-icon>
+          <el-icon
+              class="icon-contain"
+              onClick={() => eventBus.$emit(EVENT_DESIGNER_UNDO)}
+          >
+            <RefreshLeft class="icon"></RefreshLeft>
+          </el-icon>
+          <el-icon
+              class="icon-contain"
               onClick={() => eventBus.$emit(EVENT_DESIGNER_REDO)}
           >
-            重做
-          </el-button>
-          <el-button
-              title="复制组件"
+            <RefreshRight class="icon"></RefreshRight>
+          </el-icon>
+          <el-icon
+              class="icon-contain"
               onClick={() => eventBus.$emit(EVENT_COMPONENT_DUPLICATE)}
           >
-            复制组件
-          </el-button>
-          <el-button
-              title="清屏"
+            <CopyDocument class="icon"></CopyDocument>
+          </el-icon>
+          <el-icon
+              class="icon-contain"
               onClick={() => eventBus.$emit(EVENT_DESIGNER_CLEAR)}
           >
-            清屏
-          </el-button>
-          <el-button
-              title="导出JSON"
-              onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
-          >
-            导出当前画布的JSON
-          </el-button>
-          <el-button
-              title="导出图片"
+            <DocumentDelete class="icon"></DocumentDelete>
+          </el-icon>
+          <el-icon
+              class="icon-contain"
               onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
           >
-            导出当前画布为图片
-          </el-button>
+            <Download class="icon" ></Download>
+          </el-icon>
         </div>
     )
   }
@@ -66,10 +59,23 @@ export default {
 
 <style scoped>
 .ds-header{
-  height: 8vh;
-  margin: 1vh 0 1vh 0;
+  height: 50px;
+  margin: 20px 10px 0 10px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.50);
+  box-shadow: 3px 3px 10px #bebebe;
+  padding: 0;
 }
-.ds-header-text{
-  font-size: 28px;
+.icon-contain {
+  width: 40px;
+  height: 40px;
+  margin: 5px 10px 0 10px;
+}
+.icon {
+  width: 25px;
+  height: 25px;
+}
+.icon-contain :hover {
+  color: #999999;
 }
 </style>

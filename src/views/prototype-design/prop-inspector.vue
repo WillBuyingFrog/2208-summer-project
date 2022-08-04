@@ -109,9 +109,13 @@ export default {
 
   height: 75vh;
   border-left: 1px solid #ececec;
-  background: #f8f8f8;
   padding: 15px;
   overflow-y: scroll;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.50);
+  box-shadow: 3px 3px 10px #bebebe;
+  margin: 20px 20px 10px 10px;
+
   .input-item {
     margin-bottom: 12px;
     display: flex;
