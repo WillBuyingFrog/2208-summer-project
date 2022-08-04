@@ -7,11 +7,11 @@
           <DesignAppComponents />
         </el-col>
         <el-col :span="16">
-          <DesignEditorView ref="editor" :value="this.controls">
-            <template #default>
-              <PluginSelection :application="this" />
-            </template>
-          </DesignEditorView>
+            <DesignEditorView ref="editor" :value="this.controls">
+              <template #default>
+                <PluginSelection :application="this" />
+              </template>
+            </DesignEditorView>
         </el-col>
         <el-col :span="4">
           <PropInspector @change="this.handleChange" :controlled="this.controlled" />
@@ -34,6 +34,8 @@ import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
 import {parseControls} from "@/views/prototype-design/utils/collaborate";
 
+import eventBus from "@/views/prototype-design/utils/eventBus"
+
 import {
   // 一些有关全局操作的常量
   EVENT_DESIGNER_CLEAR,
@@ -55,8 +57,6 @@ import {
   generateId,
   updateTreeIn,
 } from "@/views/prototype-design/utils"
-
-import eventBus from "@/views/prototype-design/utils/eventBus"
 
 import {getSnapShot} from "@/views/prototype-design/utils/image";
 

@@ -15,7 +15,6 @@ export default {
   render(){
     return (
         <div class="ds-header">
-          <span class="ds-header-text">这里是原型设计器的页头</span>
           <el-button
               title="删除选定的组件"
               onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
