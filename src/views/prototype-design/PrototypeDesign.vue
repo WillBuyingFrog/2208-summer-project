@@ -104,6 +104,6 @@ export default {
   padding: 0;
 }
 .editor {
-  width: 1380px;
+  width: 100%;
 }
 </style>
