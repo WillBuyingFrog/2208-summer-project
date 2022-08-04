@@ -18,6 +18,7 @@ export default createStore({
         teamid: '',
         project_id: '',
         project_name: '',
+        file_name: '',
     },
     modules:{
         
