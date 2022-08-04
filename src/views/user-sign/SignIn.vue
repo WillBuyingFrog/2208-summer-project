@@ -206,9 +206,12 @@ export default {
                 ElMessage.error(res.data.message);
                 console.log(res.data.message);
                 break;
-              // case 201:
-              //   this.$message.warning('用户已登录！');
-              //   break;
+              case 201:
+                ElMessage.warning(res.data.message);
+                setTimeout(() => {
+                    this.$router.push('/workspace');
+                }, 1000);
+                break;
               // case 202:
               //   this.$message.error('用户名不存在！');
               //   break;

@@ -177,10 +177,11 @@ export default {
     },
     methods: {
         getAllProject(){
-            this.team_id = this.$route.query.id;
+            // this.team_id = this.$route.query.team_id;
+            this.team_id = this.$store.state.teamid;
             this.$axios
                 .post("/project/viewAllProject", {
-                    team_id: this.team_id
+                    team_id: this.team_id,
                 })
                 .then(res =>{
                     console.log(res.data);
@@ -233,7 +234,7 @@ export default {
             }
             else{
                 this.$axios
-                .post('/project/new_1659546407246',{
+                .post('/project/new',{
                     project_name: this.newone.name,
                     team_id: this.team_id,
                     project_info: this.newone.info
