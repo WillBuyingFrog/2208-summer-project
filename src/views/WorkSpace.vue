@@ -209,11 +209,11 @@ export default {
                     console.log(res.data.code);
                     switch (res.data.code) {
                         case 200:
+                            this.getTeam();
                             ElMessage.success('创建成功！');
                             this.newone.name = '';
                             this.newone.info = '';
                             this.dialogVisible = false;
-                            this.getTeam();
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -270,7 +270,7 @@ export default {
     box-shadow: 14px 15px 19px -15px #000;
 }
 .el-card .el-form{
-    margin-left: 15px;
+    margin-left: 5px;
 }
 .el-dialog .el-form{
     margin-left:50px;

@@ -233,8 +233,8 @@ export default {
                     switch (res.data.code){
                         case 200:
                             console.log(res.data.data);
-                            ElMessage.success("删除成功！")
                             this.getFile();
+                            ElMessage.success("删除成功！")
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -267,10 +267,10 @@ export default {
                     switch (res.data.code){
                         case 200:
                             console.log(res.data.data);
+                            this.getFile();
                             ElMessage.success("重命名成功！")
                             this.newName = '';
                             this.dialogVisible1 = false;
-                            this.getFile();
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
