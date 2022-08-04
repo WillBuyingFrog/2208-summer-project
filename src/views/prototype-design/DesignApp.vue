@@ -79,8 +79,8 @@ export default {
       currentId: '',
       currentPath: [],
       controlled: {},
-      designId: -1,
-
+      file_id: "-1",
+      userId: "-1"
     }
   },
   components:{
@@ -401,8 +401,20 @@ export default {
     eventBus.$on(EVENT_DESIGNER_UNDO, this.handleUndo)
     eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
     eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
-
     eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
+  },
+  mounted(){
+    // TODO 获取前端传入的数据，向后端验证
+    if(typeof (this.$route.query.file_id) === 'undefined'){
+      alert("文件ID错误！")
+      // TODO 禁用整个原型设计器界面 或者history.back()
+    }
+    this.file_id = this.$route.query.file_id
+
+
+    // TODO 从后端获取指定的designId对应的JSON数据
+
+    // TODO 将JSON数据渲染到App中
   }
 
 }
