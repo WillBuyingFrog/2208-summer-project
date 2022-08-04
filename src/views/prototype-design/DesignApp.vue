@@ -212,6 +212,8 @@ export default {
     },
     //  组件选中，右侧展示属性编辑器
     handleSelect(control) {
+      // collaborate
+      control.usedBy = this.userId
       this.setCurrentControl(control)
       this.updateControlStatus(true)
     },
@@ -358,9 +360,9 @@ export default {
       let result = parseControls(this.$data.controls)
       console.log(result)
       this.$http
-          .post("/summer/prototype/saveJSON",
+          .post("/file/json/new",
               {
-                uuid: "test_uuid",
+                project_id: "test_uuid",
                 data: result
               })
       .then(res => {
