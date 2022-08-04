@@ -31,8 +31,10 @@
                     <span>文档编辑</span>
                     </el-menu-item>
                     <el-menu-item index="/projectfile?filetype=2">
-                    <el-icon><Picture /></el-icon>
-                    <span>绘制图</span>
+                      <a href="https://app.diagrams.net" target="_blank" class="uml-link">
+                        <el-icon><Picture /></el-icon>
+                        <span>绘制图</span>
+                      </a >
                     </el-menu-item>
                 </el-menu>
             </el-aside>
@@ -86,5 +88,8 @@ export default {
 }
 .clear{
     clear: both;
+}
+.uml-link {
+  text-decoration-line: none;
 }
 </style>
