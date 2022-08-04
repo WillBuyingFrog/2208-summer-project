@@ -19,7 +19,7 @@ export default {
               className="icon-contain"
               onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
           >
-            <Delete class="icon"></Delete>
+            <Upload class="icon" />
           </el-icon>
           <el-icon
               class="icon-contain"

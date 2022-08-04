@@ -3,6 +3,8 @@ import { QuillBinding } from 'y-quill'
 import { WebsocketProvider } from 'y-websocket'
 
 export function handleQuillBinding(quill){
+    const IS_SINGLE_MODE = true
+    if(IS_SINGLE_MODE) return
     const ydoc = new Y.Doc()
     const ytext = ydoc.getText('quill')
     const provider = new WebsocketProvider( 'ws://localhost:1234', 'quill-demo-room', ydoc)

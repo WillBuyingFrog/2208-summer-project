@@ -80,6 +80,7 @@ export default {
       currentPath: [],
       controlled: {},
       file_id: "-1",
+      file_name: "-1",
       userId: "-1"
     }
   },
@@ -89,6 +90,17 @@ export default {
     PluginSelection
   },
   methods: {
+    reloadComponents(components) {
+      return components.map((item) => {
+        let newItem = {
+          ...item,
+          // 重置元件实时协作信息
+          usedBy: "__none__"
+        }
+        console.log(newItem.usedBy)
+        return newItem
+      })
+    },
     getComponents(components, parentId) {
       return components.map((item) => ({
         type: item.type,
@@ -129,9 +141,13 @@ export default {
      * @description 批量添加组件到编辑区域，如果指定了parentid则将添加到指定的组件中。目前parentid对应的组件只能为Container类型的组件
      * @params {{components:Array,parentId:string?}}
      */
-    addControl({ components, parentId }) {
+    addControl({ components, parentId, isReload=0 }) {
       let controls = []
       let newComponents = this.getComponents(components, parentId)
+      if(isReload){
+        console.log("This function is in reload mode.")
+        newComponents = this.reloadComponents(components, parentId)
+      }
       if (parentId) {
         const { path } = findComponentPathById(this.controls, parentId)
         controls = updateTreeIn(this.controls, path, (item) => {
@@ -358,13 +374,15 @@ export default {
     },
     exportControlsJson(){
       let result = parseControls(this.$data.controls)
+      result = JSON.stringify(result)
       console.log(result)
       this.$http
-          .post("/file/json/new",
-              {
-                project_id: "test_uuid",
-                data: result
-              })
+          // 与后端沟通过，不需要序列化
+          .post('/file/collaborate/update', {
+            file_id: this.file_id,
+            file_name: this.file_name,
+            content: result
+          })
       .then(res => {
         console.log(res)
       })
@@ -375,9 +393,12 @@ export default {
         this.setControls([])
         this.clearCurrentComponent()
       }
+      console.log(componentJSON)
+      console.log("----")
+      componentJSON = JSON.parse(componentJSON)
       componentJSON.map((item) => {
-        this.addControl({components: [item], parentId: item.parentId})
-        if (item.hasChildren === false) {
+        this.addControl({components: [item], parentId: item.parentId, isReload: 1})
+        if (item.hasChild === false) {
           // 没有子元素
           console.log("[ParseJSON] This element has no child component.")
         } else {
@@ -406,12 +427,39 @@ export default {
     eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
   },
   mounted(){
+    const IN_DEBUG_MODE = false
     // TODO 获取前端传入的数据，向后端验证
-    if(typeof (this.$route.query.file_id) === 'undefined'){
+    if((!IN_DEBUG_MODE) && this.$store.state.file_id === ''){
       alert("文件ID错误！")
-      // TODO 禁用整个原型设计器界面 或者history.back()
+      history.back()
+    }else if(IN_DEBUG_MODE){
+      console.log("调试模式开发中……")
     }
-    this.file_id = this.$route.query.file_id
+
+    this.file_id = this.$store.state.file_id
+    this.file_name = this.$store.state.file_name
+    this.userId = this.$store.state.user.id
+
+    this.$http({
+      method: 'POST',
+      url: '/file/json/get',
+      params: {
+        file_id: this.file_id
+      }
+    })
+    .then(res => {
+      console.log("hello!")
+      switch (res.data.code){
+        case 200:
+          this.parseComponentJSON({componentJSON: res.data.data.content,
+          parentId: -1})
+          console.log(this.controls)
+          // 仅调试时打开
+          // this.setControls([])
+          // this.clearCurrentComponent()
+      }
+    })
+
 
 
     // TODO 从后端获取指定的designId对应的JSON数据

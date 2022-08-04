@@ -24,6 +24,6 @@ export function parseControls(controls){
         retJSON.push(itemJSON)
         return itemJSON
     })
-    return JSON.stringify(retJSON)
+    return retJSON
 }
 
