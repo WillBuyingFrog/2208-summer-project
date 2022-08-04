@@ -21,7 +21,7 @@
               </el-popconfirm>
             </el-col>
             <el-col>
-              <p class="name">文档标题</p>
+              <p class="name">{{this.$store.state.file_name}}</p>
             </el-col>
           </el-row>
         </el-header>
