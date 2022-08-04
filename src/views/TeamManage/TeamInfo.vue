@@ -6,7 +6,7 @@
       <el-container>
           <el-aside width="200px">
                 <el-menu
-                :default-active="2"
+                :default-active="activePath"
                 class="el-menu-vertical-demo"
                 background-color="rgba(250, 250, 250, 0.5)"
                 @open="handleOpen"
@@ -125,8 +125,19 @@ export default {
         introduction:''
       };
   },
-
+  computed:{
+    activePath(){
+      console.log('路径 '+ this.$route.path.split('/').length)
+      if(this.$route.path.split('/').length == 2)
+      return '/team' 
+      else
+      return '/team/member'
+    }
+  },
   methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
     submit1(){
       const self = this;
       self.$http({
@@ -161,7 +172,7 @@ export default {
         method:'post',
         url:'/team/get/single',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64'
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
         },
       }).then(res=>{
         console.log(res.data);

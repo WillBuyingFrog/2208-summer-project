@@ -6,10 +6,14 @@
             </el-col>
             <el-col :span="6">
                 <el-menu
-                    :default-active="2"
+                    :default-active="activePath"
                     class="el-menu-demo"
                     style="background:unset"
                     mode="horizontal"
+                    :ellipsis="false"
+                    text-color="#000000"
+                    active-text-color="#409EFF"
+                    @select="handleSelect"
                     router>
                     <el-menu-item index="/allproject">
                         <el-icon><DataLine/></el-icon>
@@ -77,8 +81,18 @@ export default {
     let B = Math.floor(Math.random() * 130+110);
     this.avatarColor = 'rgb(' + R + ',' + G + ',' + B + ', .5)'
   },
+   computed:{
+    activePath(){ 
+      if(this.$route.path.split('/')[1] == 'team')
+      return '/team' 
+      else
+      return '/allproject'
+    }
+  },
   methods: {
-    
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      }
   }
 }
 </script>
