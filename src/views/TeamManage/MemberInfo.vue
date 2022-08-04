@@ -60,18 +60,18 @@
                               <el-select v-model="newLeader" filterable placeholder="请选择">
                                 <el-option
                                   style="width: 400px;"
-                                  v-for="item in tableData"
+                                  v-for="item in tableData "
                                   :key="item.username"
                                   :label="item.username"
                                   :value="item.username">
                                    <el-row>
-                                    <el-col :span="9">
+                                    <el-col :span="9"  v-if="item.username!=this.$store.state.user.name">
                                       <span >{{ item.username }}</span>
                                     </el-col>
-                                    <el-col :span="7">
+                                    <el-col :span="7"  v-if="item.username!=this.$store.state.user.name">
                                       <span style="color: #8492a6; font-size: 13px">{{ item.real_name }}</span>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="8"  v-if="item.username!=this.$store.state.user.name">
                                       <span style="color: #8492a6; font-size: 13px">{{ item.mail }}</span>
                                     </el-col>
                                   </el-row>
@@ -153,7 +153,6 @@
                           <template #default="scope">
                           <el-popover
                             placement="bottom"
-                            
                             title="更改权限"
                             :width="150"
                             trigger="click">
@@ -165,7 +164,7 @@
                             </div>
                             <div>
                               <el-button type="primary" plain style="margin-top:15px; margin-left:35px; border-radius:5px;height:20px;"
-                              @click="modifyAuthority(scope.row.username)">确认</el-button>
+                              @click=" modifyAuthority(scope.row.username);">确认</el-button>
                             </div>
                             <template #reference>
                               <el-button
@@ -174,21 +173,19 @@
                               disabled
                               style="border-radius: 7px;height: 27px;"
                               size="small"
-                              type="primary"
-                              @click="handleDelete(scope.$index, scope.row)">
+                              type="primary">
                               编辑
                             </el-button>
                             <el-button
                               v-else
                               style="border-radius: 7px;height: 27px;"
                               size="small"
-                              type="primary"
-                              @click="handleDelete(scope.$index, scope.row)">
+                              type="primary">
                               编辑
                             </el-button>
                             </template>
                           </el-popover>
-                          <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)" v-model="modifyVisible">
+                          <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)" >
                             <template #reference>
                               <el-button
                                 v-if="(scope.row.username==this.$store.state.user.name)||
@@ -250,35 +247,7 @@ export default {
       invite:'',
       authority:'1',
       newLeader:'',
-      modifyVisible:false,
-      tableData: [{
-          username: '123',
-          real_name:'王小虎',
-          mail: '206911518@qq.com',
-          authority:'leader',
-        }, {
-          username: '456',
-          real_name:'王小虎',
-          mail: '206911518@qq.com',
-          authority:'admin',
-        }, {
-          username: 'wxh1234567',
-          real_name:'张',
-          mail: '206911518@qq.com',
-          authority:'member',
-        }, {
-          username: 'abc',
-          real_name:'李',
-          mail: '206911518@qq.com',
-          authority:'member',
-        },
-        {
-          username: '管理',
-          real_name:'管理',
-          mail: '206911518@qq.com',
-          authority:'admin',
-        }
-      ]
+      tableData: []
     };
   },
   computed:{
@@ -366,10 +335,20 @@ export default {
         },
       }).then(res=>{
         console.log(res.data);
-        console.log(res.data.data);
-        this.dialogVisible=false;
-        this.invite='';
-        this.getList();
+        if(res.data.code == '200'){
+          this.dialogVisible=false;
+          this.invite='';
+          this.getList();
+          ElMessage.success("添加成功！")
+        }
+        else{
+          if(res.data.message == 'No authority')
+          ElMessage.warning('用户名不存在！')
+          else
+          ElMessage.warning('该用户已在团队中！')
+        }
+        
+        
       })
     },
     leaveTeam(){
@@ -416,12 +395,10 @@ export default {
           authority: this.authority
         },
       }).then(res=>{
-        ElMessage.success('修改成功！');
-        this.modifyVisible = false;
+        ElMessage.success('修改成功！')
         console.log(res.data);
         console.log(res.data.data);
         this.getList();
-
       })       
     },
     changeLeader(){
@@ -430,7 +407,7 @@ export default {
         method:'post',
         url:'/team/change/leader',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
           new_name: this.newLeader,
         },
       }).then(res=>{
@@ -438,6 +415,7 @@ export default {
         console.log(res.data);
         console.log(res.data.data);
         this.dialogVisible1 = false
+        this.getList();
       })        
     }
     },
