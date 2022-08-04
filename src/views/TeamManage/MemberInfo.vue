@@ -9,8 +9,6 @@
                 :default-active="2"
                 class="el-menu-vertical-demo"
                 background-color="rgba(250, 250, 250, 0.5)"
-                @open="handleOpen"
-                @close="handleClose"
                 style="height:100vh;"
                 router>
                 <el-menu-item index="/team">
@@ -38,7 +36,33 @@
                             <el-radio :label="6">管理员</el-radio>
                             <el-radio :label="9">普通成员</el-radio>
                         </el-radio-group>   
-                        <el-button type="primary" icon="CirclePlus" class="add">添加成员</el-button>
+                        <div>
+                          <el-button v-if="identity=='2'" type="primary" icon="CirclePlus" class="add"  disabled>添加成员</el-button>
+                          <el-button v-else type="primary" icon="CirclePlus" class="add" @click="dialogVisible = true">添加成员</el-button>
+                        </div>
+                        <div>
+                          <el-popconfirm title="确认要离开该团队吗" @confirm="leaveTeam()">
+                            <template #reference>
+                              <el-button v-if="identity=='0'" disabled icon="Delete" class="leave" type="danger" >离开团队</el-button>
+                              <el-button v-else icon="Delete" class="leave" type="danger" >离开团队</el-button>
+                            </template>
+                          </el-popconfirm>
+                        </div> 
+                        <el-dialog
+                            title="添加成员"
+                            v-model="dialogVisible"
+                            width="500px"
+                            :before-close="handleClose">
+                            <el-form :inline="true" class="demo-form-inline">
+                              <el-form-item label="用户名">
+                                <el-input v-model="invite"  style="width: 200px;">
+                                </el-input>
+                              </el-form-item>
+                              <el-form-item>
+                                <el-button type="primary" @click="addMember()">确定</el-button>
+                              </el-form-item>
+                            </el-form>
+                        </el-dialog>
                     </el-col>
                     <el-col :span="1">
                         <div style="height:600px; width:0.5px; background:gray"></div>
@@ -51,21 +75,29 @@
                     </div>
                     <div class="table">
                       <el-table
-                      :data="tableData"
-                      row-style="height:40px"
-                      width="800">
+                      :data="filtrate()"
+                      row-style="height:50px"
+                      width="1000px">
                         <el-table-column
                           width="45">
-                          <el-avatar :size="28" :src="circleUrl" style="margin:6px 0 0 8px" />
+                          <!-- <el-avatar :size="28" :src="circleUrl" style="margin:6px 0 0 8px" /> -->
+                          <template #default="scope">
+                          <el-avatar
+                            :size="28"
+                            :style="randomRgb()"
+                            style="margin:0px 0 0 8px">
+                            {{scope.row.username.slice(0,1)}} 
+                          </el-avatar>
+                          </template>
                         </el-table-column>
                         <el-table-column
                           icon="Search"
-                          prop="name"
+                          prop="username"
                           label="昵称"
                           width="150">
                         </el-table-column>
                         <el-table-column
-                          prop="realName"
+                          prop="real_name"
                           label="真实姓名"
                           width="150">
                         </el-table-column>
@@ -75,14 +107,37 @@
                           width="190">
                         </el-table-column>
                         <el-table-column
-                          prop="identity"
                           label="身份"
                           width="150">
+                            <template #default="scope">
+                            <el-tag v-if="scope.row.authority === 'member'">普通成员</el-tag>
+                            <el-tag v-else-if="scope.row.authority === 'admin'" type="success">管理员</el-tag>
+                            <el-tag v-else type="warning">超级管理员</el-tag>
+                            </template>
                         </el-table-column>
                         <el-table-column
                           label="操作">
                           <template #default="scope">
-                            <el-button
+                          <el-popover
+                            placement="bottom"
+                            title="更改权限"
+                            :width="150"
+                            trigger="click">
+                            <div style="margin-top: 10px">
+                              <el-radio-group v-model="authority" size="small">
+                                <el-radio-button label="1" >管理员</el-radio-button>
+                                <el-radio-button label="2" >普通成员</el-radio-button>
+                              </el-radio-group>
+                            </div>
+                            <div>
+                              <el-button type="primary" plain style="margin-top:15px; margin-left:35px; border-radius:5px;height:20px;"
+                              @click="modifyAuthority(scope.row.username)">确认</el-button>
+                            </div>
+                            <template #reference>
+                              <el-button
+                              v-if="(scope.row.username==this.$store.state.user.name)||
+                              (identity == '1' && scope.row.authority=='leader' ) || identity == '2'"
+                              disabled
                               style="border-radius: 7px;height: 27px;"
                               size="small"
                               type="primary"
@@ -90,12 +145,39 @@
                               编辑
                             </el-button>
                             <el-button
+                              v-else
                               style="border-radius: 7px;height: 27px;"
                               size="small"
-                              type="danger"
+                              type="primary"
                               @click="handleDelete(scope.$index, scope.row)">
-                              移除
+                              编辑
                             </el-button>
+                            </template>
+                          </el-popover>
+                            <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)">
+                            <template #reference>
+                              <el-button
+                                v-if="(scope.row.username==this.$store.state.user.name)||
+                              (identity == '1' && scope.row.authority!='member' ) || identity == '2'"
+                                disabled
+                                style="border-radius: 7px;height: 27px;"
+                                size="small"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)">
+                                移除
+                              </el-button>
+                              <el-button
+                                v-else
+                                style="border-radius: 7px;height: 27px;"
+                                size="small"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)">
+                                移除
+                              </el-button>
+                              
+                            </template>
+                            </el-popconfirm>
+                            
                           </template>
                         </el-table-column>
                       </el-table>
@@ -112,6 +194,8 @@
 <script>
 import { Search }  from '@element-plus/icons-vue';
 import TopGuide from '../../components/TopGuide.vue';
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
   setup() {
     return{
@@ -119,34 +203,165 @@ export default {
       TopGuide
     }
   },
-    data () {
-      return {
-        filter:3,
-        input:'',
-        tableData: [{
-            name: 'wxh1234567',
-            realName:'王小虎',
-            email: '206911518@qq.com',
-            identity:'管理员',
-          }, {
-            name: 'wxh1234567',
-            realName:'王小虎',
-            email: '206911518@qq.com',
-            identity:'管理员',
-          }, {
-            name: 'wxh1234567',
-            realName:'王小虎',
-            email: '206911518@qq.com',
-            identity:'管理员',
-          }, {
-            name: 'wxh1234567',
-            realName:'王小虎',
-            email: '206911518@qq.com',
-            identity:'管理员',
+  created() {
+    this.getList();
+  },
+  data () {
+    return {
+      filter: 3,
+      input:'',
+      identity: '',
+      dialogVisible: false,
+      invite:'',
+      authority:'1',
+      tableData: [{
+          username: '123',
+          real_name:'王小虎',
+          email: '206911518@qq.com',
+          authority:'leader',
+        }, {
+          username: '456',
+          real_name:'王小虎',
+          email: '206911518@qq.com',
+          authority:'admin',
+        }, {
+          username: 'wxh1234567',
+          real_name:'张',
+          email: '206911518@qq.com',
+          authority:'member',
+        }, {
+          username: 'abc',
+          real_name:'李',
+          email: '206911518@qq.com',
+          authority:'member',
+        },
+        {
+          username: '管理',
+          real_name:'管理',
+          email: '206911518@qq.com',
+          authority:'admin',
+        }
+      ]
+    };
+  },
+  methods: {
+      filtrate(){
+        var result = []
+        if(this.filter == 3){
+          result = this.tableData
+        }
+        else if(this.filter == 6){
+          for(var i=0; i<this.tableData.length; i++){
+            if(this.tableData[i].authority != 'member')
+            result.push(this.tableData[i])
           }
-        ]
+        }
+        else{
+          for(var j=0; j<this.tableData.length; j++){
+            if(this.tableData[j].authority == 'member')
+            result.push(this.tableData[j])
+          }
+        }
+        if(this.input == '')
+        return result
+        else{
+          var r = []
+          for(var k=0; k<result.length; k++){
+            if(result[k].username.includes(this.input) || result[k].real_name.includes(this.input))
+            r.push(result[k])
+          }
+          return r
+        }
+    },
+    randomRgb() {
+      let R = Math.floor(Math.random() * 130+110);
+      let G = Math.floor(Math.random() * 130+110);
+      let B = Math.floor(Math.random() * 130+110);
+      return {
+          background: 'rgb(' + R + ',' + G + ',' + B + ', .5)'
       };
+    },
+    getList(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/member/get',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64'
+        },
+      }).then(res=>{
+        console.log(res.data);
+        console.log(res.data.data);
+      })
+    },
+    addMember(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/member/add',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          invitee_name:this.invite
+        },
+      }).then(res=>{
+        console.log(res.data);
+        console.log(res.data.data);
+        this.dialogVisible=false
+      })
+    },
+    leaveTeam(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/member/leave',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+        },
+      }).then(res=>{
+        console.log(res.data);
+        console.log(res.data.data);
+
+        ElMessage.success('离开团队成功');
+        setTimeout(() => {
+          this.$router.push('/workspace')
+        }, 1000);
+      })
+    },
+    removeMember(name){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/member/remove',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          remove_name:name
+        },
+      }).then(res=>{
+        ElMessage.success('移除成功！');
+        console.log(res.data);
+        console.log(res.data.data);
+      })      
+    },
+    modifyAuthority(name){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/member/authority',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          member_name: name,
+          authority: this.authority
+        },
+      }).then(res=>{
+        ElMessage.success('修改成功！');
+        console.log(res.data);
+        console.log(res.data.data);
+      })       
     }
+
+      
+
+    },
   }
 
 </script>
@@ -178,7 +393,13 @@ export default {
   .add{
     height: 40px;
     border-radius: 10px;
-    margin-top: 200px;
+    margin-top: 160px;
+  }
+  .leave{
+    height: 40px;
+    border-radius: 10px;
+    margin-top: 30px;
+    left: 20%;
   }
   .title{
     font-size:22px;

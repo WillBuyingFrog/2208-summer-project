@@ -112,7 +112,6 @@
 
 
 <script>
-
 export default {
   setup() {
     return{
@@ -126,11 +125,53 @@ export default {
         introduction:''
       };
   },
+
   methods: {
     submit1(){
-      console.log(this.$store.state.test)
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/change/name',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          new_name:self.name
+        },
+      }).then(res=>{
+        console.log(res.data);
+        console.log(res.data.data);
+      })
+    },
+    submit2(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/change/info',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          new_info:self.introduction
+        },
+      }).then(res=>{
+        console.log(res.data);
+        console.log(res.data.data);
+      })
+    },
+    getInfo(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/get/single',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64'
+        },
+      }).then(res=>{
+        console.log(res.data);
+        console.log(res.data.data);
+      })
     }
-  }
+  },
+  created(){
+    this.getInfo();
+  },
 }
 </script>
 

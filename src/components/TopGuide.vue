@@ -45,7 +45,7 @@
                     trigger="click">
                   <template #reference>
                     <el-avatar :style="{background:avatarColor}" :size="36" 
-                    :src="circleUrl" style="margin-top:12px;margin-left: 15px;"> 
+                     style="margin-top:12px;margin-left: 15px;"> 
                     {{this.$store.state.user.name.slice(0,1)}} 
                     </el-avatar>
                   </template>
