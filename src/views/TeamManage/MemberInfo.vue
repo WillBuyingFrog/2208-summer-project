@@ -6,10 +6,11 @@
         <el-container  >
             <el-aside width="200px">
                 <el-menu
-                :default-active="2"
+                :default-active="activePath"
                 class="el-menu-vertical-demo"
                 background-color="rgba(250, 250, 250, 0.5)"
                 style="height:100vh;"
+                @select="handleSelect"
                 router>
                 <el-menu-item index="/team">
                   <el-icon><Histogram/></el-icon>
@@ -40,7 +41,7 @@
                           <el-button v-if="identity=='2'" type="primary" icon="CirclePlus" class="add"  disabled>添加成员</el-button>
                           <el-button v-else type="primary" icon="CirclePlus" class="add" @click="dialogVisible = true">添加成员</el-button>
                         </div>
-                        <div>
+                        <div v-if="identity !='0'">
                           <el-popconfirm title="确认要离开该团队吗" @confirm="leaveTeam()">
                             <template #reference>
                               <el-button v-if="identity=='0'" disabled icon="Delete" class="leave" type="danger" >离开团队</el-button>
@@ -48,6 +49,38 @@
                             </template>
                           </el-popconfirm>
                         </div> 
+                        <div>
+                          <el-button v-if="identity=='0'" icon="Refresh" type="danger"
+                          class="deliver" @click="dialogVisible1 = true">转交团队</el-button>
+                          <el-dialog
+                              title="转交团队"
+                              v-model="dialogVisible1"
+                              width="500px"
+                              :before-close="handleClose">
+                              <el-select v-model="newLeader" filterable placeholder="请选择">
+                                <el-option
+                                  style="width: 400px;"
+                                  v-for="item in tableData"
+                                  :key="item.username"
+                                  :label="item.username"
+                                  :value="item.username">
+                                   <el-row>
+                                    <el-col :span="9">
+                                      <span >{{ item.username }}</span>
+                                    </el-col>
+                                    <el-col :span="7">
+                                      <span style="color: #8492a6; font-size: 13px">{{ item.real_name }}</span>
+                                    </el-col>
+                                    <el-col :span="8">
+                                      <span style="color: #8492a6; font-size: 13px">{{ item.mail }}</span>
+                                    </el-col>
+                                  </el-row>
+                                </el-option>
+                              </el-select>
+                              <el-button type="primary" icon="CircleCheck" round 
+                                  @click="changeLeader()" style="margin-left:20px">确认</el-button>
+                          </el-dialog>                      
+                        </div>
                         <el-dialog
                             title="添加成员"
                             v-model="dialogVisible"
@@ -102,7 +135,7 @@
                           width="150">
                         </el-table-column>
                         <el-table-column
-                          prop="email"
+                          prop="mail"
                           label="邮箱"
                           width="190">
                         </el-table-column>
@@ -112,7 +145,7 @@
                             <template #default="scope">
                             <el-tag v-if="scope.row.authority === 'member'">普通成员</el-tag>
                             <el-tag v-else-if="scope.row.authority === 'admin'" type="success">管理员</el-tag>
-                            <el-tag v-else type="warning">超级管理员</el-tag>
+                            <el-tag v-else type="warning">所有者</el-tag>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -120,6 +153,7 @@
                           <template #default="scope">
                           <el-popover
                             placement="bottom"
+                            
                             title="更改权限"
                             :width="150"
                             trigger="click">
@@ -154,7 +188,7 @@
                             </el-button>
                             </template>
                           </el-popover>
-                            <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)">
+                          <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)" v-model="modifyVisible">
                             <template #reference>
                               <el-button
                                 v-if="(scope.row.username==this.$store.state.user.name)||
@@ -212,39 +246,54 @@ export default {
       input:'',
       identity: '',
       dialogVisible: false,
+      dialogVisible1: false,
       invite:'',
       authority:'1',
+      newLeader:'',
+      modifyVisible:false,
       tableData: [{
           username: '123',
           real_name:'王小虎',
-          email: '206911518@qq.com',
+          mail: '206911518@qq.com',
           authority:'leader',
         }, {
           username: '456',
           real_name:'王小虎',
-          email: '206911518@qq.com',
+          mail: '206911518@qq.com',
           authority:'admin',
         }, {
           username: 'wxh1234567',
           real_name:'张',
-          email: '206911518@qq.com',
+          mail: '206911518@qq.com',
           authority:'member',
         }, {
           username: 'abc',
           real_name:'李',
-          email: '206911518@qq.com',
+          mail: '206911518@qq.com',
           authority:'member',
         },
         {
           username: '管理',
           real_name:'管理',
-          email: '206911518@qq.com',
+          mail: '206911518@qq.com',
           authority:'admin',
         }
       ]
     };
   },
+  computed:{
+    activePath(){
+      console.log('路径 '+ this.$route.path.split('/').length)
+      if(this.$route.path.split('/').length == 2)
+      return '/team' 
+      else
+      return '/team/member'
+    }
+  },
   methods: {
+     handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
       filtrate(){
         var result = []
         if(this.filter == 3){
@@ -281,17 +330,29 @@ export default {
           background: 'rgb(' + R + ',' + G + ',' + B + ', .5)'
       };
     },
+    
     getList(){
       const self = this;
       self.$http({
         method:'post',
         url:'/team/member/get',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64'
+          team_id: this.$store.state.teamid
         },
       }).then(res=>{
         console.log(res.data);
-        console.log(res.data.data);
+        this.tableData = res.data.data
+        for(var i=0; i<this.tableData.length; i++){
+          if(this.tableData[i].username == this.$store.state.user.name){
+            if(this.tableData[i].authority == 'member')
+            this.identity = 2
+            else if(this.tableData[i].authority == 'leader')
+            this.identity = 0
+            else
+            this.identity = 1;
+            break;
+          }
+        }
       })
     },
     addMember(){
@@ -300,13 +361,15 @@ export default {
         method:'post',
         url:'/team/member/add',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
           invitee_name:this.invite
         },
       }).then(res=>{
         console.log(res.data);
         console.log(res.data.data);
-        this.dialogVisible=false
+        this.dialogVisible=false;
+        this.invite='';
+        this.getList();
       })
     },
     leaveTeam(){
@@ -315,12 +378,11 @@ export default {
         method:'post',
         url:'/team/member/leave',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
         },
       }).then(res=>{
         console.log(res.data);
         console.log(res.data.data);
-
         ElMessage.success('离开团队成功');
         setTimeout(() => {
           this.$router.push('/workspace')
@@ -333,13 +395,14 @@ export default {
         method:'post',
         url:'/team/member/remove',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
           remove_name:name
         },
       }).then(res=>{
         ElMessage.success('移除成功！');
         console.log(res.data);
         console.log(res.data.data);
+        this.getList();
       })      
     },
     modifyAuthority(name){
@@ -348,19 +411,35 @@ export default {
         method:'post',
         url:'/team/member/authority',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
           member_name: name,
           authority: this.authority
         },
       }).then(res=>{
         ElMessage.success('修改成功！');
+        this.modifyVisible = false;
         console.log(res.data);
         console.log(res.data.data);
+        this.getList();
+
       })       
+    },
+    changeLeader(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'/team/change/leader',
+        params: {
+          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          new_name: this.newLeader,
+        },
+      }).then(res=>{
+        ElMessage.success('转交成功！');
+        console.log(res.data);
+        console.log(res.data.data);
+        this.dialogVisible1 = false
+      })        
     }
-
-      
-
     },
   }
 
@@ -393,9 +472,15 @@ export default {
   .add{
     height: 40px;
     border-radius: 10px;
-    margin-top: 160px;
+    margin-top: 150px;
   }
   .leave{
+    height: 40px;
+    border-radius: 10px;
+    margin-top: 30px;
+    left: 20%;
+  }
+  .deliver{
     height: 40px;
     border-radius: 10px;
     margin-top: 30px;

@@ -185,7 +185,7 @@ export default {
                 })
         },
         AllProject(id){
-            this.$store.state.teamid = id;
+            this.$store.state.teamid = id
             this.$router.push({
                 path:'/allproject',
             })

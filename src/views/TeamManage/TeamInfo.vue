@@ -6,7 +6,7 @@
       <el-container>
           <el-aside width="200px">
                 <el-menu
-                :default-active="2"
+                :default-active="activePath"
                 class="el-menu-vertical-demo"
                 background-color="rgba(250, 250, 250, 0.5)"
                 @open="handleOpen"
@@ -36,7 +36,7 @@
                     </el-row>
                     </el-col>
                     <el-col :span="20">
-                      <span style="font-size:18px;float:left;margin-top:15px;font-weight:600;">frogteam</span>
+                      <span style="font-size:18px;float:left;margin-top:15px;font-weight:600;">{{teamName}}</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -44,10 +44,10 @@
                   <el-descriptions-item  :span="2">
                     <template #label>
                       <div class="cell-item">
-                        <el-icon><user /></el-icon>组长
+                        <el-icon><user /></el-icon>队长
                       </div>
                     </template>
-                    frog
+                    {{leader}}
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template #label>
@@ -55,7 +55,7 @@
                         <el-icon><user /></el-icon>创建者
                       </div>
                     </template>
-                    frog
+                    {{creator}}
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template #label>
@@ -63,7 +63,7 @@
                         <el-icon><user /></el-icon>创建时间
                       </div>
                     </template>
-                    2022-8-2 21:06
+                    {{time}}
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template #label>
@@ -71,7 +71,7 @@
                         <el-icon><user /></el-icon>简介
                       </div>
                     </template>
-                    2111111106131222222222
+                    {{info}}
                   </el-descriptions-item>
                 </el-descriptions>
                 <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
@@ -83,7 +83,7 @@
                 :before-close="handleClose">
                 <el-form :inline="true" class="demo-form-inline">
                   <el-form-item label="名称">
-                    <el-input v-model="name"  style="width: 400px;"
+                    <el-input v-model="newName"  style="width: 400px;"
                       type="textarea" maxlength="25" show-word-limit
                       resize="none">
                     </el-input>
@@ -96,7 +96,7 @@
                   <el-form-item label="简介">
                     <el-input  type="textarea" maxlength="200" show-word-limit
                          resize="none" :autosize="{ minRows: 6}"
-                         v-model="introduction"
+                         v-model="newInfo"
                          style="width:400px">
                     </el-input>
                   </el-form-item>
@@ -112,6 +112,8 @@
 
 
 <script>
+import { ElMessage } from 'element-plus';
+
 export default {
   setup() {
     return{
@@ -121,24 +123,42 @@ export default {
   data () {
     return {
         dialogVisible: false,
-        name:'',
-        introduction:''
+        teamName:'',
+        introduction:'',
+        leader:'',
+        creator:'',
+        time:'',
+        info:'',
+        newName:'',
+        newInfo:''
       };
   },
-
+  computed:{
+    activePath(){
+      console.log('路径 '+ this.$route.path.split('/').length)
+      if(this.$route.path.split('/').length == 2)
+      return '/team' 
+      else
+      return '/team/member'
+    }
+  },
   methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
     submit1(){
       const self = this;
       self.$http({
         method:'post',
         url:'/team/change/name',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
-          new_name:self.name
+          team_id: this.$store.state.teamid,
+          new_name:self.newName
         },
       }).then(res=>{
         console.log(res.data);
-        console.log(res.data.data);
+        ElMessage.success('修改成功！')
+        this.teamName = this.newName
       })
     },
     submit2(){
@@ -147,12 +167,13 @@ export default {
         method:'post',
         url:'/team/change/info',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
-          new_info:self.introduction
+          team_id: this.$store.state.teamid,
+          new_info:self.newInfo
         },
       }).then(res=>{
         console.log(res.data);
-        console.log(res.data.data);
+        ElMessage.success('修改成功！')
+        this.info = this.newInfo
       })
     },
     getInfo(){
@@ -161,11 +182,15 @@ export default {
         method:'post',
         url:'/team/get/single',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64'
+          team_id:  this.$store.state.teamid,
         },
       }).then(res=>{
+        this.teamName = res.data.data.team_name
+        this.creator = res.data.data.creator
+        this.leader = res.data.data.leader;
+        this.info = res.data.data.info;
+        this.time = res.data.data.create_time;
         console.log(res.data);
-        console.log(res.data.data);
       })
     }
   },
