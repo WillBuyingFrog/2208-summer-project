@@ -40,7 +40,7 @@
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
                             {{project.project_name}}
                         </span>
-                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_name)">进入项目</el-button>
+                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
                     <div class="clear"></div>
                     </div>
                 </template>
@@ -50,7 +50,7 @@
                             <template #label>  
                                 <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                             </template>
-                            <span>{{project.creator_name}}</span>
+                            <span>{{project.creator}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>  
@@ -246,6 +246,7 @@ export default {
                         case 200:
                             ElMessage.success("创建成功!");
                             this.newone.name = '';
+                            this.newone.info = '';
                             this.dialogVisible = false;
                             this.getAllProject();
                             break;
@@ -362,8 +363,9 @@ export default {
                     console.log(err);
                 })
         },
-        toProject(name){
+        toProject(name, id){
             this.$store.state.project_name = name;
+            this.$store.state.project_id = id;
             this.$router.push('/projectinfo');
         }
     },

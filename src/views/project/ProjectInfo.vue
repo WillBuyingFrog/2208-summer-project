@@ -36,7 +36,7 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                                 </template>
-                                <span>{{project.creator_name}}</span>
+                                <span>{{project.creator}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -122,7 +122,7 @@ name: "projectFile",
                     switch (res.data.code){
                         case 200:
                             console.log(res.data.data);
-                            this.project = res.data.data[0];
+                            this.project = res.data.data;
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
