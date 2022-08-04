@@ -102,6 +102,10 @@
             <el-form-item label="项目名称">
                 <el-input v-model="newone.name"></el-input>
             </el-form-item>
+            <el-form-item label="项目简介">
+                <el-input v-model="newone.info" :autosize="{ minRows: 3, maxRows: 6 }" 
+                type="textarea"></el-input>
+            </el-form-item>
         </el-form>
         <template #footer>
         <span class="dialog-footer">
@@ -163,11 +167,13 @@ export default {
             oldname: '',
             newone:{
                 name: "",
+                info: ""
             }
         }
     },
     created(){
         this.getAllProject();
+        console.log("team_id: "+this.team_id);
     },
     methods: {
         getAllProject(){
@@ -221,11 +227,16 @@ export default {
                 console.log('trashproject');
             }
         },
-        newProject(){           
-            this.$axios
+        newProject(){         
+            if(this.newone.name == '' || this.newone.name == undefined || this.newone.name == null) {
+                ElMessage.warning("请输入项目名称");
+            }
+            else{
+                this.$axios
                 .post('/project/new_1659546407246',{
                     project_name: this.newone.name,
-                    team_id: this.team_id
+                    team_id: this.team_id,
+                    project_info: this.newone.info
                 })
                 .then(res =>{
                     console.log(res.data.code);
@@ -245,6 +256,8 @@ export default {
                 .catch(err => {
                     console.log(err);
                 })
+            }
+            
         },
         openRename(oldname){
             this.oldname = oldname;
