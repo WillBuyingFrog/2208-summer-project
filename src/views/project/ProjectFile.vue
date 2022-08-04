@@ -202,10 +202,10 @@ export default {
                     switch (res.data.code){
                         case 200:
                             console.log(res.data.data);
+                            this.getFile();
                             ElMessage.success("创建成功！")
                             this.newFileid = res.data.data;
                             this.dialogVisible = false;
-                            this.getFile();
                             //是否跳转到编辑页？
                             break;
                         case 500:
