@@ -18,12 +18,10 @@
         </el-col>
       </el-row>
     </div>
-    <DesignAppFooter />
   </div>
 </template>
 
 <script>
-import DesignAppFooter from "@/views/prototype-design/DesignAppFooter";
 import DesignAppHeader from "@/views/prototype-design/DesignAppHeader";
 
 import DesignAppComponents from "@/views/prototype-design/DesignAppComponents";
@@ -33,6 +31,8 @@ import PropInspector from "@/views/prototype-design/prop-inspector"
 import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
 import {parseControls} from "@/views/prototype-design/utils/collaborate";
+
+import eventBus from "@/views/prototype-design/utils/eventBus"
 
 import {
   // 一些有关全局操作的常量
@@ -56,8 +56,6 @@ import {
   updateTreeIn,
 } from "@/views/prototype-design/utils"
 
-import eventBus from "@/views/prototype-design/utils/eventBus"
-
 import {getSnapShot} from "@/views/prototype-design/utils/image";
 
 let historys = [[]]
@@ -76,7 +74,7 @@ export default {
     }
   },
   components:{
-    DesignAppHeader, DesignAppFooter, DesignAppComponents,
+    DesignAppHeader, DesignAppComponents,
     DesignEditorView, PropInspector,
     PluginSelection
   },
