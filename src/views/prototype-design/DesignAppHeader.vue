@@ -6,7 +6,7 @@ import {
   EVENT_DESIGNER_UNDO,
   EVENT_DESIGNER_REDO,
   EVENT_DESIGNER_CLEAR,
-  // COLLABORATE_EXPORT_JSON,
+  COLLABORATE_EXPORT_JSON,
   EVENT_DESIGNER_SAVEIMG
 } from "@/views/prototype-design/event-enum";
 
@@ -15,6 +15,12 @@ export default {
   render(){
     return (
         <div class="ds-header">
+          <el-icon
+              className="icon-contain"
+              onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
+          >
+            <Delete class="icon"></Delete>
+          </el-icon>
           <el-icon
               class="icon-contain"
               onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}

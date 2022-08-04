@@ -355,9 +355,18 @@ export default {
     exportControlsJson(){
       let result = parseControls(this.$data.controls)
       console.log(result)
+      this.$http
+          .post("/summer/prototype/saveJSON",
+              {
+                uuid: "test_uuid",
+                data: result
+              })
+      .then(res => {
+        console.log(res)
+      })
     },
     parseComponentJSON({componentJSON, parentId}){
-      // 第一次调用（在root editor上遍历）首先清除当前画布上所有的控件
+      // 第一次调用（在root editor上遍历）首先清除当前画布上所有的控件和所有的当前选中状态
       if(parentId === -1){
         this.setControls([])
         this.clearCurrentComponent()
