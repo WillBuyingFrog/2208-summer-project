@@ -66,10 +66,11 @@ export default {
 <style scoped>
 .ds-header{
   height: 50px;
-  margin: 0;
+  margin: 20px 10px 0 10px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.50);
   box-shadow: 3px 3px 10px #bebebe;
+  padding: 0;
 }
 .icon-contain {
   width: 40px;

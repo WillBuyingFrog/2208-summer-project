@@ -17,8 +17,10 @@ app.config.globalProperties.GLOBAL = GlobalInfo
 // axios
 app.config.globalProperties.$axios = axios
 app.config.globalProperties.$http = axios
+axios.defaults.withCredentials = true;
 axios.defaults.baseURL = GlobalInfo.backUrl;
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8;'
+axios.defaults.withCredentials=true;
 
 for (let iconName in ELIcons) {
     app.component(iconName, ELIcons[iconName])

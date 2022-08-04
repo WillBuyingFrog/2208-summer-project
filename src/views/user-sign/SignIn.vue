@@ -54,6 +54,9 @@
   background-size: 100% auto;
   min-height: 800px;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: fixed;
 }
 .login {
   margin: 130px auto auto;
@@ -177,7 +180,7 @@ export default {
             passwd: self.form.password,
           })
           .then(res => {
-            console.log(res.data.code);
+            console.log(res.data);
             switch (res.data.code) {
               case 200:
                 // location.reload();
@@ -206,9 +209,12 @@ export default {
                 ElMessage.error(res.data.message);
                 console.log(res.data.message);
                 break;
-              // case 201:
-              //   this.$message.warning('用户已登录！');
-              //   break;
+              case 201:
+                ElMessage.warning(res.data.message);
+                setTimeout(() => {
+                    this.$router.push('/workspace');
+                }, 1000);
+                break;
               // case 202:
               //   this.$message.error('用户名不存在！');
               //   break;

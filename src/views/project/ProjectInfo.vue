@@ -11,22 +11,22 @@
                 </div>
             </template>
             <div class="text item">
-                <el-form :model="file" label-width="140px" label-position="left">
+                <el-form :model="project" label-width="140px" label-position="left">
                     <el-row>
                         <el-col :span="12">
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><Collection /></el-icon> 项目名称:</div>
                                 </template>
-                                <span>{{}}</span>
+                                <span>{{project.project_name}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item>
                                 <template #label>  
-                                    <div class="label1"><el-icon><DocumentCopy /></el-icon> 隶属团队:</div>
+                                    <div class="label1"><el-icon><DocumentCopy /></el-icon> 所属团队:</div>
                                 </template>
-                                <span>{{}}</span>
+                                <span>{{project.team_name}}</span>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -36,7 +36,7 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                                 </template>
-                                <span>{{}}</span>
+                                <span>{{project.creator}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -44,7 +44,7 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                                 </template>
-                                <span>{{}}</span>
+                                <span>{{project.create_time}}</span>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -54,7 +54,7 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><User /></el-icon> 最后编辑者:</div>
                                 </template>
-                                <span>{{}}</span>
+                                <span>{{project.last_modification_user}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -62,7 +62,7 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
                                 </template>
-                                <span>2022/08/02 21:46{{}}</span>
+                                <span>{{project.last_modification_time}}</span>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -71,7 +71,7 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                                 </template>
-                                <span>{{}}</span>
+                                <span>{{project.project_info}}</span>
                             </el-form-item>
                     </el-row>   
                     <div class="button1" v-if="status == 0">
@@ -88,24 +88,51 @@
 </template>
 
 <script>
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
 name: "projectFile",
     data() {
         return {
             dialogVisible: false,
-            file: {},
-            firstChar: "S",//用户名首字母
-            proNum: 4,//项目总数
+            team_id: '',
+            project_name: '',
+            project:{},
             newone:{
                 name: "",
                 info: ""
             }
         }
     },
+    created(){
+        this.team_id = this.$store.state.teamid;
+        this.project_name = this.$store.state.project_name;
+        this.getProject();
+    },
     methods: {
-        newTeam(){
-            this.dialogVisible = false;
-        }
+        getProject(){
+            this.$http
+                .post('/project/viewProject', {
+                    project_name: this.project_name,
+                    team_id: this.team_id
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            console.log(res.data.data);
+                            this.project = res.data.data;
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
     }
 
 }

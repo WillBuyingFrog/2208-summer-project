@@ -7,7 +7,13 @@
       <el-main>
         <el-tabs v-model="status" class="demo-tabs" @tab-click="handleClick">
             <el-tab-pane label="所有项目" name="0"></el-tab-pane>
-            <el-tab-pane label="回收站" name="1"></el-tab-pane>
+            <el-tab-pane label="回收站" name="1">
+                <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash">
+                    <template #reference>
+                        <el-button type="danger">清空回收站</el-button>   
+                    </template>
+                </el-popconfirm>
+            </el-tab-pane>
         </el-tabs>
         <el-space wrap size="large">
             <el-card :key="i" class="box-card" style="width: 300px" v-if="status==0">
@@ -21,20 +27,20 @@
                     </div>
                 </template>
                 <div class="new">
-                    <el-button @click="dialogVisible = true">
+                    <el-button @click="dialogVisible=true">
                         <div><Plus style="width: 1em; height: 1em;"/></div>
                     </el-button>
                 </div>
                 <div class="hint">快来创建新项目吧！</div>
             </el-card>
-            <el-card v-for="i in proNum" :key="i" class="box-card" style="width: 300px">
+            <el-card v-for="project in allproject" :key="project.project_id" class="box-card" style="width: 300px">
                 <template #header>
                     <div class="card-header">
                         <span class="pname">
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
-                            {{}}项目名
+                            {{project.project_name}}
                         </span>
-                    <el-button class="button" type="primary" plain v-if="status==0">进入项目</el-button>
+                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
                     <div class="clear"></div>
                     </div>
                 </template>
@@ -44,26 +50,34 @@
                             <template #label>  
                                 <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                             </template>
-                            <span>{{}}</span>
+                            <span>{{project.creator}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                             </template>
-                            <span>{{}}</span>
+                            <span>{{project.create_time}}</span>
                         </el-form-item>      
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                             </template>
-                            <span>2022/08/02 21:46{{}}</span>
+                            <span>{{project.project_info}}</span>
                         </el-form-item>
                         <div class="button1" v-if="status == 0">
-                            <el-button type="primary" @click="rename">重命名</el-button>
-                            <el-button type="danger" @click="deletePro">删&nbsp;除</el-button> 
+                            <el-button type="primary" @click="openRename(project.project_name)">重命名</el-button>
+                            <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(project.project_name)">
+                                <template #reference>
+                                <el-button type="danger">删&nbsp;除</el-button> 
+                                </template>
+                            </el-popconfirm>
                         </div>  
                         <div class="button1" v-if="status == 1">
-                            <el-button type="danger" @click="recover">恢&nbsp;复</el-button>    
+                            <el-popconfirm title="确定要恢复此项目?" @confirm="recover(project.project_name)">
+                                <template #reference>
+                                    <el-button type="danger" >恢&nbsp;复</el-button>     
+                                </template>
+                            </el-popconfirm>
                         </div>                                      
                     </el-form>
                 </div>
@@ -86,7 +100,11 @@
                 </template>
         <el-form :model="newone" label-width="80px">
             <el-form-item label="项目名称">
-                <el-input :v-model="name"></el-input>
+                <el-input v-model="newone.name"></el-input>
+            </el-form-item>
+            <el-form-item label="项目简介">
+                <el-input v-model="newone.info" :autosize="{ minRows: 3, maxRows: 6 }" 
+                type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -96,49 +114,261 @@
         </span>
         </template>
     </el-dialog>
+    <el-dialog
+        v-model="dialogVisible1"
+        width="35%">
+        <template #header>
+                    <div class="card-header">
+                        <span class="title" style="margin-left: 10px; color: black">
+                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
+                            {{}}
+                        </span>
+                    <div class="clear"></div>
+                    </div>
+                </template>
+        <el-form :model="newone" label-width="100px">
+            <el-form-item label="项目新名称">
+                <el-input v-model="newname"></el-input>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+        <span class="dialog-footer">
+            <el-button @click="dialogVisible1 = false">取消</el-button>
+            <el-button type="primary" @click="rename">确定</el-button>
+        </span>
+        </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
     name: "allProject",
     data() {
         return {
             team_id: '',
             dialogVisible: false,
+            dialogVisible1: false,
             status: "0",
-            proNum: 4,
-            project:{},
+            allproject: [],
+            // allproject: [{
+            //     project_id: '1',
+            //     project_name: '1',
+            //     team_name: '1',
+            //     creator_name: '1',
+            //     create_time: '1',
+            //     last_modification_user: '1',
+            //     last_modification_time: '1',
+            //     project_info: '1'
+            // }],
+            newname: '',
+            oldname: '',
             newone:{
                 name: "",
+                info: ""
             }
         }
     },
     created(){
         this.getAllProject();
+        console.log("team_id: "+this.team_id);
     },
     methods: {
         getAllProject(){
-            this.team_id = this.$route.query.id;
-            // this.$axios.post("/project/viewAllProject", {
-            //     team_id: this.team_id
-            // })
+            // this.team_id = this.$route.query.team_id;
+            this.team_id = this.$store.state.teamid;
+            this.$axios
+                .post("/project/viewAllProject", {
+                    team_id: this.team_id,
+                })
+                .then(res =>{
+                    console.log(res.data);
+                    switch(res.data.code) {
+                        case 200:
+                            this.allproject = res.data.data;
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
         },
-        newProject(){
-            this.dialogVisible = false;
+        getTrashProject() {
+            this.$axios
+                .post("/project/viewTrash", {
+                    team_id: this.team_id
+                })
+                .then(res =>{
+                    console.log(res.data);
+                    switch(res.data.code) {
+                        case 200:
+                            this.allproject = res.data.data;
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
+        handleClick() {
+            console.log(this.status);
+            if(this.status == '1'){
+                this.getAllProject();
+                console.log('allproject');
+            }
+            else if(this.status == '0'){
+                this.getTrashProject();
+                console.log('trashproject');
+            }
+        },
+        newProject(){         
+            if(this.newone.name == '' || this.newone.name == undefined || this.newone.name == null) {
+                ElMessage.warning("请输入项目名称");
+            }
+            else{
+                this.$axios
+                .post('/project/new',{
+                    project_name: this.newone.name,
+                    team_id: this.team_id,
+                    project_info: this.newone.info
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            ElMessage.success("创建成功!");
+                            this.newone.name = '';
+                            this.newone.info = '';
+                            this.dialogVisible = false;
+                            this.getAllProject();
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+            
+        },
+        openRename(oldname){
+            this.oldname = oldname;
+            this.dialogVisible1 = true;
         },
         rename(){
-
+            if(this.newname == '' || this.newname == null || this.newname == undefined){
+                ElMessage.warning("重命名不能为空")
+            }else{
+                this.$http
+                .post('/project/rename', {
+                    team_id: this.team_id,
+                    original_project_name: this.oldname,
+                    new_project_name: this.newname
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            ElMessage.success("重命名成功!");
+                            this.newname = '';
+                            this.dialogVisible1 = false;
+                            this.getAllProject();
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }            
         },
-        deletePro(){
-
+        deletePro(project_name){
+            this.$http
+                .post('/project/remove', {
+                    project_name: project_name,
+                    team_id: this.team_id
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            ElMessage.success(res.data.message);
+                            this.getAllProject();
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         },
-        recover(){
-
+        recover(project_name){
+            this.$http
+                .post('/project/recover', {
+                    project_name: project_name,
+                    team_id: this.team_id
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            ElMessage.success(res.data.message);
+                            this.getTrashProject();
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
+        cleanTrash(){
+            this.$http
+                .post('/project/emptyTrash', {
+                    team_id: this.team_id
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            ElMessage.success(res.data.message);
+                            this.getTrashProject();
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
+        toProject(name, id){
+            this.$store.state.project_name = name;
+            this.$store.state.project_id = id;
+            this.$router.push('/projectinfo');
         }
-    }
-
+    },
 }
 
 </script>
@@ -151,6 +381,9 @@ export default {
   overflow: hidden;
   background-position:center;
   background-size: 100% auto;
+  width: 100%;
+  height: 100%;
+  position: fixed;
 }
 
 .el-tabs{

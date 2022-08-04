@@ -2,16 +2,16 @@
   <div class="ds-app" id="frog-design-application">
     <div class="content">
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="200px" class="leftpane">
           <DesignAppComponents />
         </el-aside>
-        <el-main>
+        <el-main class="mainPane">
           <el-container>
             <el-container>
-              <el-header>
-                <DesignAppHeader />
+              <el-header class="header">
+                <DesignAppHeader/>
               </el-header>
-              <el-main>
+              <el-main class="workpane">
                 <DesignEditorView ref="editor" :value="this.controls">
                   <template #default>
                     <PluginSelection :application="this" />
@@ -19,8 +19,10 @@
                 </DesignEditorView>
               </el-main>
             </el-container>
-            <el-aside width="200px">
-              <PropInspector @change="this.handleChange" :controlled="this.controlled" />
+            <el-aside width="240px" class="rightpane">
+              <PropInspector
+                  @change="this.handleChange"
+                  :controlled="this.controlled" />
             </el-aside>
           </el-container>
         </el-main>
@@ -406,7 +408,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .ds-app{
   display: flex;
   flex-direction: column;
@@ -430,5 +432,19 @@ export default {
     display: block;
   }
 }
-
+.header {
+  padding: 0;
+}
+.workpane {
+  padding-left: 0;
+}
+.leftPane {
+  margin: 20px 0 0 0;
+}
+.mainPane {
+  padding: 0;
+  margin: 0 0 0 0;
+}
+.rightPane {
+}
 </style>
