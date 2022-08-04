@@ -170,6 +170,8 @@
 </style>
 
 <script>
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
   name: "SignUp",
   data() {
@@ -268,41 +270,50 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          self.$axios({
-            method: 'post',
-            url: '/user/register',
-            data: formData,
-          })
+          this.$http
+              .post("/user/register", {
+                username: self.ruleForm.username,
+                passwd: self.ruleForm.pass,
+                email: self.ruleForm.email,
+                real_name: self.ruleForm.realName,
+                user_info: '',
+              })
+          // self.$http({
+          //   method: 'post',
+          //   url: '/user/register',
+          //   data: formData,
+          // })
               .then(res => {
-                switch (res.data.status_code) {
-                  case 1:
+                console.log(res.data)
+                switch (res.data.code) {
+                  case 200:
                     this.$store.dispatch('saveUserInfo', {user: {
                         'username': this.ruleForm.username,
                         'confirmed': false,
                       }});
-                    this.$message.success('注册成功！');
-                    setTimeout(()=> {
-                      this.$router.push('/unverified_email');
-                    },1500);
+                    ElMessage.success('注册成功！');
+                    setTimeout(() => {
+                      this.$router.push('/login')
+                    }, 1000);
                     break;
-                  case -1:
-                    this.$message.warning('请检查填写的内容！');
-                    break;
-                  case 2:
-                    this.$message.warning('用户名已注册！');
-                    break;
-                  case 3:
-                    this.$message.error('邮箱已注册或不可用！');
-                    break;
-                  case 4:
-                    this.$message.error('密码不符合规则，需满足8-18，英文字母+数字！');
-                    break;
-                  case 5:
-                    this.$message.error('两次输入的密码不一致！');
-                    break;
-                  case 6:
-                    this.$message.error('邮件验证码发送失败，请检查邮箱是否填写正确！');
-                    break;
+                  // case -1:
+                  //   this.$message.warning('请检查填写的内容');
+                  //   break;
+                  case 500:
+                    ElMessage.error(res.data.message);
+                  break;
+                  // case 3:
+                  //   this.$message.error('邮箱已注册或不可用');
+                  //   break;
+                  // case 4:
+                  //   this.$message.error('密码不符合规范');
+                  //   break;
+                  // case 4:
+                  //   this.$message.error('两次输入的密码不一致！');
+                  //   break;
+                  // case 6:
+                  //   this.$message.error('邮件验证码发送失败，请检查邮箱是否填写正确！');
+                  //   break;
                 }
               })
               .catch(err => {

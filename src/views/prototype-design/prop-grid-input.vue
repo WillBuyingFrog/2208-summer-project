@@ -2,7 +2,6 @@
   <div class="grid-input">
     <input :value="this.value[0]" @input="(e) => this.handleChange(e.target.value, 0)" type="number" />
     <input :value="this.value[1]" @input="(e) => this.handleChange(e.target.value, 1)" type="number" />
-
   </div>
 </template>
 

@@ -1,12 +1,12 @@
 <template>
-  <div :class="`ds-editor ${this.parentId ? 'nest-editor' : 'root-editor'}`">
+  <div :class="this.parentId ? 'ds-editor nest-editor' : 'ds-editor root-editor'"
+       :id="this.parentId ? 'nested-editor' + this.parentId : 'root-editor-view'">
     <div class="ds-editor-canvas" ref="editor">
       <CellWrapper v-for="item in value"
                    :item="item"
                    :key="item.id"
                    />
-      <slot>
-      </slot>
+      <slot name="default"></slot>
       <PluginDrop :parentId="this.parentId" :length="this.value.length" />
     </div>
   </div>
@@ -46,15 +46,14 @@ export default {
 </script>
 
 <style scoped>
-.ds-editor{
-  color: black;
+
+.ds-editor-canvas {
+  width: 100%;
+  height: 100%;
 }
-.root-editor{
-  min-height: 60vh;
-}
+
 .root-editor > .ds-editor-canvas {
   transform: scale(1);
   transform-origin: top left;
-  min-height: 60vh;
 }
 </style>

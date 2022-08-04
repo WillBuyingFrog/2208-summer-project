@@ -3,6 +3,8 @@ import eventBus from "@/views/prototype-design/utils/eventBus";
 
 import ComponentImpl from "@/views/prototype-design/component-impl"
 
+import {saveComponentRef} from "@/views/prototype-design/utils/ref";
+
 import DragCell from 'yoyoo-ddr-vue3'
 import 'yoyoo-ddr-vue3/dist/yoyoo-ddr-vue3.css'
 
@@ -87,6 +89,10 @@ export default {
           </div>
       )
     },
+  },
+  mounted() {
+    // 保存组件的引用，方便直接对组件进行操作
+    saveComponentRef(this.item.id, this.$refs.cell)
   },
   render() {
     let item = this.item

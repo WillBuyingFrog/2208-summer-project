@@ -1,8 +1,9 @@
 <template>
   <div class="allproject">
     <el-container>
-      <el-header>
-      </el-header>
+      <el-header style="padding: 0 0 ;">
+          <TopGuide/>
+        </el-header>
       <el-main>
         <el-tabs v-model="status" class="demo-tabs" @tab-click="handleClick">
             <el-tab-pane label="所有项目" name="0"></el-tab-pane>
@@ -38,7 +39,7 @@
                     </div>
                 </template>
                 <div class="text item">
-                    <el-form :model="project" label-width="140px" label-position="left">
+                    <el-form :model="project" label-width="120px" label-position="left">
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
@@ -53,16 +54,10 @@
                         </el-form-item>      
                         <el-form-item>
                             <template #label>  
-                                <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
+                                <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                             </template>
                             <span>2022/08/02 21:46{{}}</span>
                         </el-form-item>
-                        <el-form-item>
-                            <template #label>  
-                                <div class="label1"><el-icon><User /></el-icon> 最后编辑者:</div>
-                            </template>
-                            <span>{{}}</span>
-                        </el-form-item>   
                         <div class="button1" v-if="status == 0">
                             <el-button type="primary" @click="rename">重命名</el-button>
                             <el-button type="danger" @click="deletePro">删&nbsp;除</el-button> 
@@ -110,6 +105,7 @@ export default {
     name: "allProject",
     data() {
         return {
+            team_id: '',
             dialogVisible: false,
             status: "0",
             proNum: 4,
@@ -119,7 +115,16 @@ export default {
             }
         }
     },
+    created(){
+        this.getAllProject();
+    },
     methods: {
+        getAllProject(){
+            this.team_id = this.$route.query.id;
+            // this.$axios.post("/project/viewAllProject", {
+            //     team_id: this.team_id
+            // })
+        },
         newProject(){
             this.dialogVisible = false;
         },
@@ -140,19 +145,14 @@ export default {
 
 <style scoped>
 .allproject {
-  background-image: url("../assets/images/bg.jpg");
+  background-image: url("../../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
   overflow: hidden;
   background-position:center;
   background-size: 100% auto;
 }
-.allproject .el-header{
-    height: 67px;
-    padding: 0;
-    border-bottom: 1px solid #EFEFEF;
-    background-color: rgba(255, 255, 255, 0.62);
-}
+
 .el-tabs{
     width: 150px;
     margin-left: 50px;
@@ -228,8 +228,8 @@ export default {
 .new .el-button{
     margin-top: 25px;
     margin-bottom: 37px;
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
 }
 
 .hint{

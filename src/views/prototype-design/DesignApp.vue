@@ -1,20 +1,23 @@
 <template>
-  <div class="ds-app">
+  <div class="ds-app" id="frog-design-application">
     <DesignAppHeader />
-    <el-row :gutter="20">
-      <el-col :span="4">
-        <DesignAppComponents />
-      </el-col>
-      <el-col :span="16">
-        <DesignEditorView ref="editor" :value="this.controls">
-
-        </DesignEditorView>
-      </el-col>
-      <el-col :span="4">
-        <PropInspector @change="this.handleChange" :controlled="this.controlled" />
-      </el-col>
-    </el-row>
-
+    <div class="content">
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <DesignAppComponents />
+        </el-col>
+        <el-col :span="16">
+          <DesignEditorView ref="editor" :value="this.controls">
+            <template #default>
+              <PluginSelection :application="this" />
+            </template>
+          </DesignEditorView>
+        </el-col>
+        <el-col :span="4">
+          <PropInspector @change="this.handleChange" :controlled="this.controlled" />
+        </el-col>
+      </el-row>
+    </div>
     <DesignAppFooter />
   </div>
 </template>
@@ -22,9 +25,14 @@
 <script>
 import DesignAppFooter from "@/views/prototype-design/DesignAppFooter";
 import DesignAppHeader from "@/views/prototype-design/DesignAppHeader";
+
 import DesignAppComponents from "@/views/prototype-design/DesignAppComponents";
 import DesignEditorView from "@/views/prototype-design/editor-view"
 import PropInspector from "@/views/prototype-design/prop-inspector"
+
+import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
+
+import {parseControls} from "@/views/prototype-design/utils/collaborate";
 
 import {
   // 一些有关全局操作的常量
@@ -36,7 +44,7 @@ import {
   EVENT_COMPONENT_DUPLICATE,
   EVENT_COMPONENT_SELECT,
   EVENT_COMPONENT_TRANSFORM,
-  EVENT_COMPONENT_UNSELECT,
+  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON, EVENT_DESIGNER_SAVEIMG,
 } from "@/views/prototype-design/event-enum"
 
 import {
@@ -50,6 +58,8 @@ import {
 
 import eventBus from "@/views/prototype-design/utils/eventBus"
 
+import {getSnapShot} from "@/views/prototype-design/utils/image";
+
 let historys = [[]]
 let historyPointer = 0
 
@@ -61,11 +71,14 @@ export default {
       currentId: '',
       currentPath: [],
       controlled: {},
+      designId: -1,
+
     }
   },
   components:{
     DesignAppHeader, DesignAppFooter, DesignAppComponents,
-    DesignEditorView, PropInspector
+    DesignEditorView, PropInspector,
+    PluginSelection
   },
   methods: {
     getComponents(components, parentId) {
@@ -94,6 +107,14 @@ export default {
         extra: item,
         grid: [10, 10],
         axis: 'xy',
+        // 以下属性用作实时协作：
+        usedBy: '__none__'
+      }))
+    },
+    getComponentsFromSaved(components){
+      return components.map((item) => ({
+        ...item,
+        children: item.type === 'container' ? [] : void 0
       }))
     },
     /**
@@ -112,7 +133,6 @@ export default {
       } else {
         controls = this.controls.concat(newComponents)
       }
-      console.log(controls)
       this.setControls(controls)
 
       // 默认选中最后一个
@@ -326,6 +346,32 @@ export default {
     getEditorView() {
       return this.$refs.editor
     },
+    exportControlsJson(){
+      let result = parseControls(this.$data.controls)
+      console.log(result)
+    },
+    parseComponentJSON({componentJSON, parentId}){
+      // 首先清除当前画布上所有的控件
+      this.setControls([])
+      this.clearCurrentComponent()
+      if(parentId === -1){
+        // 当前在root component上遍历
+        componentJSON.map((item) => {
+          this.addControl({components: [item], parentId: item.parentId})
+          if(item.hasChildren === false){
+            // 没有子元素
+            console.log("[ParseJSON] This element has no child component.")
+          }else{
+            // 有子元素
+            let childJSON = item.childrenJSON
+            this.parseComponentJSON({componentJSON: childJSON, parentId: item.id})
+          }
+        })
+      }
+    },
+    handleSaveImage(){
+      getSnapShot("root-editor-view")
+    }
   },
   created() {
     eventBus.$on(EVENT_COMPONENT_ADD, this.addControl)
@@ -337,6 +383,9 @@ export default {
     eventBus.$on(EVENT_DESIGNER_REDO, this.handleRedo)
     eventBus.$on(EVENT_DESIGNER_UNDO, this.handleUndo)
     eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
+    eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
+
+    eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
   }
 
 }
@@ -344,7 +393,20 @@ export default {
 
 <style lang="less">
 .ds-app{
-  color: black;
+  display: flex;
+  flex-direction: column;
+  min-height: 60vh;
+
+  .content {
+    .ds-editor {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      overflow: scroll;
+      height: 100%;
+    }
+  }
+
   .component-impl,
   .match-parent {
     width: 100%;

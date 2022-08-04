@@ -73,8 +73,7 @@ export default {
     if (this.length > 0) return null
     return (
         <div class="guide">
-          <div>拖拽组件或本地图片到此区域开始编辑</div>
-          <div>Drag component or local pictures to this area to start editing</div>
+          <div>拖拽左侧组件或是本地图片到画布上以开始设计原型</div>
         </div>
     )
   }
