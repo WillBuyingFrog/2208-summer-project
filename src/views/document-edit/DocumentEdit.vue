@@ -21,7 +21,7 @@
               </el-popconfirm>
             </el-col>
             <el-col>
-              <p class="name">{{this.$store.state.file_name}}</p>
+              <p class="name">文档标题</p>
 <!--              {{this.$store.state.file_name}}-->
             </el-col>
           </el-row>
@@ -93,7 +93,6 @@ export default {
 }
 .inner-container {
   padding: 10px 0 20px 0;
-
 }
 .header {
   margin: 0 20px 0 20px;
