@@ -153,6 +153,7 @@
                           <template #default="scope">
                           <el-popover
                             placement="bottom"
+                            
                             title="更改权限"
                             :width="150"
                             trigger="click">
@@ -187,7 +188,7 @@
                             </el-button>
                             </template>
                           </el-popover>
-                            <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)">
+                          <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)" v-model="modifyVisible">
                             <template #reference>
                               <el-button
                                 v-if="(scope.row.username==this.$store.state.user.name)||
@@ -249,6 +250,7 @@ export default {
       invite:'',
       authority:'1',
       newLeader:'',
+      modifyVisible:false,
       tableData: [{
           username: '123',
           real_name:'王小虎',
@@ -335,11 +337,22 @@ export default {
         method:'post',
         url:'/team/member/get',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64'
+          team_id: this.$store.state.teamid
         },
       }).then(res=>{
         console.log(res.data);
-        console.log(res.data.data);
+        this.tableData = res.data.data
+        for(var i=0; i<this.tableData.length; i++){
+          if(this.tableData[i].username == this.$store.state.user.name){
+            if(this.tableData[i].authority == 'member')
+            this.identity = 2
+            else if(this.tableData[i].authority == 'leader')
+            this.identity = 0
+            else
+            this.identity = 1;
+            break;
+          }
+        }
       })
     },
     addMember(){
@@ -348,13 +361,15 @@ export default {
         method:'post',
         url:'/team/member/add',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
           invitee_name:this.invite
         },
       }).then(res=>{
         console.log(res.data);
         console.log(res.data.data);
-        this.dialogVisible=false
+        this.dialogVisible=false;
+        this.invite='';
+        this.getList();
       })
     },
     leaveTeam(){
@@ -363,12 +378,11 @@ export default {
         method:'post',
         url:'/team/member/leave',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
         },
       }).then(res=>{
         console.log(res.data);
         console.log(res.data.data);
-
         ElMessage.success('离开团队成功');
         setTimeout(() => {
           this.$router.push('/workspace')
@@ -381,13 +395,14 @@ export default {
         method:'post',
         url:'/team/member/remove',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
           remove_name:name
         },
       }).then(res=>{
         ElMessage.success('移除成功！');
         console.log(res.data);
         console.log(res.data.data);
+        this.getList();
       })      
     },
     modifyAuthority(name){
@@ -396,14 +411,17 @@ export default {
         method:'post',
         url:'/team/member/authority',
         params: {
-          team_id: '097e3c02-abf2-4c5b-b599-73e4dfc62c64',
+          team_id: this.$store.state.teamid,
           member_name: name,
           authority: this.authority
         },
       }).then(res=>{
         ElMessage.success('修改成功！');
+        this.modifyVisible = false;
         console.log(res.data);
         console.log(res.data.data);
+        this.getList();
+
       })       
     },
     changeLeader(){

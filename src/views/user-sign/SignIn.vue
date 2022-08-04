@@ -177,7 +177,7 @@ export default {
             passwd: self.form.password,
           })
           .then(res => {
-            console.log(res.data.code);
+            console.log(res.data);
             switch (res.data.code) {
               case 200:
                 // location.reload();
