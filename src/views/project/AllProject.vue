@@ -40,7 +40,7 @@
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
                             {{project.project_name}}
                         </span>
-                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_id)">进入项目</el-button>
+                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_name)">进入项目</el-button>
                     <div class="clear"></div>
                     </div>
                 </template>
@@ -361,6 +361,10 @@ export default {
                 .catch(err => {
                     console.log(err);
                 })
+        },
+        toProject(name){
+            this.$store.state.project_name = name;
+            this.$router.push('/projectinfo');
         }
     },
 }

@@ -15,14 +15,14 @@
                     style="height:100vh;"
                 >  
                     <div class="title">
-                        <h4>>>{{}}项目名</h4>
+                        <h4>>>{{this.$store.state.project_name}}</h4>
                     </div>
                     <div class="clear"></div> 
                     <el-menu-item index="/projectinfo">
                     <el-icon><Paperclip /></el-icon>
                     <span>项目信息</span>
                     </el-menu-item>                   
-                    <el-menu-item index="/projectfile">
+                    <el-menu-item index="{path:'/projectfile', query:{filetype: '1'}}">
                     <el-icon><EditPen /></el-icon>
                     <span>原型设计</span>
                     </el-menu-item>
@@ -52,20 +52,12 @@ export default {
     data() {
         return {
             fileType: "1",
-            dialogVisible: false,
-            file: {},
-            firstChar: "S",//用户名首字母
-            proNum: 4,//项目总数
-            newone:{
-                name: "",
-                info: ""
-            }
         }
     },
+    created(){
+
+    },
     methods: {
-        newTeam(){
-            this.dialogVisible = false;
-        }
     }
 
 }
