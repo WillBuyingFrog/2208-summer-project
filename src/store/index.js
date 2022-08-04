@@ -38,7 +38,7 @@ export default createStore({
             info:'',
         },
         teamid: '',
-        projectid: ''
+        project_name: '',
     },
     modules:{
         
