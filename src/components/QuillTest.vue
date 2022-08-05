@@ -1,10 +1,29 @@
 <template>
+  <el-container class="inner-container">
+    <el-aside width="100px" class="leftPane">
+      <p class="online-users">在线成员</p>
+      <div>
+        <el-avatar :size="50" class="icon"> user </el-avatar>
+      </div>
+      <div>
+        <el-avatar :size="50" class="icon"> user </el-avatar>
+      </div>
+      <div>
+        <el-avatar :size="50" class="icon"> user </el-avatar>
+      </div>
+    </el-aside>
+    <el-main class="rightPane">
+      <div class="editor">
+        <QuillEditor class="quill-editor"
+                     :options="editorOption"
+                     @ready="(quill) => this.createQuillBinding(quill)">
+        </QuillEditor>
+      </div>
+    </el-main>
+  </el-container>
 <!--  <div class="out-div">-->
 <!--    <div class="inner-div">-->
-      <QuillEditor class="quill-editor"
-      :options="editorOption"
-      @ready="(quill) => this.createQuillBinding(quill)">
-      </QuillEditor>
+
 <!--    </div>-->
 <!--  </div>-->
 </template>
@@ -254,6 +273,25 @@ export default defineComponent( {
 }
 .inner-div {
   height: 100%;
+}
+.inner-container {
+  height: 100%;
+}
+.leftPane {
+  margin: 20px 0 0 20px;
+  background-color: rgba(190, 190, 190, 0.25);
+  border-radius: 10px;
+  box-shadow: 3px 3px 10px #bebebe;
+  height: 100%;
+}
+.rightPane {
+  margin: 20px 20px 0 20px;
+  height: 100%;
+  padding: 0;
+
+}
+.editor {
+  height: 93%;
 }
 .quill-editor {
   height: 100%;

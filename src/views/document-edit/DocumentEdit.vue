@@ -26,25 +26,11 @@
             </el-col>
           </el-row>
         </el-header>
-        <el-container class="inner-container">
-          <el-aside width="100px" class="leftPane">
-            <p class="online-users">在线成员</p>
-            <div>
-              <el-avatar :size="50" class="icon"> user </el-avatar>
-            </div>
-            <div>
-              <el-avatar :size="50" class="icon"> user </el-avatar>
-            </div>
-            <div>
-              <el-avatar :size="50" class="icon"> user </el-avatar>
-            </div>
-          </el-aside>
-          <el-main class="rightPane">
-            <div class="editor">
-              <QuillTest></QuillTest>
-            </div>
-          </el-main>
-        </el-container>
+        <el-main class="mainPane">
+          <div class="editor">
+            <QuillTest></QuillTest>
+          </div>
+        </el-main>
       </el-container>
     </div>
   </div>
@@ -73,8 +59,8 @@ export default {
   background-image: url("../../assets/images/sign-bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  overflow: auto;
-  position: fixed;
+  /*overflow: auto;*/
+  /*position: fixed;*/
   background-position:center;
   background-size: 100% auto;
   width: 100%;
@@ -84,7 +70,7 @@ export default {
   background-color: rgba(255, 255, 255, 0.50);
   min-height: 800px;
   overflow: auto;
-  position: fixed;
+
   background-position:center;
   background-size: 100% auto;
   width: 100%;
@@ -121,12 +107,12 @@ export default {
 .icon {
   margin: 0 0 10px 0;
 }
-.rightPane {
-  margin: 0 20px 0 20px;
+.mainPane {
   padding: 0;
+  height: 100%;
 }
 .editor {
-  height: 93%;
+  height: 98%;
 }
 .online-users {
 
