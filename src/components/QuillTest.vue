@@ -1,6 +1,9 @@
 <template>
   <el-container class="inner-container">
     <el-aside width="100px" class="leftPane">
+      <el-button type="primary">
+        保存文件
+      </el-button>
       <p class="online-users">在线成员</p>
       <div>
         <el-avatar :size="50" class="icon"> user </el-avatar>
