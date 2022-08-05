@@ -21,24 +21,25 @@ export default {
     return {
       // 所有可能的可编辑值
       inputs: [
-        { type: 'number', name: 'X坐标' },
-        { type: 'number', name: 'Y坐标' },
-        { type: 'number', name: '宽度' },
-        { type: 'number', name: '高度' },
-        { type: 'number', name: '旋转角度' },
-        { type: 'number', name: '最低宽度' },
-        { type: 'number', name: '最低高度' },
-        { type: 'grid', name: '网格化' },
+        { type: 'number', name: 'X坐标', keyName: 'x' },
+        { type: 'number', name: 'Y坐标', keyName: 'y' },
+        { type: 'number', name: '宽度' , keyName: 'width'},
+        { type: 'number', name: '高度' , keyName: 'height'},
+        { type: 'number', name: '旋转角度', keyName: 'rotation' },
+        { type: 'number', name: '最低宽度', keyName: 'minWidth' },
+        { type: 'number', name: '最低高度', keyName: 'minHeight' },
+        { type: 'grid', name: '网格化', keyName: 'grid' },
         {
           type: 'radio',
           name: '可移动方向',
+          keyName: 'axis',
           options: [{ label: 'y', value: 'y' }, { label: 'x', value: 'x' }, { label: 'xy', value: 'xy' }],
         },
-        { type: 'checkbox', name: '等比例缩放' },
-        { type: 'checkbox', name: '可拖拽' },
-        { type: 'checkbox', name: '可改变大小' },
-        { type: 'checkbox', name: '可旋转' },
-        { type: 'checkbox', name: '活动中' },
+        { type: 'checkbox', name: '等比例缩放', keyName: 'acceptRatio' },
+        { type: 'checkbox', name: '可拖拽', keyName: 'draggable'},
+        { type: 'checkbox', name: '可改变大小', keyName: 'resizable' },
+        { type: 'checkbox', name: '可旋转' , keyName: 'rotatable'},
+        { type: 'checkbox', name: '活动中', keyName: 'active' },
       ],
       extraInputs: [{ type: 'text', name: 'value' }, { type: 'text', name: 'label' }]
     }
@@ -67,11 +68,11 @@ export default {
           {this.inputs.map((item) => {
             let DyInput = PropInputImpl[item.type]
             return(
-                <div class="input-item" key={item.name}>
+                <div class="input-item" key={item.keyName}>
                   <label class="input-label">{item.name}</label>
                   <DyInput
                     options={item.options}
-                    value={this.controlled[item.name]}
+                    value={this.controlled[item.keyName]}
                     onPropInput={(e) => this.customChange(e, item)}
                     />
                 </div>
