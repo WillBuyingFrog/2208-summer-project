@@ -53,7 +53,8 @@
   background-position:center;
   background-size: 100% auto;
   min-height: 800px;
-  overflow: hidden;
+  overflow: auto;
+  position: fixed;
   width: 100%;
   height: 100%;
 }

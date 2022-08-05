@@ -61,7 +61,8 @@ export default {
   background-image: url("../../assets/images/sign-bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  overflow: hidden;
+  overflow: auto;
+  position: fixed;
   background-position:center;
   background-size: 100% auto;
   width: 100%;
