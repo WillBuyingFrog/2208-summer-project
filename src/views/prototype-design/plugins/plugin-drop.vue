@@ -64,7 +64,6 @@ export default {
   },
   mounted(){
     let element = this.editorDOM.value
-    console.log(element)
     element.addEventListener('dragover', this.handleDropOver, false)
     element.addEventListener('drop', this.handleDrop, false)
   },

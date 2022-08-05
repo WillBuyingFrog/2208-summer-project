@@ -1,5 +1,5 @@
 
-export function parseControls(controls){
+export function parseControls(controls, isRoot=1){
     let retJSON = []
 
     controls.map((item) => {
@@ -13,17 +13,23 @@ export function parseControls(controls){
             // 或许可以直接用type是不是container判定？
             // console.log("   This component has children!")
             componentHasChild = true
-            childJSON = parseControls(item.children)
+            childJSON = parseControls(item.children, 0)
         }
         let itemJSON = {
             // hasChild指示当前元素是否有子元素
             ...item,
+            children: [],
             hasChild: componentHasChild,
             childrenJSON: childJSON
         }
         retJSON.push(itemJSON)
         return itemJSON
     })
-    return retJSON
+    if(isRoot) return retJSON
+    else{
+        return JSON.stringify({
+            components: retJSON
+        })
+    }
 }
 

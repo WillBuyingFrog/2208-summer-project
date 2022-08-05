@@ -99,10 +99,10 @@ export default {
       return components.map((item) => {
         let newItem = {
           ...item,
+          childrenJSON: "",
           // 重置元件实时协作信息
           usedBy: "__none__"
         }
-        console.log(newItem.usedBy)
         return newItem
       })
     },
@@ -148,10 +148,13 @@ export default {
      */
     addControl({ components, parentId, isReload=0 }) {
       let controls = []
-      let newComponents = this.getComponents(components, parentId)
+      let newComponents = null
       if(isReload){
         console.log("This function is in reload mode.")
         newComponents = this.reloadComponents(components, parentId)
+        console.log("newComponents:", newComponents)
+      }else{
+        newComponents = this.getComponents(components, parentId)
       }
       if (parentId) {
         const { path } = findComponentPathById(this.controls, parentId)
@@ -163,6 +166,8 @@ export default {
         controls = this.controls.concat(newComponents)
       }
       this.setControls(controls)
+
+      console.log("controls now:", this.controls)
 
       // 默认选中最后一个
       let { component } = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
@@ -379,7 +384,12 @@ export default {
     },
     exportControlsJson(){
       let result = parseControls(this.$data.controls)
-      result = JSON.stringify(result)
+      let fullData = {
+        components: result,
+        width: '1200px',
+        height: '900px',
+      }
+      result = JSON.stringify(fullData)
       console.log(result)
       this.$http
           // 与后端沟通过，不需要序列化
@@ -398,10 +408,12 @@ export default {
         this.setControls([])
         this.clearCurrentComponent()
       }
-      console.log(componentJSON)
       if(componentJSON === "") return
-      console.log("----")
+      // 只有在根层遍历的时候要parse变量
       componentJSON = JSON.parse(componentJSON)
+      console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
+      componentJSON = componentJSON['components']
+
       componentJSON.map((item) => {
         this.addControl({components: [item], parentId: item.parentId, isReload: 1})
         if (item.hasChild === false) {
@@ -454,7 +466,6 @@ export default {
       }
     })
     .then(res => {
-      console.log("hello!")
       switch (res.data.code){
         case 200:
           this.parseComponentJSON({componentJSON: res.data.data.content,
