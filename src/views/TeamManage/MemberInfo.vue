@@ -338,10 +338,7 @@ export default {
           ElMessage.success("添加成功！")
         }
         else{
-          if(res.data.message == 'No authority')
-          ElMessage.warning('用户名不存在！')
-          else
-          ElMessage.warning('该用户已在团队中！')
+          ElMessage.warning('用户名不存在或该用户已在团队中！')
         }
         
         
@@ -393,7 +390,6 @@ export default {
       }).then(res=>{
         ElMessage.success('修改成功！')
         console.log(res.data);
-        console.log(res.data.data);
         this.getList();
       })       
     },
