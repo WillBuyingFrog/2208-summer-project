@@ -13,7 +13,7 @@
               </el-header>
               <el-main class="workpane">
                 <div
-                  style="height: 100%"
+                  style="height: 1200px; width: 1200px;"
                 >
                   <DesignEditorView ref="editor" :value="this.controls">
                     <template #default>
@@ -503,6 +503,10 @@ export default {
     padding: 0;
   }
   .workpane {
+    max-height: 70vh;
+    max-width: 70vw;
+    overflow-y: scroll;
+    overflow-x: scroll;
     padding-left: 0;
   }
   .leftPane {

@@ -17,8 +17,8 @@
 <script>
 import {computed} from 'vue'
 
-import eventBus from "@/views/prototype-design/utils/eventBus";
-import {EVENT_DESIGNER_RESIZE} from "@/views/prototype-design/event-enum";
+// import eventBus from "@/views/prototype-design/utils/eventBus";
+// import {EVENT_DESIGNER_RESIZE} from "@/views/prototype-design/event-enum";
 
 import PluginDrop from "@/views/prototype-design/plugins/plugin-drop"
 import CellWrapper from "@/views/prototype-design/cell-wrapper"
@@ -38,7 +38,9 @@ export default {
         // 这些style不应该被更改
         width: '100%',
         height: '100%',
-        border: 'none'
+        border: 'none',
+        overflowX: 'hidden',
+        overflowY: 'hidden'
       }
     }
   },
@@ -73,7 +75,7 @@ export default {
     }
   },
   created(){
-    eventBus.$on(EVENT_DESIGNER_RESIZE, this.handleResize)
+    // eventBus.$on(EVENT_DESIGNER_RESIZE, this.handleResize)
   }
 }
 </script>

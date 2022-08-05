@@ -181,7 +181,6 @@ export default {
         this.handleSelectionStart()
       },
       onMove: (interaction) => {
-        console.log(interaction)
         this.handleSelectionMove(interaction)
       },
       onEnd: () => {

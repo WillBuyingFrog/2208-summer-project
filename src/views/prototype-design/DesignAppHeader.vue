@@ -76,30 +76,6 @@ export default {
           >
             <Download class="icon" ></Download>
           </el-icon>
-          <el-icon
-              className="icon-contain"
-              onClick={() => this.handleResizeRequest(-5, 0)}
-          >
-            <Download class="icon"></Download>
-          </el-icon>
-          <el-icon
-              className="icon-contain"
-              onClick={() => this.handleResizeRequest(5, 0)}
-          >
-            <Download class="icon"></Download>
-          </el-icon>
-          <el-icon
-              className="icon-contain"
-              onClick={() => this.handleResizeRequest(0, -5)}
-          >
-            <Download class="icon"></Download>
-          </el-icon>
-          <el-icon
-              className="icon-contain"
-              onClick={() => this.handleResizeRequest(0, 5)}
-          >
-            <Download class="icon"></Download>
-          </el-icon>
         </div>
     )
   }

@@ -35,12 +35,12 @@ export default {
       // 该功能给所有编辑视图提供，包括嵌套的编辑视图。
       // App.vue中添加到<EditorView></EditorView> 的插件仅提供给应用的顶层编辑视图
       let rect = this.editorDOM.value.getBoundingClientRect()
+      console.log(rect)
       let coords = {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       }
-      console.log("Full dataTransfer:")
-      console.log(e.dataTransfer)
+      console.log(coords)
       if (files.length > 0) {
         for (let index = 0; index < files.length; index++) {
           const element = files[index]
@@ -54,7 +54,6 @@ export default {
           })
         }
       } else if ((comstr = e.dataTransfer.getData('text/component'))) {
-        console.log("Detected text/component!")
         let com = JSON.parse(comstr)
         com = { ...com, ...coords }
 
