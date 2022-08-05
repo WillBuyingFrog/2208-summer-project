@@ -26,7 +26,7 @@
                     <el-icon><EditPen /></el-icon>
                     <span>原型设计</span>
                     </el-menu-item>
-                    <el-menu-item index="/projectfile?filetype=0">
+                    <el-menu-item index="/documentEdit">
                     <el-icon><Document /></el-icon>
                     <span>文档编辑</span>
                     </el-menu-item>
@@ -58,9 +58,7 @@ export default {
     },
     computed:{
         activePath(){   
-            console.log(this.$route.fullPath)
         return this.$route.fullPath;
-
         }
   },
     created(){
@@ -78,11 +76,12 @@ export default {
   background-image: url("../../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  overflow: hidden;
   background-position:center;
   background-size: 100% auto;
   width: 100%;
   height: 100%;
+  position: fixed;
+  overflow: auto;
 }
 .title{
     float: left;
