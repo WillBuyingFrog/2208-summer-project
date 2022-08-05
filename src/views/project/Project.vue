@@ -58,7 +58,9 @@ export default {
     },
     computed:{
         activePath(){   
-        return this.$route;
+            console.log(this.$route.fullPath)
+        return this.$route.fullPath;
+
         }
   },
     created(){
@@ -91,5 +93,6 @@ export default {
 }
 .uml-link {
   text-decoration-line: none;
+  COLOR: #000000; 
 }
 </style>

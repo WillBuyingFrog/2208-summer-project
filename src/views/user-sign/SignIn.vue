@@ -85,7 +85,7 @@
 }
 .login-fill {
   overflow: hidden;
-  position: fixed;
+
 }
 .login-box {
   width: 295px;

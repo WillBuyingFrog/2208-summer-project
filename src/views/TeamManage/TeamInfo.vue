@@ -4,22 +4,21 @@
           <TopGuide/>
       </el-header>
       <el-container>
-          <el-aside width="200px">
+          <el-aside width="200px" style="height: 100vh;background-color:rgba(250, 250, 250, 0.5)">
                 <el-menu
                 :default-active="activePath"
                 class="el-menu-vertical-demo"
-                background-color="rgba(250, 250, 250, 0.5)"
+                background-color="rgba(250, 250, 250, 0)"
                 @open="handleOpen"
                 @close="handleClose"
-                style="height:100vh;"
                 router>
-                <el-menu-item index="/team">
+                <el-menu-item index="/team" style="margin-top:12%;">
                   <el-icon><Histogram/></el-icon>
-                  <span style="font-size: 15px;">团队信息</span>
+                  <span style="font-size: 14px;">团队信息</span>
                 </el-menu-item>
                 <el-menu-item index="/team/member" > 
                   <el-icon><UserFilled /></el-icon>
-                  <span style="font-size: 15px;">成员信息</span>
+                  <span style="font-size: 14px;">成员信息</span>
                 </el-menu-item>
               </el-menu>
           </el-aside>
@@ -150,11 +149,7 @@ export default {
   },
   computed:{
     activePath(){
-      console.log('路径 '+ this.$route.path.split('/').length)
-      if(this.$route.path.split('/').length == 2)
-      return '/team' 
-      else
-      return '/team/member'
+      return this.$route.path
     }
   },
   methods: {

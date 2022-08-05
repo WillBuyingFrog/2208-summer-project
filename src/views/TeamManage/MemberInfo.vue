@@ -14,11 +14,11 @@
                 router>
                 <el-menu-item index="/team">
                   <el-icon><Histogram/></el-icon>
-                  <span style="font-size: 15px;">团队信息</span>
+                  <span style="font-size: 14px;">团队信息</span>
                 </el-menu-item>
                 <el-menu-item index="/team/member" > 
                   <el-icon><UserFilled /></el-icon>
-                  <span style="font-size: 15px;">成员信息</span>
+                  <span style="font-size: 14px;">成员信息</span>
                 </el-menu-item>
               </el-menu>
             </el-aside>
@@ -252,11 +252,7 @@ export default {
   },
   computed:{
     activePath(){
-      console.log('路径 '+ this.$route.path.split('/').length)
-      if(this.$route.path.split('/').length == 2)
-      return '/team' 
-      else
-      return '/team/member'
+      return this.$route.path
     }
   },
   methods: {

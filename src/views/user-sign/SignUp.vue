@@ -117,7 +117,6 @@
 }
 .register-fill {
   overflow: hidden;
-  position: fixed;
 }
 .register-box {
   width: 295px;
