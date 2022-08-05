@@ -1,9 +1,8 @@
 <template>
   <div :class="this.parentId ? 'ds-editor nest-editor' : 'ds-editor root-editor'"
        :id="this.parentId ? 'nested-editor' + this.parentId : 'root-editor-view'"
-       :style="this.parentId ?  this.childCanvasStyle : this.canvasStyle"
   >
-    <div ref="editor">
+    <div ref="editor" :style="this.parentId ?  this.childCanvasStyle : this.canvasStyle">
       <CellWrapper v-for="item in value"
                    :item="item"
                    :key="item.id"
@@ -29,11 +28,11 @@ export default {
   data(){
     return {
       canvasStyle: {
-        width: '100%',
+        width: '98%',
         height: '95%',
         border: '1px solid black',
-        marginLeft: '0%',
-        marginRight: '0%'
+        marginLeft: '1%',
+        marginRight: '1%'
       },
       childCanvasStyle: {
         // 这些style不应该被更改
