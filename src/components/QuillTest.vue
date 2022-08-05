@@ -1,7 +1,7 @@
 <template>
   <el-container class="inner-container">
     <el-aside width="100px" class="leftPane">
-      <el-button type="primary">
+      <el-button type="primary" @click="() => this.exportQuillDelta()">
         保存文件
       </el-button>
       <p class="online-users">在线成员</p>
@@ -19,7 +19,9 @@
       <div class="editor">
         <QuillEditor class="quill-editor"
                      :options="editorOption"
-                     @ready="(quill) => this.createQuillBinding(quill)">
+                     v-model:content="this.delta"
+                     @ready="(quill) => this.createQuillBinding(quill)"
+        >
         </QuillEditor>
       </div>
     </el-main>
@@ -80,6 +82,7 @@ export default defineComponent( {
   data () {
     return {
       isReady: false,
+      delta: null,
       editorOption: {
         theme: 'snow',
         modules: {
@@ -98,6 +101,16 @@ export default defineComponent( {
       console.log(quill.getModule('cursors'))
       handleQuillBinding(quill)
       this.isReady = true
+    },
+    exportQuillDelta(){
+      console.log(this.delta)
+      this.delta = {
+        ops: [
+          {
+            insert: "Test two-way binding"
+          }
+        ]
+      }
     }
   },
   setup: () => {
