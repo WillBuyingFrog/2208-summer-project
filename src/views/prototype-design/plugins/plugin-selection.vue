@@ -181,6 +181,7 @@ export default {
         this.handleSelectionStart()
       },
       onMove: (interaction) => {
+        console.log(interaction)
         this.handleSelectionMove(interaction)
       },
       onEnd: () => {
@@ -197,6 +198,7 @@ export default {
           <div
               style={`
             display:${width > 0 ? 'block' : 'none'};
+            position: relative;
             width:${width}px;
             height:${height}px;
             left:${x}px;

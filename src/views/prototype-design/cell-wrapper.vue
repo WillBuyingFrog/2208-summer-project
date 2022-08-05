@@ -5,8 +5,7 @@ import ComponentImpl from "@/views/prototype-design/component-impl"
 
 import {saveComponentRef} from "@/views/prototype-design/utils/ref";
 
-import DragCell from 'yoyoo-ddr-vue3'
-import 'yoyoo-ddr-vue3/dist/yoyoo-ddr-vue3.css'
+import DragCell from '@/views/prototype-design/libs/ddr'
 
 import {
   EVENT_COMPONENT_SELECT,

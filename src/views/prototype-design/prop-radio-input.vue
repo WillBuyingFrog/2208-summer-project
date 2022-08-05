@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     handleChange(v) {
-      this.$emit('input', v)
+      this.$emit('propInput', v)
     },
   }
 }

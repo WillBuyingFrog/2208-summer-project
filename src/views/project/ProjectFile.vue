@@ -163,7 +163,7 @@ export default {
         this.getFile();
     },
     methods: {
-        getFile(){            
+        getFile(){
             this.$http
                 .post('/file/viewType', {
                     project_id: this.project_id,
@@ -323,7 +323,7 @@ export default {
             else if(this.fileType == 0){
                 this.$router.push('/documentEdit');
             }
-            
+
         }
     }
 

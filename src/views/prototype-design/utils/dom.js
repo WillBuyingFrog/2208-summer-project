@@ -125,11 +125,13 @@ export class Interaction {
     handleMouseMove = (e) => {
         e.stopPropagation()
         e.preventDefault()
+        // 实时计算鼠标坐标与之前位置的偏差
         this.deltaX = e.clientX - this.lastPointerX
         this.deltaY = e.clientY - this.lastPointerY
         this.lastPointerX = e.clientX
         this.lastPointerY = e.clientY
 
+        // 可以计算出鼠标到现在为止拖行的距离
         this.x = e.clientX - this.downPointerX
         this.y = e.clientY - this.downPointerY
 
