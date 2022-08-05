@@ -175,13 +175,12 @@ export default {
         }
     },
     created(){
+        this.team_id = this.$store.state.teamid;
         this.getAllProject();
         console.log("team_id: "+this.team_id);
     },
     methods: {
         getAllProject(){
-            // this.team_id = this.$route.query.team_id;
-            this.team_id = this.$store.state.teamid;
             this.$axios
             .post('/project/viewAllProject',{
                         team_id: this.team_id
