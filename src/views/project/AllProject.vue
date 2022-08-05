@@ -44,25 +44,25 @@
                     <div class="clear"></div>
                     </div>
                 </template>
-                <div class="text item">
+                <div class="textitem">
                     <el-form :model="project" label-width="120px" label-position="left">
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                             </template>
-                            <span>{{project.creator}}</span>
+                            <span class="show">{{project.creator}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                             </template>
-                            <span>{{project.create_time}}</span>
+                            <span class="show">{{project.create_time}}</span>
                         </el-form-item>      
                         <el-form-item>
                             <template #label>  
                                 <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                             </template>
-                            <span>{{project.project_info}}</span>
+                            <span class="show">{{project.project_info}}</span>
                         </el-form-item>
                         <div class="button1" v-if="status == 0">
                             <el-button type="primary" @click="openRename(project.project_name)">重命名</el-button>
@@ -103,8 +103,8 @@
                 <el-input v-model="newone.name"></el-input>
             </el-form-item>
             <el-form-item label="项目简介">
-                <el-input v-model="newone.info" :autosize="{ minRows: 3, maxRows: 6 }" 
-                type="textarea"></el-input>
+                <el-input type="textarea" maxlength="200" show-word-limit
+                    resize="none" :autosize="{ minRows: 6}" v-model="newone.info" style="width:400px"></el-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -121,7 +121,7 @@
                     <div class="card-header">
                         <span class="title" style="margin-left: 10px; color: black">
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
-                            {{}}
+                            重命名项目
                         </span>
                     <div class="clear"></div>
                     </div>
@@ -180,9 +180,9 @@ export default {
             // this.team_id = this.$route.query.team_id;
             this.team_id = this.$store.state.teamid;
             this.$axios
-                .post("/project/viewAllProject", {
-                    team_id: this.team_id,
-                })
+            .post('/project/viewAllProject',{
+                        team_id: this.team_id
+                    })
                 .then(res =>{
                     console.log(res.data);
                     switch(res.data.code) {
@@ -378,12 +378,12 @@ export default {
   background-image: url("../../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  overflow: auto;
-  position: fixed;
   background-position:center;
   background-size: 100% auto;
   width: 100%;
   height: 100%;
+  position: fixed;
+  overflow: auto;
 }
 
 .el-tabs{
@@ -450,10 +450,22 @@ export default {
 .clear{
     clear: both;
 }
+.textitem .show{
+  text-align: left;
+  width: 100%;   /*一定要设置宽度，或者元素内含的百分比*/
+  overflow:hidden; /*溢出的部分隐藏*/
+  white-space: nowrap; /*文本不换行*/
+  text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
+}
 .pname{
     font-size: 25px;
     float: left;
     font-weight: 600;
+    width: 150px;
+    text-align: left;
+  overflow:hidden; /*溢出的部分隐藏*/
+  white-space: nowrap; /*文本不换行*/
+  text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
 .button{
     float: right;

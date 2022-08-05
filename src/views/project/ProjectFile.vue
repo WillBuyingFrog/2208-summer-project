@@ -157,12 +157,12 @@ export default {
         this.team_id = this.$store.state.teamid;
         this.project_name = this.$store.state.project_name;
         this.project_id = this.$store.state.project_id;
-        this.fileType = parseInt(this.$route.query.filetype);
         console.log(this.fileType);
         this.getFile();
     },
     methods: {
         getFile(){
+            this.fileType = parseInt(this.$route.query.filetype);
             this.$http
                 .post('/file/viewType', {
                     project_id: this.project_id,
@@ -207,6 +207,7 @@ export default {
                             this.newFileid = res.data.data;
                             this.dialogVisible = false;
                             //是否跳转到编辑页？
+                            // this.$router.push('/prototypeDesign');
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -219,7 +220,62 @@ export default {
             }
         },
         deleteFile(fileid){
+            //原型设计
             if(this.fileType == 1){
+                this.$http({
+                    method:'post',
+                    url:'/file/json/delete',
+                    params: {
+                        file_id: fileid,
+                    },
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            console.log(res.data.data);
+                            this.getFile();
+                            ElMessage.success("删除成功！")
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+            //文档编辑
+            else if(this.fileType == 0){
+                this.$http({
+                    method:'post',
+                    url:'/file/json/delete',
+                    params: {
+                        file_id: fileid,
+                    },
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            console.log(res.data.data);
+                            this.getFile();
+                            ElMessage.success("删除成功！")
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+            //绘制图
+            else if(this.fileType == 2){
                 this.$http({
                     method:'post',
                     url:'/file/json/delete',

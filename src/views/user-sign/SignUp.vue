@@ -85,10 +85,10 @@
   background-position:center;
   background-size: 100% auto;
   min-height: 800px;
-  overflow: auto;
-  position: fixed;
   width: 100%;
   height: 100%;
+  position: fixed;
+  overflow: auto;
 }
 .register {
   margin: 130px auto auto;

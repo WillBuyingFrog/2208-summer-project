@@ -59,18 +59,16 @@ export default {
   background-image: url("../../assets/images/sign-bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  /*overflow: auto;*/
-  /*position: fixed;*/
   background-position:center;
   background-size: 100% auto;
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 .bg-plus {
   background-color: rgba(255, 255, 255, 0.50);
   min-height: 800px;
   overflow: auto;
-
   background-position:center;
   background-size: 100% auto;
   width: 100%;
