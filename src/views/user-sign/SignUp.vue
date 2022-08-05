@@ -385,26 +385,25 @@ export default {
           this.canClick = true; //这里重新开启
         }
       }, 1000);
-      self.ruleform.email.validate((valid) => {
-        if (valid) {
+      // self.ruleform.email.validate((valid) => {
+      //   if (valid) {
           this.$http
-              .post("/user/register", {
-                email: self.ruleForm.email,
+              .post("/sendEmail", {
+                to: self.ruleForm.email,
               })
               .then(res => {
                 console.log(res.data)
                 switch (res.data.code) {
                   case 200:
                     ElMessage.success('发送成功，验证码有效期五分钟！');
-
                     break;
                   case 500:
                     ElMessage.error(res.data.message);
                     break;
                 }
               })
-        }
-      })
+      //   }
+      // })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
