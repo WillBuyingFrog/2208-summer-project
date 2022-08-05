@@ -68,35 +68,35 @@
                     <div class="clear"></div>
                     </div>
                 </template>
-                <div class="text item">
+                <div class="textitem">
                     <el-form :model="team" label-width="120px" label-position="left">
                         <el-form-item>
                             <!-- 重写label -->
                             <template #label>
                                 <div class="label1"><el-icon><Avatar /></el-icon> 组长:</div>
                             </template>
-                            <span>{{team.leader}}</span>
+                            <span class="show">{{team.leader}}</span>
                         </el-form-item>
                         <el-form-item>
                             <!-- 重写label -->
                             <template #label>
                                 <div class="label1"><el-icon><User /></el-icon> 成员:</div>
                             </template>
-                            <span>{{team.members}}</span>
+                            <span class="show">{{team.members}}</span>
                         </el-form-item>
                         <el-form-item>
                             <!-- 重写label -->
                             <template #label>
                                 <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                             </template>
-                            <span>{{team.create_time}}</span>
+                            <span class="show">{{team.create_time}}</span>
                         </el-form-item>
                         <el-form-item>
                             <!-- 重写label -->
                             <template #label>
                                 <div class="label1"><el-icon><InfoFilled /></el-icon> 团队简介:</div>
                             </template>
-                            <span>{{team.info}}</span>
+                            <span class="show">{{team.info}}</span>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -123,8 +123,8 @@
                 <el-input v-model="newone.name"></el-input>
             </el-form-item>
             <el-form-item label="团队简介">
-                <el-input v-model="newone.info" :autosize="{ minRows: 3, maxRows: 6 }"
-                type="textarea"></el-input>
+                <el-input type="textarea" maxlength="200" show-word-limit
+                    resize="none" :autosize="{ minRows: 6}" v-model="newone.info" style="width:400px"></el-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -166,10 +166,9 @@ export default {
     },
     methods: {
         getTeam(){
-            var id = this.$store.state.user.id;
-            this.$http
-                .post("/team/get/all", {
-                    user_id: id
+            this.$http({
+                    method:'post',
+                    url:'/team/get/all',
                 })
                 .then(res =>{
                     console.log(res.data);
@@ -244,11 +243,19 @@ export default {
   background-image: url("../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  overflow: hidden;
+  overflow: auto;
   background-position:center;
   background-size: 100% auto;
   width: 100%;
   height: 100%;
+  position: fixed;
+}
+.textitem .show{
+  text-align: left;
+  width: 100%;   /*一定要设置宽度，或者元素内含的百分比*/
+  overflow:hidden; /*溢出的部分隐藏*/
+  white-space: nowrap; /*文本不换行*/
+  text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
 .workspace .el-header{
     height: 67px;
@@ -314,6 +321,11 @@ export default {
     font-size: 25px;
     float: left;
     font-weight: 600;
+    width: 150px;
+    text-align: left;
+  overflow:hidden; /*溢出的部分隐藏*/
+  white-space: nowrap; /*文本不换行*/
+  text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
 .button{
     float: right;

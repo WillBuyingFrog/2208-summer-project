@@ -207,6 +207,7 @@ export default {
                             this.newFileid = res.data.data;
                             this.dialogVisible = false;
                             //是否跳转到编辑页？
+                            // this.$router.push('/prototypeDesign');
                             break;
                         case 500:
                             ElMessage.error(res.data.message);

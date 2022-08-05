@@ -27,11 +27,12 @@ export default {
   background-image: url("../../assets/images/homepage_bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  overflow: hidden;
   background-position:center;
   background-size: 100% auto;
   width: 100%;
   height: 100%;
+  position: fixed;
+  overflow: auto;
 }
 
 .buttons button{
