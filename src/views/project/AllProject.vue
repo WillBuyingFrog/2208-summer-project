@@ -179,13 +179,10 @@ export default {
         getAllProject(){
             // this.team_id = this.$route.query.team_id;
             this.team_id = this.$store.state.teamid;
-            this.$axios({
-                    method:'post',
-                    url:'/project/viewAllProject',
-                    params: {
+            this.$axios
+            .post('/project/viewAllProject',{
                         team_id: this.team_id
-                    },
-                })
+                    })
                 .then(res =>{
                     console.log(res.data);
                     switch(res.data.code) {
