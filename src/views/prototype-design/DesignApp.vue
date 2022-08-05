@@ -12,11 +12,16 @@
                 <DesignAppHeader/>
               </el-header>
               <el-main class="workpane">
-                <DesignEditorView ref="editor" :value="this.controls">
-                  <template #default>
-                    <PluginSelection :application="this" />
-                  </template>
-                </DesignEditorView>
+                <div
+                  style="height: 100%"
+                >
+                  <DesignEditorView ref="editor" :value="this.controls">
+                    <template #default>
+                      <PluginSelection :application="this" />
+                    </template>
+                  </DesignEditorView>
+                </div>
+
               </el-main>
             </el-container>
             <el-aside width="240px" class="rightpane">
@@ -394,6 +399,7 @@ export default {
         this.clearCurrentComponent()
       }
       console.log(componentJSON)
+      if(componentJSON === "") return
       console.log("----")
       componentJSON = JSON.parse(componentJSON)
       componentJSON.map((item) => {

@@ -1,7 +1,9 @@
 <template>
   <div :class="this.parentId ? 'ds-editor nest-editor' : 'ds-editor root-editor'"
-       :id="this.parentId ? 'nested-editor' + this.parentId : 'root-editor-view'">
-    <div ref="editor" :style="this.$data.canvasStyle">
+       :id="this.parentId ? 'nested-editor' + this.parentId : 'root-editor-view'"
+       :style="this.parentId ?  this.childCanvasStyle : this.canvasStyle"
+  >
+    <div ref="editor">
       <CellWrapper v-for="item in value"
                    :item="item"
                    :key="item.id"
@@ -16,6 +18,9 @@
 <script>
 import {computed} from 'vue'
 
+import eventBus from "@/views/prototype-design/utils/eventBus";
+import {EVENT_DESIGNER_RESIZE} from "@/views/prototype-design/event-enum";
+
 import PluginDrop from "@/views/prototype-design/plugins/plugin-drop"
 import CellWrapper from "@/views/prototype-design/cell-wrapper"
 
@@ -24,9 +29,17 @@ export default {
   data(){
     return {
       canvasStyle: {
-        width: '70%',
-        height: '90%',
-        border: '1px solid black'
+        width: '100%',
+        height: '95%',
+        border: '1px solid black',
+        marginLeft: '0%',
+        marginRight: '0%'
+      },
+      childCanvasStyle: {
+        // 这些style不应该被更改
+        width: '100%',
+        height: '100%',
+        border: 'none'
       }
     }
   },
@@ -50,6 +63,18 @@ export default {
   },
   methods: {
       // 由于Vue3特性，原版本中唯一的methods已空
+    // 增加功能：设置整个画布的大小
+    handleResize({newWidth, newHeight, margins}){
+      console.log(newWidth, newHeight, margins)
+      this.canvasStyle.width = newWidth
+      this.canvasStyle.height = newHeight
+      console.log("Received margins:", margins)
+      this.canvasStyle.marginLeft = margins
+      this.canvasStyle.marginRight = margins
+    }
+  },
+  created(){
+    eventBus.$on(EVENT_DESIGNER_RESIZE, this.handleResize)
   }
 }
 </script>

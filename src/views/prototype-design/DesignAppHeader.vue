@@ -7,11 +7,30 @@ import {
   EVENT_DESIGNER_REDO,
   EVENT_DESIGNER_CLEAR,
   COLLABORATE_EXPORT_JSON,
-  EVENT_DESIGNER_SAVEIMG
+  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE
 } from "@/views/prototype-design/event-enum";
 
 export default {
   name: "DesignAppHeader",
+  data(){
+    return {
+      expr_width: 100,
+      expr_height: 95
+    }
+  },
+  methods: {
+    handleResizeRequest(alterHeight, alterWidth){
+      this.expr_height = (alterHeight + this.expr_height >= 95) ? 95 : (alterHeight + this.expr_height)
+      this.expr_width = (alterWidth + this.expr_width >= 100) ? 100 : (alterWidth + this.expr_width)
+      let newHeight = this.expr_height.toString() + "%"
+      let newWidth = this.expr_width.toString() + "%"
+      let newMargin = (100 - this.expr_width) / 2
+      newMargin = newMargin.toFixed(4)
+      let newMarginText = newMargin.toString() + "%"
+      console.log("ready to set new size", newWidth, newHeight, newMarginText)
+      eventBus.$emit(EVENT_DESIGNER_RESIZE, {newWidth: newWidth, newHeight: newHeight, margins:newMarginText})
+    }
+  },
   render(){
     return (
         <div class="ds-header">
@@ -56,6 +75,30 @@ export default {
               onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
           >
             <Download class="icon" ></Download>
+          </el-icon>
+          <el-icon
+              className="icon-contain"
+              onClick={() => this.handleResizeRequest(-5, 0)}
+          >
+            <Download class="icon"></Download>
+          </el-icon>
+          <el-icon
+              className="icon-contain"
+              onClick={() => this.handleResizeRequest(5, 0)}
+          >
+            <Download class="icon"></Download>
+          </el-icon>
+          <el-icon
+              className="icon-contain"
+              onClick={() => this.handleResizeRequest(0, -5)}
+          >
+            <Download class="icon"></Download>
+          </el-icon>
+          <el-icon
+              className="icon-contain"
+              onClick={() => this.handleResizeRequest(0, 5)}
+          >
+            <Download class="icon"></Download>
           </el-icon>
         </div>
     )

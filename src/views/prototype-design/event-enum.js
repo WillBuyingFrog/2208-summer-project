@@ -12,6 +12,7 @@ export const EVENT_DESIGNER_REDO = 'designer:redo'
 export const EVENT_DESIGNER_UNDO = 'designer:undo'
 export const EVENT_DESIGNER_CLEAR = 'designer:clear'
 export const EVENT_DESIGNER_SAVEIMG = 'designer:saveimg'
+export const EVENT_DESIGNER_RESIZE = 'designer:resize'
 
 export const EVENT_FUNCTION_TEST = 'function:test'
 
