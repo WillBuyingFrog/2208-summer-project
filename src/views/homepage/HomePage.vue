@@ -2,8 +2,8 @@
   <div class="hp-fill">
 <!--    <h1>HomePage</h1>-->
     <div class="buttons">
-      <el-button id="register-button" color="#626aef" :dark="isDark" plain @click="gotoRegister">Try Out Now</el-button>
-      <el-button id="sign-in-button" color="#626aef" :dark="isDark" plain @click="gotoLogin">Sign In</el-button>
+      <el-button id="sign-in-button" color="#626aef" :dark="isDark" plain @click="gotoLogin">登录</el-button>
+      <el-button id="register-button" color="#626aef" :dark="isDark" plain @click="gotoRegister">注册</el-button>
     </div>
   </div>
 </template>
@@ -46,10 +46,10 @@ export default {
 }
 
 .buttons #register-button{
-  margin: 600px 100px 0 0;
+  margin: 600px 0 0 100px;
 }
 
 .buttons #sign-in-button{
-  margin: 600px 0 0 100px;
+  margin: 600px 100px 0 0;
 }
 </style>

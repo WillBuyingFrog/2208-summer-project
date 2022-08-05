@@ -8,7 +8,7 @@
         <el-tabs v-model="status" class="demo-tabs" @tab-click="handleClick">
             <el-tab-pane label="所有项目" name="0"></el-tab-pane>
             <el-tab-pane label="回收站" name="1">
-                <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash">
+                <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash" v-if="allproject.length!=0">
                     <template #reference>
                         <el-button type="danger">清空回收站</el-button>   
                     </template>
@@ -32,6 +32,9 @@
                     </el-button>
                 </div>
                 <div class="hint">快来创建新项目吧！</div>
+            </el-card>
+            <el-card :key="i" class="box-card" style="width:300px;height: 310px;" v-if="status==1 && allproject.length==0">
+                  <el-empty description="回收站无项目" />
             </el-card>
             <el-card v-for="project in allproject" :key="project.project_id" class="box-card" style="width: 300px">
                 <template #header>
@@ -172,13 +175,12 @@ export default {
         }
     },
     created(){
+        this.team_id = this.$store.state.teamid;
         this.getAllProject();
         console.log("team_id: "+this.team_id);
     },
     methods: {
         getAllProject(){
-            // this.team_id = this.$route.query.team_id;
-            this.team_id = this.$store.state.teamid;
             this.$axios
             .post('/project/viewAllProject',{
                         team_id: this.team_id
@@ -218,6 +220,7 @@ export default {
                 })
         },
         handleClick() {
+            this.allproject=[];
             console.log(this.status);
             if(this.status == '1'){
                 this.getAllProject();

@@ -26,7 +26,7 @@
                     <el-icon><EditPen /></el-icon>
                     <span>原型设计</span>
                     </el-menu-item>
-                    <el-menu-item index="/documentEdit">
+                    <el-menu-item index="/projectfile?filetype=0">
                     <el-icon><Document /></el-icon>
                     <span>文档编辑</span>
                     </el-menu-item>
@@ -58,7 +58,7 @@ export default {
     },
     computed:{
         activePath(){   
-            return this.$route.path;
+        return this.$route.fullPath;
         }
   },
     created(){
@@ -92,5 +92,6 @@ export default {
 }
 .uml-link {
   text-decoration-line: none;
+  COLOR: #000000; 
 }
 </style>

@@ -150,6 +150,8 @@ export default {
     watch:{
         //查询参数改变，再次执行数据获取方法
         '$route'(){
+            this.fileType = parseInt(this.$route.query.filetype);
+            this.allFile = {};
             this.getFile();
         }
     },
@@ -161,8 +163,7 @@ export default {
         this.getFile();
     },
     methods: {
-        getFile(){
-            this.fileType = parseInt(this.$route.query.filetype);
+        getFile(){            
             this.$http
                 .post('/file/viewType', {
                     project_id: this.project_id,
@@ -189,12 +190,13 @@ export default {
             if(this.newone.name == '' || this.newone.name == null || this.newone.name == undefined){
                 ElMessage.warning("请输入文件名");
             }
-            //设计原型
-            else if(this.fileType == 1){
+            //设计原型、文档
+            else if(this.fileType == 1 || this.fileType == 0){
                 this.$http
                 .post('/file/json/new', {
                     project_id: this.project_id,
                     file_name: this.newone.name,
+                    type: this.fileType
                 })
                 .then(res =>{
                     console.log(res.data.code);
@@ -204,6 +206,7 @@ export default {
                             console.log(res.data.data);
                             this.getFile();
                             ElMessage.success("创建成功！")
+                            this.newone.name = '';
                             this.newFileid = res.data.data;
                             this.dialogVisible = false;
                             //是否跳转到编辑页？
@@ -220,35 +223,8 @@ export default {
             }
         },
         deleteFile(fileid){
-            //原型设计
-            if(this.fileType == 1){
-                this.$http({
-                    method:'post',
-                    url:'/file/json/delete',
-                    params: {
-                        file_id: fileid,
-                    },
-                })
-                .then(res =>{
-                    console.log(res.data.code);
-                    console.log(res.data.data);
-                    switch (res.data.code){
-                        case 200:
-                            console.log(res.data.data);
-                            this.getFile();
-                            ElMessage.success("删除成功！")
-                            break;
-                        case 500:
-                            ElMessage.error(res.data.message);
-                            break;
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-            }
-            //文档编辑
-            else if(this.fileType == 0){
+            //原型设计,文档
+            if(this.fileType == 1 || this.fileType == 0){
                 this.$http({
                     method:'post',
                     url:'/file/json/delete',
@@ -308,7 +284,7 @@ export default {
             console.log(this.nowfid);
         },
         renameFile(){
-            if(this.fileType == 1){
+            if(this.fileType == 1 || this.fileType == 0){
                 this.$http({
                     method:'post',
                     url:'/file/json/update',
@@ -341,7 +317,13 @@ export default {
         editFile(id, name){
             this.$store.state.file_name = name;
             this.$store.state.file_id = id;
-            this.$router.push('/prototypeDesign');
+            if(this.fileType == 1){
+                this.$router.push('/prototypeDesign');
+            }
+            else if(this.fileType == 0){
+                this.$router.push('/documentEdit');
+            }
+            
         }
     }
 

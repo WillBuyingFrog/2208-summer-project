@@ -39,16 +39,13 @@
 <script>
 //import { InfoFilled } from '@element-plus/icons-vue';
 import QuillTest from "@/components/QuillTest";
-import {ElMessage} from "element-plus";
+//import {ElMessage} from "element-plus";
 export default {
   name: "DocumentEdit",
   components: {QuillTest},
   methods: {
     quit() {
-      ElMessage.success('即将回到工作空间');
-      setTimeout(() => {
-        this.$router.push('/workspace')
-      }, 1000);
+       this.$router.go(-1);
     }
   }
 }

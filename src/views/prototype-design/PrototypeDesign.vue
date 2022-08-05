@@ -4,23 +4,25 @@
       <el-container class="outer-container">
         <el-header height="60px" class="header">
           <el-row>
-            <el-col>
+            <el-col :span="1">
+                <div class="logo">
+                    <img src="../../assets/images/logo-1.png" height="60">
+                </div>
+            </el-col>
+            <el-col  :span="2">
               <el-popconfirm
                   confirm-button-text="Yes"
                   cancel-button-text="No, Thanks"
                   icon-color="#626AEF"
                   title="确认退出编辑?"
-                  class="quit"
                   @confirm="quit()"
               >
                 <template #reference>
-                  <div class="logo">
-                    <img src="../../assets/images/logo-1.png" height="60">
-                  </div>
+                  <el-button link icon="Back" class="quit">退出</el-button>
                 </template>
               </el-popconfirm>
             </el-col>
-            <el-col>
+            <el-col :span="16">
               <p class="name">{{this.$store.state.file_name}}</p>
             </el-col>
           </el-row>
@@ -40,17 +42,18 @@
 <script>
 //import { InfoFilled } from '@element-plus/icons-vue';
 
-import {ElMessage} from "element-plus";
+//import {ElMessage} from "element-plus";
 import DesignApp from "@/views/prototype-design/DesignApp";
 export default {
   name: "PrototypeDesign",
   components: {DesignApp},
   methods: {
     quit() {
-      ElMessage.success('即将回到工作空间');
+      //ElMessage.success('即将回到工作空间');
       setTimeout(() => {
-        this.$router.push('/workspace')
-      }, 1000);
+        // this.$router.push('/workspace')
+        this.$router.go(-1);
+      }, 0);
     }
   }
 }
@@ -110,5 +113,9 @@ export default {
 }
 .editor {
   width: 100%;
+}
+.quit{
+  line-height: 50px;
+  font-size: 15px;
 }
 </style>
