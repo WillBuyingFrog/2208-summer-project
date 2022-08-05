@@ -7,12 +7,12 @@
                 <div>
                     <img class="logo" src="..\assets\images\logo-1.png" height="60">
                 </div>
-            </el-col>         
+            </el-col>
             <el-col :span="1">
                 <div>
-                    <span><div class="title">工作空间</div></span> 
+                    <span><div class="title">工作空间</div></span>
                 </div>
-            </el-col> 
+            </el-col>
             <el-col :span="16"><div/></el-col>
             <el-col :span="1" >
                  <el-badge :value="12" class="item" style="margin-top:15px;">
@@ -26,9 +26,9 @@
                     :width="200"
                     trigger="click">
                   <template #reference>
-                    <el-avatar :style="{background:avatarColor}" :size="36" 
-                    :src="circleUrl" style="margin-top:12px;margin-left: 15px;"> 
-                    {{this.$store.state.user.name.slice(0,1)}} 
+                    <el-avatar :style="{background:avatarColor}" :size="36"
+                    :src="circleUrl" style="margin-top:12px;margin-left: 15px;">
+                    {{this.$store.state.user.name.slice(0,1)}}
                     </el-avatar>
                   </template>
                   <UserInfo :avatarColor="avatarColor"></UserInfo>
@@ -72,32 +72,32 @@
                     <el-form :model="team" label-width="120px" label-position="left">
                         <el-form-item>
                             <!-- 重写label -->
-                            <template #label>  
+                            <template #label>
                                 <div class="label1"><el-icon><Avatar /></el-icon> 组长:</div>
                             </template>
                             <span>{{team.leader}}</span>
                         </el-form-item>
                         <el-form-item>
                             <!-- 重写label -->
-                            <template #label>  
+                            <template #label>
                                 <div class="label1"><el-icon><User /></el-icon> 成员:</div>
                             </template>
                             <span>{{team.members}}</span>
-                        </el-form-item>      
+                        </el-form-item>
                         <el-form-item>
                             <!-- 重写label -->
-                            <template #label>  
+                            <template #label>
                                 <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                             </template>
                             <span>{{team.create_time}}</span>
                         </el-form-item>
                         <el-form-item>
                             <!-- 重写label -->
-                            <template #label>  
+                            <template #label>
                                 <div class="label1"><el-icon><InfoFilled /></el-icon> 团队简介:</div>
                             </template>
                             <span>{{team.info}}</span>
-                        </el-form-item>                     
+                        </el-form-item>
                     </el-form>
                 </div>
             </el-card>
@@ -123,7 +123,7 @@
                 <el-input v-model="newone.name"></el-input>
             </el-form-item>
             <el-form-item label="团队简介">
-                <el-input v-model="newone.info" :autosize="{ minRows: 3, maxRows: 6 }" 
+                <el-input v-model="newone.info" :autosize="{ minRows: 3, maxRows: 6 }"
                 type="textarea"></el-input>
             </el-form-item>
         </el-form>
@@ -174,7 +174,7 @@ export default {
                 .then(res =>{
                     console.log(res.data);
                     switch (res.data.code) {
-                        case 200: 
+                        case 200:
                             this.allteam = res.data.data;
                             this.proNum = this.allteam.length;
                             break;
@@ -199,7 +199,7 @@ export default {
             }
             else{
                 this.$http
-                    .post("/team/new", 
+                    .post("/team/new",
                     {
                         user_id: id,
                         team_name: this.newone.name,
@@ -221,10 +221,10 @@ export default {
                             break;
                     }
                 })
-                
+
             }
-            
-            
+
+
         }
     },
     created(){

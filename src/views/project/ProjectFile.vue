@@ -8,14 +8,14 @@
         <template #header>
                     <div class="card-header">
                         <span class="title" v-if="fileType == 1" style="margin-left: 10px; color: black">
-                            <el-icon ><EditPen /></el-icon>新建原型                           
+                            <el-icon ><EditPen /></el-icon>新建原型
                         </span>
                         <span class="title" v-if="fileType == 0" style="margin-left: 10px; color: black">
-                            <el-icon><Document /></el-icon>新建文档                           
+                            <el-icon><Document /></el-icon>新建文档
                         </span>
                         <span class="title" v-if="fileType == 2" style="margin-left: 10px; color: black">
-                            <el-icon><Picture /></el-icon>新建图                           
-                        </span> 
+                            <el-icon><Picture /></el-icon>新建图
+                        </span>
                     <div class="clear"></div>
                     </div>
                 </template>
@@ -37,14 +37,14 @@
         <template #header>
                     <div class="card-header">
                         <span class="title" v-if="fileType == 1" style="margin-left: 10px; color: black">
-                            <el-icon ><EditPen /></el-icon>重命名原型                           
+                            <el-icon ><EditPen /></el-icon>重命名原型
                         </span>
                         <span class="title" v-if="fileType == 0" style="margin-left: 10px; color: black">
-                            <el-icon><Document /></el-icon>重命名文档                           
+                            <el-icon><Document /></el-icon>重命名文档
                         </span>
                         <span class="title" v-if="fileType == 2" style="margin-left: 10px; color: black">
-                            <el-icon><Picture /></el-icon>重命名图                           
-                        </span> 
+                            <el-icon><Picture /></el-icon>重命名图
+                        </span>
                     <div class="clear"></div>
                     </div>
                 </template>
@@ -85,7 +85,7 @@
                     <el-row>
                         <el-col :span="12">
                             <el-form-item>
-                                <template #label>  
+                                <template #label>
                                     <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                                 </template>
                                 <span>{{file.creator}}</span>
@@ -93,7 +93,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item>
-                                <template #label>  
+                                <template #label>
                                     <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                                 </template>
                                 <span>{{file.create_time}}</span>
@@ -103,7 +103,7 @@
                     <el-row>
                         <el-col :span="12">
                             <el-form-item>
-                                <template #label>  
+                                <template #label>
                                     <div class="label1"><el-icon><User /></el-icon> 最后编辑者:</div>
                                 </template>
                                 <span>{{file.last_modification_user}}</span>
@@ -111,13 +111,13 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item>
-                                <template #label>  
+                                <template #label>
                                     <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
                                 </template>
                                 <span>{{file.last_modification_time}}</span>
                             </el-form-item>
-                        </el-col>                        
-                    </el-row>                                    
+                        </el-col>
+                    </el-row>
                 </el-form>
             </div>
         </el-card>
@@ -285,6 +285,7 @@ export default {
         editFile(id, name){
             this.$store.state.file_name = name;
             this.$store.state.file_id = id;
+            this.$router.push('/prototypeDesign');
         }
     }
 
