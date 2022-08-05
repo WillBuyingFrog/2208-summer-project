@@ -4,15 +4,15 @@
           <TopGuide/>
         </el-header>
         <el-container  >
-            <el-aside width="200px">
+           <el-aside width="200px" style="height: 100vh;background-color:rgba(250, 250, 250, 0.5)">
                 <el-menu
                 :default-active="activePath"
                 class="el-menu-vertical-demo"
-                background-color="rgba(250, 250, 250, 0.5)"
-                style="height:100vh;"
-                @select="handleSelect"
+                background-color="rgba(250, 250, 250, 0)"
+                @open="handleOpen"
+                @close="handleClose"
                 router>
-                <el-menu-item index="/team">
+                <el-menu-item index="/team" style="margin-top:12%;">
                   <el-icon><Histogram/></el-icon>
                   <span style="font-size: 14px;">团队信息</span>
                 </el-menu-item>
@@ -21,7 +21,7 @@
                   <span style="font-size: 14px;">成员信息</span>
                 </el-menu-item>
               </el-menu>
-            </el-aside>
+          </el-aside>
             <el-main>
                 <el-card class="card" body-style="padding:0px">
                 <el-row >
