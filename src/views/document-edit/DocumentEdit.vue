@@ -124,7 +124,7 @@ export default {
   padding: 0;
 }
 .editor {
-  height: 90%;
+  height: 93%;
 }
 .online-users {
 
