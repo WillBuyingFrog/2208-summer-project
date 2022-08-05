@@ -47,3 +47,43 @@ export function handleQuillBinding(quill){
 
     return {binding, provider}
 }
+
+
+export function saveQuillContent(quill, application, file_id, file_name){
+    let contents = quill.getContents()
+    console.log('contents', contents)
+    application.$http
+        .post('/file/collaborate/update', {
+            file_id: file_id,
+            file_name: file_name,
+            content: contents
+        })
+        .then(res => {
+            switch (res.data.code){
+                case 200:
+                    return 1
+                case 500:
+                    return 0
+                default:
+                    return -1
+            }
+        })
+}
+
+export function loadQuillContent(quill, application, file_id){
+    let contents = ""
+    let returnCode = -1
+    application.$http({
+        method: 'POST',
+        url: '/file/json/get',
+        params: {
+            file_id: file_id
+        }
+    })
+        .then(res => {
+            contents = res.data.data.content
+            quill.setContents(contents)
+            returnCode = res.data.code
+        })
+    return returnCode
+}

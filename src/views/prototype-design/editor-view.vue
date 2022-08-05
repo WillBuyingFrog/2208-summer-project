@@ -1,7 +1,7 @@
 <template>
   <div :class="this.parentId ? 'ds-editor nest-editor' : 'ds-editor root-editor'"
        :id="this.parentId ? 'nested-editor' + this.parentId : 'root-editor-view'">
-    <div class="ds-editor-canvas" ref="editor">
+    <div ref="editor" :style="this.$data.canvasStyle">
       <CellWrapper v-for="item in value"
                    :item="item"
                    :key="item.id"
@@ -21,6 +21,15 @@ import CellWrapper from "@/views/prototype-design/cell-wrapper"
 
 export default {
   name: "editor-view",
+  data(){
+    return {
+      canvasStyle: {
+        width: '70%',
+        height: '90%',
+        border: '1px solid black'
+      }
+    }
+  },
   components: {
     CellWrapper,
     PluginDrop

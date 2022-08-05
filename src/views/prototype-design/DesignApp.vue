@@ -428,7 +428,6 @@ export default {
   },
   mounted(){
     const IN_DEBUG_MODE = false
-    // TODO 获取前端传入的数据，向后端验证
     if((!IN_DEBUG_MODE) && this.$store.state.file_id === ''){
       alert("文件ID错误！")
       history.back()
@@ -439,6 +438,7 @@ export default {
     this.file_id = this.$store.state.file_id
     this.file_name = this.$store.state.file_name
     this.userId = this.$store.state.user.id
+    // TODO 获取原型设计的所有页面文件id，默认打开第一个（远期：存储当前打开的页面是哪个）
 
     this.$http({
       method: 'POST',
