@@ -41,6 +41,7 @@
                       autocomplete="off"
                       @keyup.enter="register('ruleForm')"
                       class="register-input"
+                      show-password
                   ></el-input>
                 </el-form-item>
                 <el-form-item prop="checkPass">
@@ -51,6 +52,7 @@
                       autocomplete="off"
                       @keyup.enter="register('ruleForm')"
                       class="register-input"
+                      show-password
                   ></el-input>
                 </el-form-item>
                 <el-form-item prop="email">
@@ -66,11 +68,12 @@
                 <el-form-item prop="verCode">
                   <el-input
                       placeholder="Verification Code"
-                      type="verCode"
+                      type="password"
                       v-model="ruleForm.verCode"
                       autocomplete="off"
                       @keyup.enter="register('ruleForm')"
                       class="code-input"
+                      show-password
                   ></el-input>
                   <el-button
                       color="#626aef"
@@ -139,7 +142,7 @@
 .register-box {
   width: 295px;
   height: 370px;
-  padding: 50px 0 0 20px;
+  padding: 30px 0 0 20px;
   line-height: 40px;
   position: relative;
   display: inline-block;
@@ -147,7 +150,7 @@
 .register-btn {
   margin-top: 25px;
   text-align: center;
-  padding-left: 60px;
+  padding-left: 80px;
 }
 .register-btn button{
   width: 115px;
@@ -188,7 +191,7 @@
   color:#999;
   cursor: pointer;
   float: right;
-  margin: 5px 15px 0 0;
+  margin: -26px 15px 0 0;
   text-shadow: 3px 3px 10px #bebebe;
 }
 .to-login:hover {
@@ -387,21 +390,21 @@ export default {
       }, 1000);
       // self.ruleform.email.validate((valid) => {
       //   if (valid) {
-          this.$http
-              .post("/sendEmail", {
-                to: self.ruleForm.email,
-              })
-              .then(res => {
-                console.log(res.data)
-                switch (res.data.code) {
-                  case 200:
-                    ElMessage.success('发送成功，验证码有效期五分钟！');
-                    break;
-                  case 500:
-                    ElMessage.error(res.data.message);
-                    break;
-                }
-              })
+      this.$http
+          .post("/sendEmail", {
+            to: this.ruleForm.email,
+          })
+          .then(res => {
+            console.log(res.data)
+            switch (res.data.code) {
+              case 200:
+                ElMessage.success('发送成功，验证码有效期五分钟！');
+                break;
+              case 500:
+                ElMessage.error(res.data.message);
+                break;
+            }
+          })
       //   }
       // })
     },
