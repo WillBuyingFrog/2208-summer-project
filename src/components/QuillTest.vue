@@ -1,7 +1,5 @@
 <template>
   <div class="out-div">
-    <label for="username">Your username</label>
-    <input id="username" type="text" />
     <div class="inner-div">
       <QuillEditor class="quill-editor"
       :options="editorOption"
@@ -61,7 +59,7 @@ export default defineComponent( {
     return {
       isReady: false,
       editorOption: {
-        theme: 'snow', 
+        theme: 'snow',
         modules: {
           toolbar: {
             container: toolbarOptions,
