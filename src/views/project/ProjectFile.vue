@@ -151,6 +151,7 @@ export default {
         //查询参数改变，再次执行数据获取方法
         '$route'(){
             this.fileType = parseInt(this.$route.query.filetype);
+            this.allFile = {};
             this.getFile();
         }
     },
@@ -162,8 +163,7 @@ export default {
         this.getFile();
     },
     methods: {
-        getFile(){
-            this.allFile = {};
+        getFile(){            
             this.$http
                 .post('/file/viewType', {
                     project_id: this.project_id,
