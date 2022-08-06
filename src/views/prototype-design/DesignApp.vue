@@ -438,12 +438,13 @@ export default {
     eventBus.$on(EVENT_DESIGNER_SWITCH, this.handleSwitchPage)
   },
   mounted(){
-    const IN_DEBUG_MODE = true
+    const IN_DEBUG_MODE = false
     if((!IN_DEBUG_MODE) && this.$store.state.file_id === ''){
       alert("文件ID错误！")
       history.back()
     }
     if(IN_DEBUG_MODE){
+      // TODO 更改为正式的获取页面的函数
       let pagesJSON = demoMultiPage()
       let prototypePages = JSON.parse(pagesJSON)
       let minIndex = 100000
@@ -503,6 +504,7 @@ export default {
     padding: 0;
   }
   .workpane {
+    margin-top: 2vh;
     max-height: 70vh;
     max-width: 70vw;
     overflow-y: scroll;

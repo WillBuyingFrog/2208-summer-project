@@ -7,7 +7,7 @@ import {
   EVENT_DESIGNER_REDO,
   EVENT_DESIGNER_CLEAR,
   COLLABORATE_EXPORT_JSON,
-  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE, EVENT_DESIGNER_SWITCH
+  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE,
 } from "@/views/prototype-design/event-enum";
 
 export default {
@@ -38,23 +38,12 @@ export default {
     return (
         <div class="ds-header">
           <el-space>
-            {this.pages.value.map((item) => {
-              return (
-                  <div
-                      class="page-switch-button"
-                      onClick=
-                      {() => eventBus.$emit(EVENT_DESIGNER_SWITCH, {newPageFile: item.page_file_id})}
-                  >
-                    第{item.page_index}页
-                  </div>
-              )
-            })}
-            <el-icon
-                className="icon-contain"
-                onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
-            >
-              <Upload class="icon"/>
-            </el-icon>
+                <el-icon
+                    className="icon-contain"
+                    onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
+                >
+                  <Upload class="icon"/>
+                </el-icon>
             <el-icon
                 className="icon-contain"
                 onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
@@ -108,9 +97,7 @@ export default {
   padding: 0;
 }
 .icon-contain {
-  width: 40px;
-  height: 40px;
-  margin: 5px 10px 0 10px;
+  margin: 0 10px 0 10px;
 }
 .icon {
   width: 25px;
@@ -127,7 +114,7 @@ export default {
   cursor: pointer;
 
   height: 100%;
-  width: 60px;
+  min-width: 60px;
 }
 .page-switch-button:active{
   box-shadow: rgb(24, 49, 83) 0 1px 0 0;

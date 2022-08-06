@@ -1,0 +1,13 @@
+<el-space>
+            {this.pages.value.map((item) => {
+              return (
+                  <div
+                      class="page-switch-button"
+                      onClick=
+                      {() => eventBus.$emit(EVENT_DESIGNER_SWITCH, {newPageFile: item.page_file_id})}
+                  >
+                    第{item.page_index}页
+                  </div>
+              )
+            })}
+          </el-space>
