@@ -239,6 +239,7 @@ export default {
     //  组件选中，右侧展示属性编辑器
     handleSelect(control) {
       // collaborate
+      // TODO: 如果userId为别的用户，则直接返回，取消选择
       control.usedBy = this.userId
       this.setCurrentControl(control)
       this.updateControlStatus(true)

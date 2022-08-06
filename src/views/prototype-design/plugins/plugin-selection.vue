@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     getContains() {
+      // TODO 检查每个即将被选中元素的userId
       // rect代表了选择的矩形区域
       const rect = this.selectionArea
       const controls = this.application.controls

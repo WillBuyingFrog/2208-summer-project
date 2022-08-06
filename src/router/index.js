@@ -78,7 +78,7 @@ const routes = [
     {
         path: '/dtest',
         name: 'TextEditorTest',
-        component: () => import('../components/QuillTest')
+        component: () => import('../components/TipTapDemo')
     }
 ]
 
