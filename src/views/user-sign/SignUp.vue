@@ -67,7 +67,7 @@
                 </el-form-item>
                 <el-form-item prop="verCode">
                   <el-input
-                      placeholder="Verification Code"
+                      placeholder="verification code"
                       type="password"
                       v-model="ruleForm.verCode"
                       autocomplete="off"
