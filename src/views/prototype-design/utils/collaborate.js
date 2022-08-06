@@ -49,12 +49,17 @@ export var collaboratePrototypeConfig = {
 
 }
 
+export const sharedDocMap = new Map()
+
 export function getCollaboratePrototype(file_id){
+
+
+
     const newDoc = new Y.Doc()
     collaboratePrototypeConfig.doc = newDoc
     const provider = new WebsocketProvider(
         "wss://demos.yjs.dev",
-        file_id,  // 房间号即为当前的文件id
+        file_id,  // 房间号即为当前的页面id（页面隶属于某个原型设计，但我们不关心）
         newDoc
     )
     collaboratePrototypeConfig.provider = provider
