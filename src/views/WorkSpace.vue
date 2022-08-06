@@ -56,19 +56,13 @@
                 </div>
                 <div class="hint">快来创建你的专属团队吧！</div>
             </el-card>
-            <el-card v-for="team in allteam" :key="team.team_id" class="box-card" style="width: 300px">
-                <template #header>
-                    <div class="card-header">
-                        <span class="pname">
-                            <User style="width: 0.8em; height: 0.8em;"/>
-                            <User style="width: 0.5em; height: 0.5em; margin-left:-6px"/>
-                            {{team.team_name}}
-                        </span>
-                    <el-button class="button" type="primary" plain @click="AllProject(team.team_id)">进入团队</el-button>
-                    <div class="clear"></div>
-                    </div>
-                </template>
-                <div class="textitem">
+            <el-card v-for="team in allteam" :key="team.team_id" class="box-card" style="width: 600px" :body-style="{ padding: '0px' }">
+                <el-row>
+                <el-col span="12">
+                    <img src="../assets/images/c.jpg" class="image">
+                </el-col>
+                <el-col span="12">
+                    <div class="textitem">
                     <el-form :model="team" label-width="120px" label-position="left">
                         <el-form-item>
                             <!-- 重写label -->
@@ -100,6 +94,20 @@
                         </el-form-item>
                     </el-form>
                 </div>
+                </el-col>
+                </el-row>
+                <!-- <template #header>
+                    <div class="card-header">
+                        <span class="pname">
+                            <User style="width: 0.8em; height: 0.8em;"/>
+                            <User style="width: 0.5em; height: 0.5em; margin-left:-6px"/>
+                            {{team.team_name}}
+                        </span>
+                    <el-button class="button" type="primary" plain @click="AllProject(team.team_id)">进入团队</el-button>
+                    <div class="clear"></div>
+                    </div>
+                </template> -->
+                
             </el-card>
             <div class="clear"></div>
         </el-space>
@@ -263,6 +271,10 @@ export default {
     border-bottom: 1px solid #EFEFEF;
     background-color: rgba(255, 255, 255, 0.4);
 }
+.image{
+    width: 300px;
+    height: 250px;
+}
 .logo {
     padding-left: 10px;
 }
@@ -271,13 +283,15 @@ export default {
     padding-left: 12%;
 }
 .el-card {
+    padding: 0px;
     margin: 30px 30px 0 30px;
     background-color:  rgba(255, 255, 255, 0.62);
     border-radius: 1ch;
     box-shadow: 14px 15px 19px -15px #000;
+    max-height: 250px;
 }
 .el-card .el-form{
-    margin-left: 5px;
+    margin-left: 0px;
 }
 .el-dialog .el-form{
     margin-left:50px;
