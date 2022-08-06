@@ -25,6 +25,27 @@
             <el-col :span="16">
               <p class="name">{{this.$store.state.file_name}}</p>
             </el-col>
+            <el-col :span="5">
+              <el-button
+                  circle
+                  class="drawer-btn"
+                  color="#859dda"
+                  :dark="isDark"
+                  plain
+                  text @click="drawer = true"
+              >
+                <el-icon class="drawer-icon"><ArrowLeftBold /></el-icon>
+              </el-button>
+              <el-drawer
+                  v-model="table"
+                  title="I have a nested table inside!"
+                  direction="rtl"
+                  size="50%"
+              >
+<!--                里面的内容-->
+              </el-drawer>
+<!--              <el-icon class="drawer-icon"><ArrowLeftBold /></el-icon>-->
+            </el-col>
           </el-row>
         </el-header>
         <el-container class="inner-container">
@@ -44,6 +65,9 @@
 
 //import {ElMessage} from "element-plus";
 import DesignApp from "@/views/prototype-design/DesignApp";
+// import {
+//   ArrowLeftBold,
+// } from '@element-plus/icons-vue'
 export default {
   name: "PrototypeDesign",
   components: {DesignApp},
@@ -106,6 +130,11 @@ export default {
 }
 .icon {
   margin: 0 0 10px 0;
+}
+.drawer-btn {
+  float: right;
+  margin: 10px 0 0 0;
+  box-shadow: 3px 3px 10px #859dda;
 }
 .mainPane {
   margin: 0 0 0 10px;
