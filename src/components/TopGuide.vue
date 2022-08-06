@@ -1,5 +1,6 @@
 <template >
-    <div style="background-color:rgba(250, 250, 250, 0.6);">
+<!--    <div style="background-color:rgb(59,63,65);">-->
+  <div>
         <el-row >
             <el-col :span="4">
             <span style="float:left;margin-left: 30px;"> <img src="../assets/images/logo-1.png" height="58"/></span>    
@@ -11,8 +12,8 @@
                     style="background:unset"
                     mode="horizontal"
                     :ellipsis="false"
-                    text-color="#000000"
-                    active-text-color="#409EFF"
+                    text-color="rgb(210,228,245)"
+                    active-text-color="rgb(210,228,245)"
                     @select="handleSelect"
                     router>
                     <el-menu-item index="/allproject">
