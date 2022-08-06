@@ -105,7 +105,7 @@ export default {
             key={item.id}
             id={item.id}
             draggable={item.draggable}
-            rotatable={item.rotatable}
+            rotatable={false}
             resizable={item.resizable}
             parent={item.parent}
             acceptRatio={item.acceptRatio}

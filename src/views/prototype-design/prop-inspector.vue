@@ -26,7 +26,6 @@ export default {
         { type: 'number', name: 'Y坐标', keyName: 'y' },
         { type: 'number', name: '宽度' , keyName: 'width'},
         { type: 'number', name: '高度' , keyName: 'height'},
-        { type: 'number', name: '旋转角度', keyName: 'rotation' },
         { type: 'number', name: '最低宽度', keyName: 'minWidth' },
         { type: 'number', name: '最低高度', keyName: 'minHeight' },
         { type: 'grid', name: '网格化', keyName: 'grid' },
@@ -39,7 +38,6 @@ export default {
         { type: 'checkbox', name: '等比例缩放', keyName: 'acceptRatio' },
         { type: 'checkbox', name: '可拖拽', keyName: 'draggable'},
         { type: 'checkbox', name: '可改变大小', keyName: 'resizable' },
-        { type: 'checkbox', name: '可旋转' , keyName: 'rotatable'},
       ],
       extraInputs: [{ type: 'text', name: 'value' }, { type: 'text', name: 'label' }]
     }
