@@ -26,17 +26,12 @@
           <el-main>
               <el-card class="card" body-style="padding:0px">
                 <div class="title">
-                  <el-row style="margin-top: 30px;">
-                    <el-col :span="4">
-                    <el-row>
-                      <span style="font-size:20px;margin-left:40px; font-weight:700;">团 队</span>
-                    </el-row>
-                    <el-row>
-                      <span style="font-size:20px;margin-left:50px; font-weight:700;">名 称</span>
-                    </el-row>
+                  <el-row >
+                    <el-col :span="6" style="height: 80px;">
+                      <span style="font-size:20px;font-weight:700;line-height: 80px;">团 队 名 称</span>
                     </el-col>
-                    <el-col :span="20">
-                      <span style="font-size:18px;float:left;margin-top:15px;font-weight:600;">{{teamName}}</span>
+                    <el-col :span="18" style="height: 80px;" >
+                      <span style="font-size:18px;float:left;line-height: 80px;font-weight:600;">{{teamName}}</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -279,7 +274,6 @@ export default {
   .title{
     height: 80px;
     border-bottom:1px solid rgb(230, 230, 230) ;
-
   }
   .form{
     border-radius: 60px;
