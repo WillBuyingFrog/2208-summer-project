@@ -2,10 +2,25 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
     {
-        path: '/',
+        path: '/homepage',
         name: 'Homepage',
         component: () => import('../views/homepage/HomePage')
     },
+    {
+        path: '/try',
+        name: 'lightbulb',
+        component: () => import('../components/TestComponent')
+    },
+    // {
+    //     path: '/h2',
+    //     name: 'home2',
+    //     component: () => import('../views/homepage/Home2')
+    // },
+    // {
+    //     path: '/',
+    //     name: 'LightComponent',
+    //     component: () => import('../views/homepage/LightComponent')
+    // },
     {
         path: '/prototypeDesign',
         name: 'PrototypeDesign',

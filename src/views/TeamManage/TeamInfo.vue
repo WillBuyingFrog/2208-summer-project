@@ -4,11 +4,12 @@
           <TopGuide/>
       </el-header>
       <el-container>
-          <el-aside width="200px" style="height: 100vh;background-color:rgba(250, 250, 250, 0.5)">
+          <el-aside width="200px" style="height: 100vh;background-color:rgba(83,127,165,0.6)">
                 <el-menu
                 :default-active="activePath"
                 class="el-menu-vertical-demo"
                 background-color="rgba(250, 250, 250, 0)"
+                text-color="rgb(210,228,245)"
                 @open="handleOpen"
                 @close="handleClose"
                 router>
@@ -256,15 +257,16 @@ export default {
 
 <style scoped>
   .hp-fill {
-  background-image: url("../../assets/images/bg.jpg");
-  background-repeat: repeat-y;
-  min-height: 800px;
-  overflow: auto;
-  position: fixed;
-  background-position:center;
-  background-size: 100% auto;
-  width: 100%;
-  height: 100%;
+    background-color: rgb(196,217,226);
+  /*background-image: url("../../assets/images/bg.jpg");*/
+  /*background-repeat: repeat-y;*/
+  /*min-height: 800px;*/
+  /*overflow: auto;*/
+  /*position: fixed;*/
+  /*background-position:center;*/
+  /*background-size: 100% auto;*/
+  /*width: 100%;*/
+  /*height: 100%;*/
 }
   .card {
     background-color: rgba(250, 250, 250, 0.7);
