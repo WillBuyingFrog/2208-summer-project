@@ -41,6 +41,7 @@
                       autocomplete="off"
                       @keyup.enter="register('ruleForm')"
                       class="register-input"
+                      show-password
                   ></el-input>
                 </el-form-item>
                 <el-form-item prop="checkPass">
@@ -51,6 +52,7 @@
                       autocomplete="off"
                       @keyup.enter="register('ruleForm')"
                       class="register-input"
+                      show-password
                   ></el-input>
                 </el-form-item>
                 <el-form-item prop="email">
@@ -62,6 +64,24 @@
                       @keyup.enter="register('ruleForm')"
                       class="register-input"
                   ></el-input>
+                </el-form-item>
+                <el-form-item prop="verCode">
+                  <el-input
+                      placeholder="Verification Code"
+                      type="password"
+                      v-model="ruleForm.verCode"
+                      autocomplete="off"
+                      @keyup.enter="register('ruleForm')"
+                      class="code-input"
+                      show-password
+                  ></el-input>
+                  <el-button
+                      color="#626aef"
+                      :dark="isDark"
+                      plain
+                      @click="sendCode()"
+                      class="send-code-btn"
+                  >{{content}}</el-button>
                 </el-form-item>
                 <el-form-item class="register-btn">
                   <el-button color="#626aef" :dark="isDark" plain @click="register('ruleForm')">注 册</el-button>
@@ -122,7 +142,7 @@
 .register-box {
   width: 295px;
   height: 370px;
-  padding: 50px 0 0 50px;
+  padding: 30px 0 0 20px;
   line-height: 40px;
   position: relative;
   display: inline-block;
@@ -130,7 +150,7 @@
 .register-btn {
   margin-top: 25px;
   text-align: center;
-  padding-left: 60px;
+  padding-left: 80px;
 }
 .register-btn button{
   width: 115px;
@@ -139,9 +159,18 @@
   border-radius: 5px;
 }
 .register-input {
-  width: 230px;
+  width: 280px;
   box-shadow: 3px 3px 10px #bebebe;
   border-radius: 5px;
+}
+.code-input {
+  width: 150px;
+  box-shadow: 3px 3px 10px #bebebe;
+  border-radius: 5px;
+}
+.send-code-btn {
+  width: 120px;
+  margin: 0 0 0 10px;
 }
 .to-home {
   font-size:14px;
@@ -162,7 +191,7 @@
   color:#999;
   cursor: pointer;
   float: right;
-  margin: 5px 15px 0 0;
+  margin: -26px 15px 0 0;
   text-shadow: 3px 3px 10px #bebebe;
 }
 .to-login:hover {
@@ -233,6 +262,16 @@ export default {
         callback();
       }
     };
+    var checkCode = (rule, value, callback) => {
+      const reg = /^[a-zA-Z0-9]{6}$/;
+      if (!value) {
+        return callback(new Error('验证码为必填项'));
+      } else if (!reg.test(value)) {
+        callback(new Error('验证码应为六位字符'))
+      } else {
+        callback();
+      }
+    };
     return {
       ruleForm: {
         username: '',
@@ -240,6 +279,7 @@ export default {
         email: '',
         pass: '',
         checkPass: '',
+        verCode: ''
       },
       rules: {
         username: [
@@ -257,7 +297,13 @@ export default {
         checkPass: [
           { validator: validatePass2, trigger: 'blur' }
         ],
-      }
+        verCode: [
+          { validator: checkCode, trigger: 'blur' }
+        ]
+      },
+      content: "获取验证码",
+      totalTime: 60, //倒计时
+      canClick: true,
     };
   },
   methods: {
@@ -269,6 +315,7 @@ export default {
       formData.append("email", self.ruleForm.email);
       formData.append("password1", self.ruleForm.pass);
       formData.append("password2", self.ruleForm.checkPass);
+      formData.append("verCode", self.ruleForm.verCode);
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -279,6 +326,7 @@ export default {
                 email: self.ruleForm.email,
                 real_name: self.ruleForm.realName,
                 user_info: '',
+                verCode: self.ruleForm.verCode,
               })
           // self.$http({
           //   method: 'post',
@@ -289,10 +337,6 @@ export default {
                 console.log(res.data)
                 switch (res.data.code) {
                   case 200:
-                    this.$store.dispatch('saveUserInfo', {user: {
-                        'username': this.ruleForm.username,
-                        'confirmed': false,
-                      }});
                     ElMessage.success('注册成功！');
                     setTimeout(() => {
                       this.$router.push('/login')
@@ -326,6 +370,43 @@ export default {
           return false;
         }
       });
+    },
+    sendCode() {
+      if (!this.canClick) {
+        return;
+      }
+      this.canClick = false;
+      this.content = this.totalTime + "s后重新发送";
+      let clock = window.setInterval(() => {
+        this.totalTime--;
+        this.content = this.totalTime + "s后重新发送";
+        if (this.totalTime < 0) {
+          //当倒计时小于0时清除定时器
+          window.clearInterval(clock); //关闭
+          this.content = "重新发送验证码";
+          this.totalTime = 60;
+          this.canClick = true; //这里重新开启
+        }
+      }, 1000);
+      // self.ruleform.email.validate((valid) => {
+      //   if (valid) {
+      this.$http
+          .post("/sendEmail", {
+            to: this.ruleForm.email,
+          })
+          .then(res => {
+            console.log(res.data)
+            switch (res.data.code) {
+              case 200:
+                ElMessage.success('发送成功，验证码有效期五分钟！');
+                break;
+              case 500:
+                ElMessage.error(res.data.message);
+                break;
+            }
+          })
+      //   }
+      // })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
