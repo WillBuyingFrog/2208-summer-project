@@ -12,6 +12,8 @@ import {
 
 export default {
   name: "DesignAppHeader",
+  inject: ['pages'],
+  emits: ['spage'],
   data(){
     return {
       expr_width: 100,
@@ -32,50 +34,63 @@ export default {
     }
   },
   render(){
+    console.log(this.pages.value)
     return (
         <div class="ds-header">
-          <el-icon
-              className="icon-contain"
-              onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
-          >
-            <Upload class="icon" />
-          </el-icon>
-          <el-icon
-              class="icon-contain"
-              onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
-          >
-            <Delete class="icon"></Delete>
-          </el-icon>
-          <el-icon
-              class="icon-contain"
-              onClick={() => eventBus.$emit(EVENT_DESIGNER_UNDO)}
-          >
-            <RefreshLeft class="icon"></RefreshLeft>
-          </el-icon>
-          <el-icon
-              class="icon-contain"
-              onClick={() => eventBus.$emit(EVENT_DESIGNER_REDO)}
-          >
-            <RefreshRight class="icon"></RefreshRight>
-          </el-icon>
-          <el-icon
-              class="icon-contain"
-              onClick={() => eventBus.$emit(EVENT_COMPONENT_DUPLICATE)}
-          >
-            <CopyDocument class="icon"></CopyDocument>
-          </el-icon>
-          <el-icon
-              class="icon-contain"
-              onClick={() => eventBus.$emit(EVENT_DESIGNER_CLEAR)}
-          >
-            <DocumentDelete class="icon"></DocumentDelete>
-          </el-icon>
-          <el-icon
-              class="icon-contain"
-              onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
-          >
-            <Download class="icon" ></Download>
-          </el-icon>
+          <el-space>
+            {this.pages.value.map((item) => {
+              return (
+                  <div
+                      class="page-switch-button"
+                      onClick={this.$emit('spxage', item.page_file_id)}
+                  >
+                    第{item.page_index}页
+                  </div>
+              )
+            })}
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
+            >
+              <Upload class="icon"/>
+            </el-icon>
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
+            >
+              <Delete class="icon"></Delete>
+            </el-icon>
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(EVENT_DESIGNER_UNDO)}
+            >
+              <RefreshLeft class="icon"></RefreshLeft>
+            </el-icon>
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(EVENT_DESIGNER_REDO)}
+            >
+              <RefreshRight class="icon"></RefreshRight>
+            </el-icon>
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(EVENT_COMPONENT_DUPLICATE)}
+            >
+              <CopyDocument class="icon"></CopyDocument>
+            </el-icon>
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(EVENT_DESIGNER_CLEAR)}
+            >
+              <DocumentDelete class="icon"></DocumentDelete>
+            </el-icon>
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
+            >
+              <Download class="icon"></Download>
+            </el-icon>
+          </el-space>
         </div>
     )
   }
@@ -102,5 +117,19 @@ export default {
 }
 .icon-contain :hover {
   color: #999999;
+}
+.page-switch-button{
+  box-shadow: rgb(24, 49, 83) 0 6px 0 0;
+  box-sizing: border-box;
+  border: 2px solid rgb(24, 49, 83);
+  border-radius: 6px;
+  cursor: pointer;
+
+  height: 100%;
+  width: 60px;
+}
+.page-switch-button:active{
+  box-shadow: rgb(24, 49, 83) 0 1px 0 0;
+  margin: 5px 0 0 0;
 }
 </style>

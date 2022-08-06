@@ -9,7 +9,7 @@
           <el-container>
             <el-container>
               <el-header class="header">
-                <DesignAppHeader/>
+                <DesignAppHeader @spage="(page_file_id) => this.handleSwitchPage(page_file_id)"/>
               </el-header>
               <el-main class="workpane">
                 <div
@@ -73,6 +73,7 @@ import {
 
 import {getSnapShot} from "@/views/prototype-design/utils/image";
 import {_exportControlsJson, _loadCanvasByPageId} from "@/views/prototype-design/utils/prototypeJSON";
+import {computed} from "vue";
 
 let historys = [[]]
 let historyPointer = 0
@@ -96,6 +97,11 @@ export default {
     DesignAppHeader, DesignAppComponents,
     DesignEditorView, PropInspector,
     PluginSelection
+  },
+  provide() {
+    return {
+      pages: computed(() => this.pages)
+    }
   },
   methods: {
     reloadComponents(components) {
@@ -407,6 +413,11 @@ export default {
         }
       })
     },
+    handleSwitchPage(page_file_id){
+      this.currentPage = page_file_id
+      console.log("Change page to page no. " + page_file_id)
+      _loadCanvasByPageId(this);
+    },
     handleSaveImage(){
       getSnapShot("root-editor-view")
     }
@@ -425,7 +436,7 @@ export default {
     eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
   },
   mounted(){
-    const IN_DEBUG_MODE = false
+    const IN_DEBUG_MODE = true
     if((!IN_DEBUG_MODE) && this.$store.state.file_id === ''){
       alert("文件ID错误！")
       history.back()
@@ -434,7 +445,7 @@ export default {
       let pagesJSON = demoMultiPage()
       let prototypePages = JSON.parse(pagesJSON)
       let minIndex = 100000
-      prototypePages.map((item) => {
+      prototypePages['pages'].map((item) => {
         // 预留更加客制化的修改功能
         if(minIndex > item.page_index){
           minIndex = item.page_index
@@ -442,6 +453,7 @@ export default {
         }
         this.pages.push(item)
       })
+      this.file_id = this.currentPage.page_file_id
     }else{
       this.file_id = this.$store.state.file_id
     }
