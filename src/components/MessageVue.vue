@@ -184,7 +184,6 @@ export default {
     let G = Math.floor(Math.random() * 130+110);
     let B = Math.floor(Math.random() * 130+110);
     this.avatarColor = 'rgb(' + R + ',' + G + ',' + B + ', .5)'
-
     this.getMessage();
   },
    computed:{

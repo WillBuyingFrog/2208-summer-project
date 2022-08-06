@@ -226,7 +226,6 @@ export default {
             break;
           }
         }
-        console.log('身份'+this.identity)
       })
     },
     deleteTeam(){
