@@ -1,6 +1,5 @@
 <template >
-    <div style="background-color:rgba(32,80,111,0.6);">
-<!--  <div>-->
+    <div style="background-color:rgba(250, 250, 250, 0.6);">
         <el-row >
             <el-col :span="4">
             <span style="float:left;margin-left: 30px;"> <img src="../assets/images/logo-1.png" height="58"/></span>    
@@ -12,11 +11,11 @@
                     style="background:unset"
                     mode="horizontal"
                     :ellipsis="false"
-                    text-color="rgb(210,228,245)"
-                    active-text-color="rgb(210,228,245)"
+                    text-color="#000000"
+                    active-text-color="#409EFF"
                     @select="handleSelect"
                     router>
-                    <el-menu-item index="/allproject" class="item">
+                    <el-menu-item index="/allproject">
                         <el-icon><DataLine/></el-icon>
                         <span style="font-size: 16px;">项目管理</span>
                     </el-menu-item>
@@ -31,12 +30,10 @@
                     class="space"
                     style="background:unset;"
                     mode="horizontal"
-                    text-color="rgb(210,228,245)"
                     router>
                     <el-menu-item index="/workspace" style="padding:0 0 ;">
                         <el-icon><Menu/></el-icon>
-                        <span
-                            style="font-size: 16px;">工作空间</span>
+                        <span style="font-size: 16px;">工作空间</span>
                     </el-menu-item>
                 </el-menu>    
             </el-col>
@@ -152,13 +149,6 @@
   .space{
     border-bottom: 0;
   }
-  .item {
-
-  }
-  .item :hover {
-    color: rgb(32,80,111);
-    background-color: rgba(255,255,255,0.3);
-  }
 </style>
 
 <script>
@@ -194,7 +184,6 @@ export default {
     let G = Math.floor(Math.random() * 130+110);
     let B = Math.floor(Math.random() * 130+110);
     this.avatarColor = 'rgb(' + R + ',' + G + ',' + B + ', .5)'
-
     this.getMessage();
   },
    computed:{

@@ -38,8 +38,8 @@
                             <el-radio :label="9">普通成员</el-radio>
                         </el-radio-group>   
                         <div>
-                          <el-button v-if="identity=='2'" type="primary" icon="CirclePlus" class="add"  disabled>添加成员</el-button>
-                          <el-button v-else type="primary" icon="CirclePlus" class="add" @click="dialogVisible = true">添加成员</el-button>
+                          <el-button v-if="identity=='2'" type="primary" icon="CirclePlus" class="add"  disabled>邀请成员</el-button>
+                          <el-button v-else type="primary" icon="CirclePlus" class="add" @click="dialogVisible = true">邀请成员</el-button>
                         </div>
                         <div v-if="identity !='0'">
                           <el-popconfirm title="确认要离开该团队吗" @confirm="leaveTeam()">
@@ -82,7 +82,7 @@
                           </el-dialog>                      
                         </div>
                         <el-dialog
-                            title="添加成员"
+                            title="邀请成员"
                             v-model="dialogVisible"
                             width="500px"
                             :before-close="handleClose">
@@ -334,8 +334,7 @@ export default {
         if(res.data.code == '200'){
           this.dialogVisible=false;
           this.invite='';
-          this.getList();
-          ElMessage.success("添加成功！")
+          ElMessage.success("邀请成功！")
         }
         else{
           ElMessage.warning('用户名不存在或该用户已在团队中！')
