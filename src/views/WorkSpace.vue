@@ -122,68 +122,73 @@
       </el-header>
       <el-main>
         <el-space wrap size="large">
-            <el-card :key="i" class="box-card" style="width: 300px">
-                <template #header>
-                    <div class="card-header">
-                        <span class="pname">
-                            <User style="width: 0.8em; height: 0.8em;"/>
-                            <User style="width: 0.5em; height: 0.5em; margin-left:-6px"/>
-                            新建团队
-                        </span>
+            <el-card class="box-card" style="width: 600px" :body-style="{ padding: '0px' }">
+                <el-row>
+                <el-col span="12">
+                    <img :src="imgsrc[0]" class="image">
+                </el-col>
+                <el-col span="12">
+                    <div class="textitem">
+                        <div class="pname" style="margin-bottom: 40px;">
+                            创建新的团队
+                        </div>
                     <div class="clear"></div>
-                    </div>
-                </template>
-                <div class="new">
-                    <el-button @click="dialogVisible = true">
-                        <div><Plus style="width: 1em; height: 1em;"/></div>
-                    </el-button>
+                        <el-button @click="dialogVisible = true" color="#859dda" :dark="isDark" plain>
+                            <div><Plus style="width: 1em; height: 1em;"/></div>
+                        </el-button>
                 </div>
-                <div class="hint">快来创建你的专属团队吧！</div>
+                </el-col>
+                </el-row>
             </el-card>
-            <el-card v-for="team in allteam" :key="team.team_id" class="box-card" style="width: 300px">
-                <template #header>
-                    <div class="card-header">
-                        <span class="pname">
-                            <User style="width: 0.8em; height: 0.8em;"/>
-                            <User style="width: 0.5em; height: 0.5em; margin-left:-6px"/>
-                            {{team.team_name}}
-                        </span>
-                    <el-button class="button" type="primary" plain @click="AllProject(team.team_id)">进入团队</el-button>
-                    <div class="clear"></div>
-                    </div>
-                </template>
-                <div class="textitem">
-                    <el-form :model="team" label-width="120px" label-position="left">
+            <el-card v-for="i in allteam.length" :key="i" class="box-card" style="width: 600px" :body-style="{ padding: '0px' }">
+                <el-row>
+                <el-col span="12">
+                    <img :src="imgsrc[i % 4]" class="image">
+                </el-col>
+                <el-col span="12">
+                    <div class="textitem">
+                        <div class="both front">
+                            <div class="pname">
+                                {{allteam[i].team_name}}
+                            </div>
+                            <el-form :model="allteam[i]" label-width="120px" label-position="left">
+                                <el-form-item>
+                                    <template #label>
+                                        <div class="label1"><el-icon><Avatar /></el-icon> 创建时间:</div>
+                                    </template>
+                                    <span class="show">{{allteam[i].create_time}}</span>
+                                </el-form-item>
+                            </el-form>
+                            <el-button class="button" color="#859dda" :dark="isDark" plain @click="AllProject(allteam[i].team_id)">进入团队</el-button>
+                        </div>
+                        <div class="both form">
+                    <el-form :model="allteam[i]" label-width="120px" label-position="left">
                         <el-form-item>
-                            <!-- 重写label -->
                             <template #label>
                                 <div class="label1"><el-icon><Avatar /></el-icon> 组长:</div>
                             </template>
-                            <span class="show">{{team.leader}}</span>
+                            <span class="show">{{allteam[i].leader}}</span>
                         </el-form-item>
                         <el-form-item>
-                            <!-- 重写label -->
                             <template #label>
                                 <div class="label1"><el-icon><User /></el-icon> 成员:</div>
                             </template>
-                            <span class="show">{{team.members}}</span>
+                            <span class="show" v-if="allteam[i].members == ''">暂无成员加入</span>
+                            <span class="show" v-else>{{allteam[i].members}}</span>
                         </el-form-item>
                         <el-form-item>
-                            <!-- 重写label -->
-                            <template #label>
-                                <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
-                            </template>
-                            <span class="show">{{team.create_time}}</span>
-                        </el-form-item>
-                        <el-form-item>
-                            <!-- 重写label -->
                             <template #label>
                                 <div class="label1"><el-icon><InfoFilled /></el-icon> 团队简介:</div>
                             </template>
-                            <span class="show">{{team.info}}</span>
+                            <span class="show" v-if="allteam[i].info == ''">暂无简介</span>
+                            <span class="show" v-else>{{allteam[i].info}}</span>
                         </el-form-item>
                     </el-form>
+                    <el-button class="button" color="#859dda" :dark="isDark" plain @click="AllProject(allteam[i].team_id)">进入团队</el-button>
+                    </div>
                 </div>
+                </el-col>
+                </el-row>
             </el-card>
             <div class="clear"></div>
         </el-space>
@@ -245,6 +250,8 @@ export default {
                 name: "",
                 info: ""
             },
+            imgsrc: [require('../assets/images/a.jpg'), require('../assets/images/b.jpg'), 
+            require('../assets/images/c.jpg'), require('../assets/images/d.jpg')],
             avatarColor:'',
             visible:false,
             options: [{
@@ -264,6 +271,12 @@ export default {
             invite:[],
             unreadNumber:'0',
         }
+    },
+    watch: {
+	'$route'() {
+        // 路由发生变化页面刷新
+        this.$router.go(0);
+		}
     },
     methods: {
         getTeam(){
@@ -493,20 +506,27 @@ export default {
 </script>
 
 <style scoped>
+html,body{
+    width: 100%;
+    height: 100%;
+}
 .workspace {
-  background-image: url("../assets/images/bg.jpg");
+    background-image: url("../assets/images/bg.jpg");
   background-repeat: repeat-y;
   min-height: 800px;
-  overflow: auto;
   background-position:center;
   background-size: 100% auto;
   width: 100%;
   height: 100%;
   position: fixed;
+  overflow: auto;
 }
+/* .textitem {
+    padding: 20px 10px 10px 40px;
+} */
 .textitem .show{
   text-align: left;
-  width: 100%;   /*一定要设置宽度，或者元素内含的百分比*/
+  width: 180px;   /*一定要设置宽度，或者元素内含的百分比*/
   overflow:hidden; /*溢出的部分隐藏*/
   white-space: nowrap; /*文本不换行*/
   text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
@@ -515,7 +535,11 @@ export default {
     height: 67px;
     padding: 0;
     border-bottom: 1px solid #EFEFEF;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color:rgba(32,80,111,0.6);
+}
+.image{
+    width: 240px;
+    height: 200px;
 }
 .logo {
     padding-left: 10px;
@@ -525,13 +549,16 @@ export default {
     padding-left: 12%;
 }
 .el-card {
+    padding: 0px;
     margin: 30px 30px 0 30px;
     background-color:  rgba(255, 255, 255, 0.62);
-    border-radius: 1ch;
+    border-radius: 0 2ch 0 2ch;
     box-shadow: 14px 15px 19px -15px #000;
+    height: 200px;
 }
 .el-card .el-form{
-    margin-left: 5px;
+    margin-left: 0px;
+    padding: 14px 0 0 40px;
 }
 .el-dialog .el-form{
     margin-left:50px;
@@ -546,8 +573,8 @@ export default {
     margin-top: 20px;
     padding-bottom: 5px;
     font-size: 22px;
-    color: rgb(64,158,255);
-    border-bottom:4px solid  rgb(64,158,255);
+    color: rgb(210,228,245);
+    border-bottom:4px solid  rgb(210,228,245);
     font-weight: 600;
     float: left;
     }
@@ -562,6 +589,9 @@ export default {
     text-align: center;
     margin-right: 30px;
 }
+.el-form-item {
+    margin-bottom: 10px !important;
+}
 .headleft{
     float: right;
 }
@@ -572,17 +602,15 @@ export default {
     clear: both;
 }
 .pname{
-    font-size: 25px;
-    float: left;
+    margin-top: 50px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 30px;
     font-weight: 600;
-    width: 150px;
-    text-align: left;
+    width: 320px;
   overflow:hidden; /*溢出的部分隐藏*/
   white-space: nowrap; /*文本不换行*/
   text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
-}
-.button{
-    float: right;
 }
 .new .el-button{
     margin-top:20px;
@@ -594,4 +622,23 @@ export default {
 .hint{
     margin-bottom: 10px;
 }
+.both {
+    position: absolute;
+}
+.front{
+    backface-visibility: hidden;
+}
+.form{
+    padding-top: 0px 10px 10px 0px;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+}
+.textitem:hover .form{
+    transform: rotateY(0deg);
+}
+.textitem:hover .front{
+    transform: rotateY(180deg);
+
+}
 </style>
+
