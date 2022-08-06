@@ -9,7 +9,7 @@
           <el-container>
             <el-container>
               <el-header class="header">
-                <DesignAppHeader @spage="(page_file_id) => this.handleSwitchPage(page_file_id)"/>
+                <DesignAppHeader />
               </el-header>
               <el-main class="workpane">
                 <div
@@ -59,7 +59,7 @@ import {
   EVENT_COMPONENT_DUPLICATE,
   EVENT_COMPONENT_SELECT,
   EVENT_COMPONENT_TRANSFORM,
-  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON, EVENT_DESIGNER_SAVEIMG,
+  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON, EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_SWITCH
 } from "@/views/prototype-design/event-enum"
 
 import {
@@ -413,9 +413,10 @@ export default {
         }
       })
     },
-    handleSwitchPage(page_file_id){
-      this.currentPage = page_file_id
-      console.log("Change page to page no. " + page_file_id)
+    handleSwitchPage({newPageFile}){
+      this.currentPage = newPageFile
+      this.file_id = newPageFile
+      console.log("Change page to page no. " + newPageFile)
       _loadCanvasByPageId(this);
     },
     handleSaveImage(){
@@ -434,6 +435,7 @@ export default {
     eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
     eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
     eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
+    eventBus.$on(EVENT_DESIGNER_SWITCH, this.handleSwitchPage)
   },
   mounted(){
     const IN_DEBUG_MODE = true

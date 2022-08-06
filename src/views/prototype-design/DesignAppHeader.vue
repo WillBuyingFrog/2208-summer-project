@@ -7,7 +7,7 @@ import {
   EVENT_DESIGNER_REDO,
   EVENT_DESIGNER_CLEAR,
   COLLABORATE_EXPORT_JSON,
-  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE
+  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE, EVENT_DESIGNER_SWITCH
 } from "@/views/prototype-design/event-enum";
 
 export default {
@@ -42,7 +42,8 @@ export default {
               return (
                   <div
                       class="page-switch-button"
-                      onClick={this.$emit('spxage', item.page_file_id)}
+                      onClick=
+                      {() => eventBus.$emit(EVENT_DESIGNER_SWITCH, {newPageFile: item.page_file_id})}
                   >
                     第{item.page_index}页
                   </div>
