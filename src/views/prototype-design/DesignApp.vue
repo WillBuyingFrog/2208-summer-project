@@ -45,7 +45,6 @@ import PropInspector from "@/views/prototype-design/prop-inspector"
 
 import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
-import {demoMultiPage} from "@/views/prototype-design/utils/collaborate";
 
 import eventBus from "@/views/prototype-design/utils/eventBus"
 
@@ -72,7 +71,7 @@ import {
 } from "@/views/prototype-design/utils"
 
 import {getSnapShot} from "@/views/prototype-design/utils/image";
-import {_exportControlsJson, _loadCanvasByPageId} from "@/views/prototype-design/utils/prototypeJSON";
+import {_exportControlsJson, _loadCanvasByPageId, _loadCanvasInit} from "@/views/prototype-design/utils/prototypeJSON";
 import {computed} from "vue";
 
 let historys = [[]]
@@ -89,8 +88,8 @@ export default {
       file_id: "-1",
       file_name: "-1",
       userId: "-1",
-      pages: [],
-      currentPage: null
+      pages: [],  // 所有Page的完整json
+      currentPage: null  // 当前Page的完整json
     }
   },
   components:{
@@ -437,41 +436,22 @@ export default {
     eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
     eventBus.$on(EVENT_DESIGNER_SWITCH, this.handleSwitchPage)
   },
-  mounted(){
-    const IN_DEBUG_MODE = false
-    if((!IN_DEBUG_MODE) && this.$store.state.file_id === ''){
+  async mounted(){
+    const IS_MULTIPAGE_MODE = true
+
+    this.file_id = this.$store.state.file_id // 原型设计的id
+    this.file_name = this.$store.state.file_name  // 原型设计名称
+    this.userId = this.$store.state.user.id
+
+    if((!IS_MULTIPAGE_MODE) && this.$store.state.file_id === ''){
       alert("文件ID错误！")
       history.back()
     }
-    if(IN_DEBUG_MODE){
-      // TODO 更改为正式的获取页面的函数
-      let pagesJSON = demoMultiPage()
-      let prototypePages = JSON.parse(pagesJSON)
-      let minIndex = 100000
-      prototypePages['pages'].map((item) => {
-        // 预留更加客制化的修改功能
-        if(minIndex > item.page_index){
-          minIndex = item.page_index
-          this.currentPage = item
-        }
-        this.pages.push(item)
-      })
-      this.file_id = this.currentPage.page_file_id
+    if(IS_MULTIPAGE_MODE){
+      this.currentPage = await _loadCanvasInit(this)
     }else{
-      this.file_id = this.$store.state.file_id
+      console.log("You shouldn't see this")
     }
-
-    this.file_name = this.$store.state.file_name
-    this.userId = this.$store.state.user.id
-    // TODO 获取原型设计的所有页面文件id，默认打开第一个（远期：存储当前打开的页面是哪个）
-
-    _loadCanvasByPageId(this)
-
-
-    // TODO 从后端获取指定的designId对应的JSON数据
-
-    // TODO 将JSON数据渲染到App中
-
   }
 
 }

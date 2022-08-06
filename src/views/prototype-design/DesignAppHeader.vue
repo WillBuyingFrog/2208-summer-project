@@ -13,7 +13,6 @@ import {
 export default {
   name: "DesignAppHeader",
   inject: ['pages'],
-  emits: ['spage'],
   data(){
     return {
       expr_width: 100,
@@ -34,7 +33,6 @@ export default {
     }
   },
   render(){
-    console.log(this.pages.value)
     return (
         <div class="ds-header">
           <el-space>
