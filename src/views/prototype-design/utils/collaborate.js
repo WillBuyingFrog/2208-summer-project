@@ -1,5 +1,6 @@
 import * as Y from 'yjs'
 import { WebsocketProvider } from "y-websocket";
+import {findComponent} from "@/views/prototype-design/utils/index";
 
 
 export function parseControls(controls, isRoot=1){
@@ -41,20 +42,23 @@ export function parseControls(controls, isRoot=1){
  * 协作编辑 export函数
  */
 
-export var collaboratePrototypeConfig = {
-    doc: null,
-    provider: null,
-    awareness: null,
-    map: null,
-
-}
 
 export const sharedDocMap = new Map()
 
 export function getCollaboratePrototype(file_id){
 
+    if(sharedDocMap.get(file_id)){
+        // 已经创建了改file_id对应的房间
+        return sharedDocMap.get(file_id)
+    }
 
-
+    // 没有创建过房间，新建一个
+    let collaboratePrototypeConfig = {
+        doc: null,
+        provider: null,
+        awareness: null,
+        map: null,
+    }
     const newDoc = new Y.Doc()
     collaboratePrototypeConfig.doc = newDoc
     const provider = new WebsocketProvider(
@@ -66,6 +70,19 @@ export function getCollaboratePrototype(file_id){
 
     const newMap = new Y.Map()
     collaboratePrototypeConfig.map = newMap
+
+    sharedDocMap.set(file_id, collaboratePrototypeConfig)
+}
+
+export function setRootComponentOccupation(application, file_id, componentId){
+    if(sharedDocMap.get(file_id)){
+        let collaborateConfig = sharedDocMap.get(file_id)
+        collaborateConfig.map.set(componentId, findComponent(application.controls, (item) => {
+            return item.id === componentId
+        }))
+    }else{
+        return -1
+    }
 }
 
 
