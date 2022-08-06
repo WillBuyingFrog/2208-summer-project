@@ -33,7 +33,12 @@
                   ></el-input>
                 </el-form-item>
                 <el-form-item class="login-btn">
-                  <el-button color="#626aef" :dark="isDark" plain @click="login">登 录</el-button>
+                  <el-button
+                      color="#859dda"
+                      :dark="isDark"
+                      plain
+                      @click="login"
+                  >登 录</el-button>
                 </el-form-item>
               </el-form>
               <div class="to-register">
@@ -104,7 +109,7 @@
 .login-btn button{
   width: 115px;
   height: 38px;
-  box-shadow: 3px 3px 10px #bebebe;
+  box-shadow: 3px 3px 10px #859dda;
   border-radius: 5px;
 }
 .login-input {
@@ -123,7 +128,7 @@
   text-shadow: 3px 3px 10px #bebebe;
 }
 .to-home:hover {
-  color: #626aef;
+  color: #859dda;
   text-decoration-line: underline;
 }
 .to-register {
@@ -136,7 +141,7 @@
   text-shadow: 3px 3px 10px #bebebe;
 }
 .to-register:hover {
-  color: #626aef;
+  color: #859dda;
   text-decoration-line: underline;
 }
 </style>

@@ -76,7 +76,7 @@
                       show-password
                   ></el-input>
                   <el-button
-                      color="#626aef"
+                      color="rgba(133,157,218,1)"
                       :dark="isDark"
                       plain
                       @click="sendCode()"
@@ -84,7 +84,13 @@
                   >{{content}}</el-button>
                 </el-form-item>
                 <el-form-item class="register-btn">
-                  <el-button color="#626aef" :dark="isDark" plain @click="register('ruleForm')">注 册</el-button>
+                  <el-button
+                      color="rgba(133,157,218,1)"
+                      :dark="isDark"
+                      round
+                      plain
+                      @click="register('ruleForm')"
+                  >注 册</el-button>
                 </el-form-item>
               </el-form>
               <div class="to-login">
@@ -147,15 +153,17 @@
   position: relative;
   display: inline-block;
 }
+
 .register-btn {
   margin-top: 25px;
   text-align: center;
   padding-left: 80px;
+
 }
 .register-btn button{
   width: 115px;
   height: 38px;
-  box-shadow: 3px 3px 10px #bebebe;
+  box-shadow: 3px 3px 10px #859dda;
   border-radius: 5px;
 }
 .register-input {
@@ -171,6 +179,7 @@
 .send-code-btn {
   width: 120px;
   margin: 0 0 0 10px;
+  box-shadow: 3px 3px 10px #859dda;
 }
 .to-home {
   font-size:14px;
