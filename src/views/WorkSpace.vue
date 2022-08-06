@@ -45,7 +45,7 @@
                 </el-col>
                 <el-col span="12">
                     <div class="textitem">
-                        <div class="pname">
+                        <div class="pname" style="margin-bottom: 40px;">
                             创建新的团队
                         </div>
                     <div class="clear"></div>
@@ -67,6 +67,14 @@
                             <div class="pname">
                                 {{allteam[i].team_name}}
                             </div>
+                            <el-form :model="allteam[i]" label-width="120px" label-position="left">
+                                <el-form-item>
+                                    <template #label>
+                                        <div class="label1"><el-icon><Avatar /></el-icon> 创建时间:</div>
+                                    </template>
+                                    <span class="show">{{allteam[i].create_time}}</span>
+                                </el-form-item>
+                            </el-form>
                             <el-button class="button" color="#859dda" :dark="isDark" plain @click="AllProject(allteam[i].team_id)">进入团队</el-button>
                         </div>
                         <div class="both form">
@@ -81,7 +89,8 @@
                             <template #label>
                                 <div class="label1"><el-icon><User /></el-icon> 成员:</div>
                             </template>
-                            <span class="show">{{allteam[i].members}}</span>
+                            <span class="show" v-if="allteam[i].members == ''">暂无成员加入</span>
+                            <span class="show" v-else>{{allteam[i].members}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>
@@ -289,7 +298,7 @@ html,body{
 }
 .el-card .el-form{
     margin-left: 0px;
-    padding: 20px 0 0 40px;
+    padding: 14px 0 0 40px;
 }
 .el-dialog .el-form{
     margin-left:50px;
@@ -334,7 +343,6 @@ html,body{
 }
 .pname{
     margin-top: 50px;
-    margin-bottom: 40px;
     margin-left: 20px;
     margin-right: 20px;
     font-size: 30px;
