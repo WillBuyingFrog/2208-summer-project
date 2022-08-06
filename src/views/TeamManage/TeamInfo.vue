@@ -1,14 +1,15 @@
 <template>
     <el-container class="hp-fill">
-      <el-header style="padding: 0 0 ;background-color:rgb(32,80,111,0.6)">
+      <el-header style="padding: 0 0 ;">
           <TopGuide/>
       </el-header>
       <el-container>
-          <el-aside width="200px" style="height: 100vh;background-color:rgb(83,127,165,0.6)">
+          <el-aside width="200px" style="height: 100vh;background-color:rgba(83,127,165,0.6)">
                 <el-menu
                 :default-active="activePath"
                 class="el-menu-vertical-demo"
                 background-color="rgba(250, 250, 250, 0)"
+                text-color="rgb(210,228,245)"
                 @open="handleOpen"
                 @close="handleClose"
                 router>
