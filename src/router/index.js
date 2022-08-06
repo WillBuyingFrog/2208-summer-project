@@ -6,11 +6,11 @@ const routes = [
         name: 'Homepage',
         component: () => import('../views/homepage/HomePage')
     },
-    // {
-    //     path: '/bulb',
-    //     name: 'lightbulb',
-    //     component: () => import('../views/homepage/LightBulb')
-    // },
+    {
+        path: '/try',
+        name: 'lightbulb',
+        component: () => import('../components/TestComponent')
+    },
     // {
     //     path: '/h2',
     //     name: 'home2',
