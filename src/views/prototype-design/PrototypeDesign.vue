@@ -34,17 +34,74 @@
                   plain
                   text @click="drawer = true"
               >
-                <el-icon class="drawer-icon"><ArrowLeftBold /></el-icon>
+                <el-icon class="drawer-icon"><Fold /></el-icon>
               </el-button>
               <el-drawer
-                  v-model="table"
-                  title="I have a nested table inside!"
+                  v-model="drawer"
+                  title="全部页面"
                   direction="rtl"
-                  size="50%"
+                  size="30%"
               >
-<!--                里面的内容-->
+                <el-menu
+                    default-active="2"
+                    class="all-prototypes"
+                    @open="handleOpen"
+                    @close="handleClose"
+                >
+                  <el-menu-item
+                      v-for="prototype in allPrototype"
+                      :key="prototype.file_id"
+                      @click="toggle(prototype)"
+                  >{{prototype.name}}</el-menu-item>
+                  <el-menu-item index="2">2</el-menu-item>
+                  <el-menu-item index="3">3</el-menu-item>
+                  <el-menu-item index="4">4</el-menu-item>
+                  <el-menu-item index="5">5</el-menu-item>
+                  <el-menu-item index="6">6</el-menu-item>
+                  <el-menu-item index="7">7</el-menu-item>
+                  <el-menu-item index="8" @click="dialogVisible = true">
+                    <el-icon><Plus /></el-icon>
+                  </el-menu-item>
+                  <el-dialog
+                      v-model="dialogVisible"
+                      width="35%">
+                    <template #header>
+                      <div class="card-header">
+                        <span class="title" style="margin-left: 10px; color: black">
+                            新页面
+                        </span>
+                        <div class="clear"></div>
+                      </div>
+                    </template>
+                    <el-form :model="newone" label-width="80px">
+                      <el-form-item label="页面标题">
+                        <el-input v-model="newone.name"></el-input>
+                      </el-form-item>
+                      <el-form-item label="画布大小">
+                        <el-input
+                            placeholder="宽度X"
+                            type="number"
+                            v-model="newone.x"
+                            style="width:80px;"
+                        ></el-input>
+                        <el-input
+                            placeholder="高度Y"
+                            type="number"
+                            v-model="newone.y"
+                            style="width:80px;margin-left: 20px;"
+                        ></el-input>
+                      </el-form-item>
+                    </el-form>
+                    <template #footer>
+                      <span class="dialog-footer">
+                          <el-button @click="dialogVisible = false">取消</el-button>
+                          <el-button type="primary" @click="newPrototype">立即创建</el-button>
+                      </span>
+                    </template>
+                  </el-dialog>
+
+                </el-menu>
               </el-drawer>
-<!--              <el-icon class="drawer-icon"><ArrowLeftBold /></el-icon>-->
             </el-col>
           </el-row>
         </el-header>
@@ -61,16 +118,26 @@
 </template>
 
 <script>
-//import { InfoFilled } from '@element-plus/icons-vue';
-
-//import {ElMessage} from "element-plus";
 import DesignApp from "@/views/prototype-design/DesignApp";
-// import {
-//   ArrowLeftBold,
-// } from '@element-plus/icons-vue'
+import 'element-plus/dist/index.css'
+import { ElMessage } from 'element-plus'
 export default {
   name: "PrototypeDesign",
   components: {DesignApp},
+  data() {
+    return {
+      project_id: '',
+      drawer: false,
+      dialogVisible: false,
+      allPrototype: [],
+      prototypeNum: 4,
+      newone:{
+        name: "",
+        x: "",
+        y: ""
+      },
+    }
+  },
   methods: {
     quit() {
       //ElMessage.success('即将回到工作空间');
@@ -78,8 +145,73 @@ export default {
         // this.$router.push('/workspace')
         this.$router.go(-1);
       }, 0);
-    }
-  }
+    },
+    getPrototype(){
+      this.$http({
+        method:'post',
+        url:'/team/get/all',
+      })
+          .then(res =>{
+            console.log(res.data);
+            switch (res.data.code) {
+              case 200:
+                this.allPrototype = res.data.data;
+                this.prototypeNum = this.allPrototype.length;
+                break;
+            }
+          })
+          .catch(err =>{
+            console.log(err);
+          })
+    },
+
+    newPrototype(){
+      var id = this.$store.state.user.id;
+      if(this.newone.name == undefined || this.newone.name == '' || this.newone.name == null){
+        ElMessage.warning('请输入新页面的名称');
+      }else if(id == undefined || id == null || id == ''){
+        ElMessage.warning('请先登录');
+      }
+      else{
+        this.$http
+            .post("/team/new",
+                {
+                  project_id: this.project_id,
+                  prototype_name: this.newone.name,
+                  prototype_x: this.newone.x,
+                  prototype_y: this.newone.y,
+                })
+            .then(res =>{
+              console.log(res.data.code);
+              switch (res.data.code) {
+                case 200:
+                  this.getPrototype();
+                  ElMessage.success('创建成功！');
+                  this.newone.name = '';
+                  this.newone.x = '';
+                  this.newone.y = '';
+                  this.dialogVisible = false;
+                  break;
+                case 500:
+                  ElMessage.error(res.data.message);
+                  console.log(res.data.message);
+                  break;
+              }
+            })
+
+      }
+    },
+
+    created(){
+      this.project_id = this.$store.state.project_id;
+      this.getPrototype();
+    },
+    toggle(prototype){
+      this.$store.file_id = prototype.file_id;
+      this.$store.file_name = prototype.file_name;
+      // 标题和内容更改
+    },
+  },
 }
 </script>
 
