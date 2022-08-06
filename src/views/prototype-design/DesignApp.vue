@@ -136,12 +136,6 @@ export default {
         usedBy: '__none__'
       }))
     },
-    getComponentsFromSaved(components){
-      return components.map((item) => ({
-        ...item,
-        children: item.type === 'container' ? [] : void 0
-      }))
-    },
     /**
      * @description 批量添加组件到编辑区域，如果指定了parentid则将添加到指定的组件中。目前parentid对应的组件只能为Container类型的组件
      * @params {{components:Array,parentId:string?}}

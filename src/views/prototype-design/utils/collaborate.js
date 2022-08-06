@@ -1,3 +1,6 @@
+import * as Y from 'yjs'
+import { WebsocketProvider } from "y-websocket";
+
 
 export function parseControls(controls, isRoot=1){
     let retJSON = []
@@ -33,3 +36,29 @@ export function parseControls(controls, isRoot=1){
     }
 }
 
+
+/**
+ * 协作编辑 export函数
+ */
+
+export var collaboratePrototypeConfig = {
+    doc: null,
+    provider: null,
+    awareness: null,
+    map: null,
+
+}
+
+export function getCollaboratePrototype(file_id){
+    const newDoc = new Y.Doc()
+    collaboratePrototypeConfig.doc = newDoc
+    const provider = new WebsocketProvider(
+        "wss://demos.yjs.dev",
+        file_id,  // 房间号即为当前的文件id
+        newDoc
+    )
+    collaboratePrototypeConfig.provider = provider
+
+    const newMap = new Y.Map()
+    collaboratePrototypeConfig.map = newMap
+}
