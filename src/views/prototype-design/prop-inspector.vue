@@ -14,6 +14,7 @@ const PropInputImpl = {
 export default {
   name: "prop-inspector",
   props: ['controlled'],
+  emits: ['propChange'],
   components: {
     PropCheckInput, PropGridInput, PropNumberInput, PropRadioInput
   },
@@ -39,7 +40,6 @@ export default {
         { type: 'checkbox', name: '可拖拽', keyName: 'draggable'},
         { type: 'checkbox', name: '可改变大小', keyName: 'resizable' },
         { type: 'checkbox', name: '可旋转' , keyName: 'rotatable'},
-        { type: 'checkbox', name: '活动中', keyName: 'active' },
       ],
       extraInputs: [{ type: 'text', name: 'value' }, { type: 'text', name: 'label' }]
     }
@@ -47,13 +47,13 @@ export default {
   methods: {
     customChange(e, item) {
       console.log("Received custom event from child component. " + e)
-      this.$emit('change', {
+      this.$emit('propChange', {
         ...item,
         value: e
       })
     },
     extraChange(e, item) {
-      this.$emit('change', {
+      this.$emit('propChange', {
         ...item,
         value: e.target.value,
         checked: e.target.checked,

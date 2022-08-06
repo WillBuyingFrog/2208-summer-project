@@ -26,7 +26,7 @@
             </el-container>
             <el-aside width="240px" class="rightpane">
               <PropInspector
-                  @change="this.handleChange"
+                  @propChange="this.handleChange"
                   :controlled="this.controlled" />
             </el-aside>
           </el-container>
@@ -45,7 +45,7 @@ import PropInspector from "@/views/prototype-design/prop-inspector"
 
 import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
-import {parseControls} from "@/views/prototype-design/utils/collaborate";
+import {demoMultiPage} from "@/views/prototype-design/utils/collaborate";
 
 import eventBus from "@/views/prototype-design/utils/eventBus"
 
@@ -72,6 +72,7 @@ import {
 } from "@/views/prototype-design/utils"
 
 import {getSnapShot} from "@/views/prototype-design/utils/image";
+import {_exportControlsJson, _loadCanvasByPageId} from "@/views/prototype-design/utils/prototypeJSON";
 
 let historys = [[]]
 let historyPointer = 0
@@ -86,7 +87,9 @@ export default {
       controlled: {},
       file_id: "-1",
       file_name: "-1",
-      userId: "-1"
+      userId: "-1",
+      pages: [],
+      currentPage: null
     }
   },
   components:{
@@ -144,9 +147,9 @@ export default {
       let controls = []
       let newComponents = null
       if(isReload){
-        console.log("This function is in reload mode.")
+        // console.log("This function is in reload mode.")
         newComponents = this.reloadComponents(components, parentId)
-        console.log("newComponents:", newComponents)
+        // console.log("newComponents:", newComponents)
       }else{
         newComponents = this.getComponents(components, parentId)
       }
@@ -161,7 +164,7 @@ export default {
       }
       this.setControls(controls)
 
-      console.log("controls now:", this.controls)
+      // console.log("controls now:", this.controls)
 
       // 默认选中最后一个
       let { component } = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
@@ -265,17 +268,18 @@ export default {
       this.currentId = control.id
     },
     // 属性编辑器变化后同步到组件中
-    handleChange({ name, value, extra }) {
+    handleChange({ keyName, value, extra }) {
+      console.log("hello!")
       if (!this.currentId) {
         return
       }
       if (extra) {
-        this.controlled.extra[name] = value
+        this.controlled.extra[keyName] = value
       } else {
-        this.controlled[name] = value
+        this.controlled[keyName] = value
       }
       // 注意节流优化提升性能
-      this.updateControlValue(name, value, extra)
+      this.updateControlValue(keyName, value, extra)
     },
     getActiveComponent(ctls) {
       return findComponent(ctls, (item) => item.active)
@@ -378,24 +382,7 @@ export default {
       return this.$refs.editor
     },
     exportControlsJson(){
-      let result = parseControls(this.$data.controls)
-      let fullData = {
-        components: result,
-        width: '1200px',
-        height: '900px',
-      }
-      result = JSON.stringify(fullData)
-      console.log(result)
-      this.$http
-          // 与后端沟通过，不需要序列化
-          .post('/file/collaborate/update', {
-            file_id: this.file_id,
-            file_name: this.file_name,
-            content: result
-          })
-      .then(res => {
-        console.log(res)
-      })
+      _exportControlsJson(this)
     },
     parseComponentJSON({componentJSON, parentId}){
       // 第一次调用（在root editor上遍历）首先清除当前画布上所有的控件和所有的当前选中状态
@@ -406,21 +393,19 @@ export default {
       if(componentJSON === "") return
       // 只有在根层遍历的时候要parse变量
       componentJSON = JSON.parse(componentJSON)
-      console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
+      // console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
       componentJSON = componentJSON['components']
-
       componentJSON.map((item) => {
         this.addControl({components: [item], parentId: item.parentId, isReload: 1})
         if (item.hasChild === false) {
           // 没有子元素
-          console.log("[ParseJSON] This element has no child component.")
+          // console.log("[ParseJSON] This element has no child component.")
         } else {
           // 有子元素
           let childJSON = item.childrenJSON
           this.parseComponentJSON({componentJSON: childJSON, parentId: item.id})
         }
       })
-
     },
     handleSaveImage(){
       getSnapShot("root-editor-view")
@@ -444,39 +429,34 @@ export default {
     if((!IN_DEBUG_MODE) && this.$store.state.file_id === ''){
       alert("文件ID错误！")
       history.back()
-    }else if(IN_DEBUG_MODE){
-      console.log("调试模式开发中……")
+    }
+    if(IN_DEBUG_MODE){
+      let pagesJSON = demoMultiPage()
+      let prototypePages = JSON.parse(pagesJSON)
+      let minIndex = 100000
+      prototypePages.map((item) => {
+        // 预留更加客制化的修改功能
+        if(minIndex > item.page_index){
+          minIndex = item.page_index
+          this.currentPage = item
+        }
+        this.pages.push(item)
+      })
+    }else{
+      this.file_id = this.$store.state.file_id
     }
 
-    this.file_id = this.$store.state.file_id
     this.file_name = this.$store.state.file_name
     this.userId = this.$store.state.user.id
     // TODO 获取原型设计的所有页面文件id，默认打开第一个（远期：存储当前打开的页面是哪个）
 
-    this.$http({
-      method: 'POST',
-      url: '/file/json/get',
-      params: {
-        file_id: this.file_id
-      }
-    })
-    .then(res => {
-      switch (res.data.code){
-        case 200:
-          this.parseComponentJSON({componentJSON: res.data.data.content,
-          parentId: -1})
-          console.log(this.controls)
-          // 仅调试时打开
-          // this.setControls([])
-          // this.clearCurrentComponent()
-      }
-    })
-
+    _loadCanvasByPageId(this)
 
 
     // TODO 从后端获取指定的designId对应的JSON数据
 
     // TODO 将JSON数据渲染到App中
+
   }
 
 }

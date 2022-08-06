@@ -62,3 +62,25 @@ export function getCollaboratePrototype(file_id){
     const newMap = new Y.Map()
     collaboratePrototypeConfig.map = newMap
 }
+
+
+/**
+ * 分页原型设计 调试函数
+ */
+
+
+export function demoMultiPage(){
+    let JSONInformation = {
+        pages: [
+            {
+                page_index: 1,
+                page_file_id: "a9eda713-c637-49f6-b4a5-56a0f88caaa4"  // summer-project-my-ass
+            },
+            {
+                page_index: 2,
+                page_file_id: "dcc491d6-f029-4fc9-9ac8-97362f85e114"  // I-wanna-remake
+            }
+        ]
+    }
+    return JSON.stringify(JSONInformation)
+}
