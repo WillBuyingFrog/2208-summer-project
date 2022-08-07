@@ -44,15 +44,14 @@
             <span class="button2"><el-button color="#82b38c">搜索</el-button></span>
             </div>
         </el-row>
-        <el-row>
+        <el-row v-if="status == 0 && allproject.length!=0">
             <div style="margin-left: 30px;margin-top:20px">
                 <el-radio-group v-model="orderType">
-                    <el-radio :label="1">项目名(中文优先)</el-radio>
-                    <el-radio :label="2">项目名(英文优先)</el-radio>
+                    <el-radio :label="1">项目名</el-radio>
+                    <el-radio :label="2">创建时间(降序)</el-radio>
                     <el-radio :label="3">创建时间(升序)</el-radio>
-                    <el-radio :label="4">创建时间(降序)</el-radio>
+                    <el-radio :label="4">最后编辑时间(降序)</el-radio>
                     <el-radio :label="5">最后编辑时间(升序)</el-radio>
-                    <el-radio :label="6">最后编辑时间(降序)</el-radio>
                 </el-radio-group>
             </div>
         </el-row>
@@ -76,19 +75,19 @@
             <el-card class="box-card" style="width:310px;height: 310px;" v-if="status==1 && allproject.length==0">
                   <el-empty description="暂无收藏项目" />
             </el-card>
-            <el-card v-for="i in allproject.length" :key="i" class="box-card" style="width: 310px" :body-style="{ padding: '0px' }">
+            <el-card v-for="(project,index) in filterProject" :key="index" class="box-card" style="width: 310px" :body-style="{ padding: '0px' }">
                 <div class="textitem">
                     <div class="both front">
-                        <img :src="imgsrc[i % 4]" class="image">
+                        <img :src="imgsrc[(index + 1) % 4]" class="image">
                         <div class="pname">
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
-                            {{allproject[i-1].project_name}}
+                            {{project.project_name}}
                         </div>
                         <div class="button2">
-                        <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                        <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
                         </div>
                         <span class="button1" v-if="status == 2">
-                            <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
+                            <el-popconfirm title="确定要恢复此项目?" @confirm="recover(project.project_name)">
                                 <template #reference>
                                     <el-button color="#82b38c">恢&nbsp;复</el-button>     
                                 </template>
@@ -96,64 +95,64 @@
                         </span>
                     </div>
                     <div class="both form">
-                        <el-form :model="allproject[i-1]" label-width="140px" label-position="left">
+                        <el-form :model="project" label-width="140px" label-position="left">
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                                 </template>
-                                <span class="show">{{allproject[i-1].creator}}</span>
+                                <span class="show">{{project.creator}}</span>
                             </el-form-item>
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
                                 </template>
-                                <span class="show">{{allproject[i-1].create_time}}</span>
+                                <span class="show">{{project.create_time}}</span>
                             </el-form-item>    
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><Avatar /></el-icon> 最后编辑者:</div>
                                 </template>
-                                <span class="show">{{allproject[i-1].last_modification_user}}</span>
+                                <span class="show">{{project.last_modification_user}}</span>
                             </el-form-item>  
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
                                 </template>
-                                <span class="show">{{allproject[i-1].last_modification_time}}</span>
+                                <span class="show">{{project.last_modification_time}}</span>
                             </el-form-item>
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                                 </template>
-                                <span class="show" v-if="allproject[i-1].project_info == ''">暂无简介</span>
-                                <span class="show" v-else>{{allproject[i-1].project_info}}</span>
+                                <span class="show" v-if="project.project_info == ''">暂无简介</span>
+                                <span class="show" v-else>{{project.project_info}}</span>
                             </el-form-item>
                             <div class="button1" v-if="status == 0">
-                                <el-button color="#859dda" @click="starProject(allproject[i-1].project_name)">收藏</el-button>
-                                <el-button @click="openRename(allproject[i-1].project_name)" color="#daad81">重命名</el-button>
-                                <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(allproject[i-1].project_name)">
+                                <el-button color="#859dda" @click="starProject(project.project_name)">收藏</el-button>
+                                <el-button @click="openRename(project.project_name)" color="#daad81">重命名</el-button>
+                                <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(project.project_name)">
                                     <template #reference>
                                     <el-button type="danger">删除</el-button> 
                                     </template>
                                 </el-popconfirm>
                             </div>  
                             <div class="button1" v-if="status == 1">
-                                <el-popconfirm title="确定取消收藏此项目?" @confirm="cancleStarProject(allproject[i-1].project_name)">
+                                <el-popconfirm title="确定取消收藏此项目?" @confirm="cancleStarProject(project.project_name)">
                                     <template #reference>
                                         <el-button color="#859dda">取消收藏</el-button>     
                                     </template>
                                 </el-popconfirm>
                             </div>
                             <div class="button1" v-if="status == 2" style="margin-top:30px">
-                                <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
+                                <el-popconfirm title="确定要恢复此项目?" @confirm="recover(project.project_name)">
                                     <template #reference>
                                         <el-button color="#82b38c">恢&nbsp;复</el-button>     
                                     </template>
                                 </el-popconfirm>
                             </div>
                             <span class="button2" v-if="status!=2">
-                        <el-button class="button" color="#468ac8" @click="copyProject(allproject[i-1].project_name)">创建副本</el-button>   
-                        <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                        <el-button class="button" color="#468ac8" @click="copyProject(project.project_name)">创建副本</el-button>   
+                        <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
                         </span>
                         </el-form>
                     </div>
@@ -237,7 +236,7 @@ export default {
     name: "allProject",
     data() {
         return {
-            orderType: 0,
+            orderType: 1,
             team_id: '',
             dialogVisible: false,
             dialogVisible1: false,
@@ -283,52 +282,41 @@ export default {
     },
     computed:{
         filterProject(){
+            const {orderType}=this;
             let fprojects;
-            let reg = /[a-zA-Z0-9]/;
             //过滤搜索结果
             fprojects = this.allproject.filter(p => p.project_name.toLowerCase().indexOf(this.search.toLowerCase())!==-1);
             fprojects.sort(function(x,y){
-                switch(this.orderType){
-                    //1 按项目名(中文优先)
+            let a = x.project_name;
+            let b = y.project_name;
+            console.log(typeof(x.create_time));
+                switch(orderType){
+                    //1 按项目名
                     case 1:
-                        if(reg.test(x)|| reg.test(y)){
-                            if(x < y){
-                                return 1;
-                            }else if(x > y){
-                                return -1;
-                            }else{
-                                return 0;
-                            }
-                        }else{
-                            return x.localeCompare(y)
-                        }
-                    //2 按项目名(英文优先)
-                    case 2:
-                        if(reg.test(x)|| reg.test(y)){
-                            if(x > y){
-                                return 1;
-                            }else if(x < y){
-                                return -1;
-                            }else{
-                                return 0;
-                            }
-                        }else{
-                            return x.localeCompare(y)
-                        }
+                        return a.localeCompare(b);
                     //3创建时间升序
-                    case 3:
-                        return y.create_time - x.create_time;
+                    case 2:
+                        if(x.create_time > y.create_time)
+                            return -1;
+                        return 1;
                     //4创建时间降序
-                    case 4:
-                        return x.create_time - y.create_time
+                    case 3:
+                        if(x.create_time > y.create_time)
+                            return 1;
+                        return -1;
                     //5最后编辑时间升序
-                    case 5:
-                        return y.last_modification_time - x.last_modification_time; 
+                    case 4:
+                        if(x.last_modification_time > y.last_modification_time)
+                            return -1;
+                        return 1;
                     //6最后编辑时间降序
-                    case 6:
-                        return x.last_modification_time - y.last_modification_time; 
+                    case 5:
+                        if(x.last_modification_time > y.last_modification_time)
+                            return 1;
+                        return -1;
                 }
             })
+            console.log(fprojects);
             return fprojects;
         }
     },
