@@ -1,31 +1,10 @@
 <template >
-    <div style="background-color:rgba(250, 250, 250, 0.6);">
+    <div style="background-color:rgba(250, 250, 250, 0.6);height:60px">
         <el-row >
-            <el-col :span="4">
+            <el-col :span="2">
             <span style="float:left;margin-left: 30px;"> <img src="../assets/images/logo-1.png" height="58"/></span>    
             </el-col>
-            <el-col :span="6">
-                <el-menu
-                    :default-active="activePath"
-                    class="el-menu-demo"
-                    style="background:unset"
-                    mode="horizontal"
-                    :ellipsis="false"
-                    text-color="#000000"
-                    active-text-color="#409EFF"
-                    @select="handleSelect"
-                    router>
-                    <el-menu-item index="/allproject">
-                        <el-icon><DataLine/></el-icon>
-                        <span style="font-size: 16px;">项目管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="/team" style="margin-left:80px">
-                        <el-icon><Coordinate/></el-icon>
-                        <span style="font-size: 16px;">团队管理</span>
-                    </el-menu-item>
-                </el-menu>
-            </el-col>
-            <el-col :span="3" :offset="7">
+            <el-col :span="2" >
               <div style="margin-top:14px">
                 <el-button text @click="this.$router.push('/workspace')" 
                   style="font-size:15.5px;padding-left:7px;padding-right:7px;">工作空间</el-button>
@@ -40,6 +19,31 @@
                   <TeamList></TeamList>
                 </el-popover>
               </div>            
+            </el-col>
+            <el-col :span="12" :offset="4">
+                <el-menu
+                    :default-active="activePath"
+                    class="el-menu-demo"
+                    style="background:unset"
+                    mode="horizontal"
+                    :ellipsis="false"
+                    text-color="#000000"
+                    active-text-color="#409EFF"
+                    @select="handleSelect"
+                    router>
+                    <el-menu-item index="/allproject">
+                        <el-icon><DataLine/></el-icon>
+                        <span style="font-size: 16px;">项目管理</span>
+                    </el-menu-item>
+                    <el-menu-item index="/team" style="margin-left:70px">
+                        <el-icon><Coordinate/></el-icon>
+                        <span style="font-size: 16px;">团队管理</span>
+                    </el-menu-item>
+                    <el-menu-item index="" style="margin-left:70px">
+                        <el-icon><DocumentCopy/></el-icon>
+                        <span style="font-size: 16px;">文档中心</span>
+                    </el-menu-item>
+                </el-menu>
             </el-col>
             <el-col :span="1" >
               <el-popover
