@@ -35,7 +35,8 @@
         </div>
         </el-row>
         <el-space wrap size="large">
-            <el-card class="box-card" style="width: 300px" v-if="status==0" :body-style="{ padding: '0px' }">
+          <div class="shell">
+            <el-card class="box-card" style="width: 310px" v-if="status==0" :body-style="{ padding: '0px' }">
                 <img :src="imgsrc[0]" class="image">
                 <div class="pname">
                     <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
@@ -45,13 +46,13 @@
                     <div><Plus style="width: 1em; height: 1em;"/></div>
                 </el-button>
             </el-card>
-            <el-card class="box-card" style="width:300px;height: 310px;" v-if="status==2 && allproject.length==0">
+            <el-card class="box-card" style="width:310px;height: 310px;" v-if="status==2 && allproject.length==0">
                   <el-empty description="回收站无项目" />
             </el-card>
-            <el-card class="box-card" style="width:300px;height: 310px;" v-if="status==1 && allproject.length==0">
+            <el-card class="box-card" style="width:310px;height: 310px;" v-if="status==1 && allproject.length==0">
                   <el-empty description="暂无收藏项目" />
             </el-card>
-            <el-card v-for="i in allproject.length" :key="i" class="box-card" style="width: 300px" :body-style="{ padding: '0px' }">
+            <el-card v-for="i in allproject.length" :key="i" class="box-card" style="width: 310px" :body-style="{ padding: '0px' }">
                 <div class="textitem">
                     <div class="both front">
                         <img :src="imgsrc[i % 4]" class="image">
@@ -129,6 +130,7 @@
                     </div>
                 </div>
             </el-card>
+          </div>
             <div class="clear"></div>
         </el-space>
       </el-main>
@@ -595,7 +597,7 @@ export default {
   text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
 .image{
-    width: 300px;
+    width: 310px;
     height: 220px;
 }
 .hint{
@@ -632,7 +634,7 @@ export default {
 }
 </style>
 
-<style>
+<style scoped>
 .allproject .el-tabs__item:hover {
   color: #859dda;
   border-right: 2px solid #859dda;
@@ -650,4 +652,38 @@ export default {
 .button2 .el-button{
     color: white;
 }
+
+
+.shell {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    /* 设置3d变化 */
+    transform-style: preserve-3d;
+    /* 添加透视效果 */
+    perspective: 900px;
+}
+.shell .box-card {
+    position: relative;
+    transition: 0.2s;
+    overflow: hidden;
+    transform: rotateY(0deg);
+    transition-delay: .1s;
+}
+
+/* 当鼠标悬浮在当前卡片上时，当前卡片的翻转角度为0，
+并放大一点二五倍，加个阴影 */
+.shell .box-card:hover {
+    transform: rotateY(0deg) scale(1.08);
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+/* 当鼠标悬浮在卡片上时，
+当前卡片后面的所有卡片全部都反向翻转负20度 */
+.shell .box-card:hover~.box-card {
+    transform: rotateY(-6deg);
+}
+
+
 </style>

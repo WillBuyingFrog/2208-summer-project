@@ -79,10 +79,10 @@
                      <el-scrollbar >
                     <el-table :data="invite_filter()" style="width: 100%" v-if="status=='0'" :show-header="false">
                       <el-table-column
-                        width="40">
+                        width="45">
                         <template #default="scope">
                           <el-checkbox v-if="scope.row._read == false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
-                          <el-checkbox v-else v-model="scope.row._read" disabled></el-checkbox>
+                          <el-tag v-else  type="info" size="small">已读</el-tag>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -104,10 +104,10 @@
                     </el-table>
                     <el-table :data="notice_filter()" style="width: 100%" v-else :show-header="false">
                       <el-table-column
-                        width="40">
+                        width="45">
                         <template #default="scope">
-                          <el-checkbox v-if="scope.row._read==false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
-                          <el-checkbox v-else v-model="scope.row._read" disabled></el-checkbox>
+                          <el-checkbox v-if="scope.row._read == false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
+                          <el-tag v-else  type="info" size="small">已读</el-tag>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -186,6 +186,7 @@ export default {
         notice: [],
         invite:[],
         unreadNumber:'0',
+        sign:'0'
     }
   },
   created(){
@@ -302,6 +303,9 @@ export default {
         })
     },
     readed(message_id){
+      this.sign ++;
+      if(this.sign %2 == 0)
+      return
         const self = this;
         self.$http({
           method:'post',
@@ -311,7 +315,7 @@ export default {
         },
         }).then(res=>{
           console.log(res.data);
-          this.unreadNumber--;
+          this.unreadNumber --;
         })
     },
     readedAll(){
