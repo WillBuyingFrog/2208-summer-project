@@ -55,18 +55,6 @@
 </template>
 
 <style>
-* {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: rgb(210, 210, 220);
-        }
 
         .shell {
             position: relative;
@@ -113,40 +101,5 @@
             transform: rotateY(-20deg);
         }
 
-        .shell .box .images img {
-            width: 100%;
-        }
-
-        .shell .box .content {
-            position: absolute;
-            top: 0;
-            width: 90%;
-            height: 100%;
-            z-index: 999;
-            padding: 15px;
-        }
-
-        .shell .box .content h2 {
-            color: rgb(210, 140, 140);
-            transition: 0.3s;
-            font-size: 20px;
-            transform: translateY(-100px);
-        }
-
-        .shell .box:hover .content h2 {
-            transform: translateY(-15px);
-        }
-
-        .shell .box .content p {
-            color: rgb(0, 0, 0);
-            transition: 0.3s;
-            font-size: 14px;
-            transform: translateY(600px);
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        .shell .box:hover .content p {
-            transform: translateY(220px);
-        }
 
 </style>

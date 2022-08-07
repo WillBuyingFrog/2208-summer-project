@@ -35,6 +35,7 @@
         </div>
         </el-row>
         <el-space wrap size="large">
+          <div class="shell">
             <el-card class="box-card" style="width: 300px" v-if="status==0" :body-style="{ padding: '0px' }">
                 <img :src="imgsrc[0]" class="image">
                 <div class="pname">
@@ -129,6 +130,7 @@
                     </div>
                 </div>
             </el-card>
+          </div>
             <div class="clear"></div>
         </el-space>
       </el-main>
@@ -650,4 +652,52 @@ export default {
 .button2 .el-button{
     color: white;
 }
+
+
+.shell {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    /* 设置3d变化 */
+    transform-style: preserve-3d;
+    /* 添加透视效果 */
+}
+.shell {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    /* 设置3d变化 */
+    transform-style: preserve-3d;
+    /* 添加透视效果 */
+}
+
+.shell .box-card {
+    position: relative;
+    transition: 0.2s;
+    overflow: hidden;
+    transform: rotateY(0deg);
+    transition-delay: .1s;
+}
+
+/* 当鼠标所有卡片的父元素点shell上时，
+所有卡片像Y轴翻转20度 */
+.box-card:hover .box-card {
+    transform: rotateY(3deg);
+}
+
+/* 当鼠标悬浮在当前卡片上时，当前卡片的翻转角度为0，
+并放大一点二五倍，加个阴影 */
+.shell .box-card:hover {
+    transform: rotateY(0deg) scale(1.08);
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+/* 当鼠标悬浮在卡片上时，
+当前卡片后面的所有卡片全部都反向翻转负20度 */
+.shell .box-card:hover~.box-card {
+    transform: rotateY(-6deg);
+}
+
+
 </style>
