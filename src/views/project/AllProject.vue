@@ -26,7 +26,7 @@
         </el-aside>
       <el-main>
         <el-row v-if="status==2 && allproject.length!=0">
-        <div class="del" style="margin-left:30px">
+        <div class="del" style="margin-left:30px;margin-bottom:20px">
         <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash">
             <template #reference>
                 <el-button type="danger">清空回收站</el-button>   
@@ -34,7 +34,7 @@
         </el-popconfirm>
         </div>
         </el-row>
-        <el-row v-if="status == 0 && allproject.length!=0">
+        <el-row v-if="allproject.length!=0">
             <div class="search">
             <el-input v-model="search" placeholder="请输入项目名关键字" size="large">
                 <template #prefix>
@@ -44,7 +44,7 @@
             <span class="button2"><el-button color="#82b38c">搜索</el-button></span>
             </div>
         </el-row>
-        <el-row v-if="status == 0 && allproject.length!=0">
+        <el-row v-if="allproject.length!=0">
             <div style="margin-left: 30px;margin-top:20px">
                 <el-radio-group v-model="orderType">
                     <el-radio :label="1">项目名</el-radio>
