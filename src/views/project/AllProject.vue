@@ -117,7 +117,7 @@
                                     </template>
                                 </el-popconfirm>
                             </div>
-                            <div class="button1" v-if="status == 2">
+                            <div class="button1" v-if="status == 2" style="margin-top:30px">
                                 <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
                                     <template #reference>
                                         <el-button color="#82b38c">恢&nbsp;复</el-button>     
