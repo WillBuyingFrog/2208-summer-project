@@ -11,51 +11,100 @@
         >
           <span></span>
           <el-icon
-              style="padding: 20px 0 0 0;font-size: 20px"
-              @click="dialogVisible=true"
-          ><Plus /></el-icon>
+              style="padding: 20px 10px 0 0;font-size: 20px"
+              @click="dialogVisible = true"
+          ><FolderAdd /></el-icon>
           <el-dialog
               v-model="dialogVisible"
               width="35%">
             <template #header>
               <div class="card-header">
-                        <span class="title" style="margin-left: 10px; color: black">
-                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
-                            新建文件夹/文档
-                        </span>
-                <div class="clear"></div>
+                <span class="title" style="margin-left: 10px; color: black">
+                    <el-icon ><EditPen /></el-icon>新建文件夹
+                </span>
               </div>
             </template>
-            <el-form :model="newone" label-width="80px">
-              <el-form-item label="项目名称">
-                <el-input v-model="newone.name"></el-input>
-              </el-form-item>
-              <el-form-item label="项目简介">
-                <el-input type="textarea" maxlength="200" show-word-limit
-                          resize="none" :autosize="{ minRows: 6}" v-model="newone.info" style="width:400px"></el-input>
+            <el-form :model="newfolder" label-width="100px">
+              <el-form-item label="文件夹名称">
+                <el-input v-model="newfolder.name"></el-input>
               </el-form-item>
             </el-form>
             <template #footer>
         <span class="dialog-footer">
-            <span>
             <el-button @click="dialogVisible = false">取消</el-button>
-            <span class="button2" style="margin-left:20px;">
-            <el-button @click="newFile" color="#859dda" class="new_btn">立即创建</el-button>
-            </span>
-            </span>
-            <div class="clear"></div>
+            <el-button type="primary" @click="newFolder">立即创建</el-button>
         </span>
             </template>
           </el-dialog>
-          <el-tree
-              :data="data"
-              :props="defaultProps"
-              accordion
-              @node-click="handleNodeClick"
-              class="tree"
-              style="padding: 10px 20px 0 20px;"
+          <el-icon
+              style="padding: 20px 0 0 10px;font-size: 20px"
+              @click="dialogVisible1 = true"
+          ><DocumentAdd /></el-icon>
+          <el-dialog
+              v-model="dialogVisible1"
+              width="35%">
+            <template #header>
+              <div class="card-header">
+                <span class="title" style="margin-left: 10px; color: black">
+                    <el-icon ><EditPen /></el-icon>新建文档
+                </span>
+              </div>
+            </template>
+            <el-form :model="newfile" label-width="100px">
+              <el-form-item label="文档标题">
+                <el-input v-model="newfile.name"></el-input>
+              </el-form-item>
+              <el-form-item label="文档路径">
+                <el-select v-model="value" placeholder="请选择">
+                  <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <template #footer>
+        <span class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="newFolder">立即创建</el-button>
+        </span>
+            </template>
+          </el-dialog>
+          <el-menu
+              default-active="2"
+              class="docs"
+              @open="handleOpen"
+              @close="handleClose"
           >
-          </el-tree>
+            <el-sub-menu index="1">
+              <template #title>
+                <el-icon><Folder /></el-icon>
+                <span>Navigator One</span>
+              </template>
+              <el-menu-item-group title="Group One">
+                <el-menu-item index="1-1">item one</el-menu-item>
+                <el-menu-item index="1-2">item one</el-menu-item>
+              </el-menu-item-group>
+              <el-menu-item-group title="Group Two">
+                <el-menu-item index="1-3">item three</el-menu-item>
+              </el-menu-item-group>
+                <el-menu-item index="1-4">item four</el-menu-item>
+            </el-sub-menu>
+            <el-menu-item index="2">
+              <el-icon><Document /></el-icon>
+              <span>Navigator Two</span>
+            </el-menu-item>
+            <el-menu-item index="3">
+              <el-icon><Document /></el-icon>
+              <span>Navigator Three</span>
+            </el-menu-item>
+            <el-menu-item index="4">
+              <el-icon><Document /></el-icon>
+              <span>Navigator Four</span>
+            </el-menu-item>
+          </el-menu>
         </el-aside>
         <el-main>
 
@@ -74,12 +123,33 @@ export default {
     return {
       team_id: '',
       dialogVisible: false,
+      dialogVisible1: false,
       allFile: [],
-      newone:{
+      newfile:{
         name: "",
-        type: "",
-        father: "",
+        router: "",
       },
+      newfolder:{
+        name: "",
+      },
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
+      value: '',
+
       data: [{
         label: '一级 1',
         children: [{
@@ -129,6 +199,13 @@ export default {
     handleNodeClick(data) {
       console.log(data);
     },
+    newFolder() {
+
+    },
+    newFile() {
+
+    }
+
   },
 }
 
@@ -146,12 +223,10 @@ export default {
   position: fixed;
   overflow: auto;
 }
-.tree {
+.docs {
   background-color: rgba(250, 250, 250, 0);
   height: 100vh;
-}
-.new_btn {
-  color: #FFFFFF;
+
 }
 
 </style>
