@@ -39,7 +39,7 @@
                         <el-icon><Coordinate/></el-icon>
                         <span style="font-size: 16px;">团队管理</span>
                     </el-menu-item>
-                    <el-menu-item index="" style="margin-left:70px">
+                    <el-menu-item index="/documentCenter" style="margin-left:70px">
                         <el-icon><DocumentCopy/></el-icon>
                         <span style="font-size: 16px;">文档中心</span>
                     </el-menu-item>
@@ -198,13 +198,15 @@ export default {
    computed:{
     activePath(){ 
       if(this.$route.path.split('/')[1] == 'team')
-      return '/team' 
+        return '/team'
+      else if(this.$route.path.split('/')[1] == 'allproject')
+        return '/allproject'
       else
-      return '/allproject'
+        return '/documentCenter'
     }
   },
   methods: {
-      timeago (time) {
+    timeago (time) {
       var data = new Date(time);
       var dateTimeStamp = data.getTime()
       var minute = 1000 * 60;      //把分，时，天，周，半个月，一个月用毫秒表示
@@ -244,7 +246,6 @@ export default {
       }
       return result
     },
-
     invite_filter(){
         var data=[];
         if(this.value == '0')
