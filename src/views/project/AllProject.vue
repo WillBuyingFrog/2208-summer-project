@@ -175,7 +175,7 @@ export default {
         }
     },
     created(){
-        this.team_id = this.$store.state.teamid;
+        this.team_id = this.$store.state.team_id;
         this.getAllProject();
         console.log("team_id: "+this.team_id);
     },

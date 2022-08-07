@@ -302,7 +302,7 @@ export default {
         method:'post',
         url:'/team/member/get',
         params: {
-          team_id: this.$store.state.teamid
+          team_id: this.$store.state.team_id
         },
       }).then(res=>{
         console.log(res.data);
@@ -326,7 +326,7 @@ export default {
         method:'post',
         url:'/team/member/add',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           invitee_name:this.invite
         },
       }).then(res=>{
@@ -349,7 +349,7 @@ export default {
         method:'post',
         url:'/team/member/leave',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
         },
       }).then(res=>{
         console.log(res.data);
@@ -366,7 +366,7 @@ export default {
         method:'post',
         url:'/team/member/remove',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           remove_name:name
         },
       }).then(res=>{
@@ -382,7 +382,7 @@ export default {
         method:'post',
         url:'/team/member/authority',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           member_name: name,
           authority: this.authority
         },
@@ -398,7 +398,7 @@ export default {
         method:'post',
         url:'/team/change/leader',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           new_name: this.newLeader,
         },
       }).then(res=>{

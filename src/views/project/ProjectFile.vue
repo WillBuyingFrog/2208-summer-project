@@ -156,7 +156,7 @@ export default {
         }
     },
     created(){
-        this.team_id = this.$store.state.teamid;
+        this.team_id = this.$store.state.team_id;
         this.project_name = this.$store.state.project_name;
         this.project_id = this.$store.state.project_id;
         console.log(this.fileType);
