@@ -94,6 +94,11 @@ const routes = [
         path: '/dtest',
         name: 'TextEditorTest',
         component: () => import('../components/TipTapDemo')
+    },
+    {
+        path: '/test',
+        component: () => import('../views/TeamManage/TestVue.vue')
+        
     }
 ]
 
