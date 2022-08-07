@@ -5,13 +5,57 @@
         <TopGuide/>
       </el-header>
       <el-container>
-        <el-aside width="200px">
+        <el-aside
+            width="300px"
+            style="background-color: rgba(250, 250, 250, 0.5);"
+        >
+          <span></span>
+          <el-icon
+              style="padding: 20px 0 0 0;font-size: 20px"
+              @click="dialogVisible=true"
+          ><Plus /></el-icon>
+          <el-dialog
+              v-model="dialogVisible"
+              width="35%">
+            <template #header>
+              <div class="card-header">
+                        <span class="title" style="margin-left: 10px; color: black">
+                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
+                            新建文件夹/文档
+                        </span>
+                <div class="clear"></div>
+              </div>
+            </template>
+            <el-form :model="newone" label-width="80px">
+              <el-form-item label="项目名称">
+                <el-input v-model="newone.name"></el-input>
+              </el-form-item>
+              <el-form-item label="项目简介">
+                <el-input type="textarea" maxlength="200" show-word-limit
+                          resize="none" :autosize="{ minRows: 6}" v-model="newone.info" style="width:400px"></el-input>
+              </el-form-item>
+            </el-form>
+            <template #footer>
+        <span class="dialog-footer">
+            <span>
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <span class="button2" style="margin-left:20px;">
+            <el-button @click="newFile" color="#859dda" class="new_btn">立即创建</el-button>
+            </span>
+            </span>
+            <div class="clear"></div>
+        </span>
+            </template>
+          </el-dialog>
           <el-tree
               :data="data"
               :props="defaultProps"
               accordion
               @node-click="handleNodeClick"
-          />
+              class="tree"
+              style="padding: 10px 20px 0 20px;"
+          >
+          </el-tree>
         </el-aside>
         <el-main>
 
@@ -23,7 +67,6 @@
 
 <script>
 import 'element-plus/dist/index.css'
-import { ElMessage } from 'element-plus'
 
 export default {
   name: "DocumentCenter",
@@ -31,14 +74,11 @@ export default {
     return {
       team_id: '',
       dialogVisible: false,
-      dialogVisible1: false,
-      status: "0",
-      allproject: [],
-      newname: '',
-      oldname: '',
+      allFile: [],
       newone:{
         name: "",
-        info: "",
+        type: "",
+        father: "",
       },
       data: [{
         label: '一级 1',
@@ -89,198 +129,6 @@ export default {
     handleNodeClick(data) {
       console.log(data);
     },
-
-    getAllProject(){
-      this.$axios
-          .post('/project/viewAllProject',{
-            team_id: this.team_id
-          })
-          .then(res =>{
-            console.log(res.data);
-            switch(res.data.code) {
-              case 200:
-                this.allproject = res.data.data;
-                break;
-              case 500:
-                ElMessage.error(res.data.message);
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-
-    },
-    getTrashProject() {
-      this.$axios
-          .post("/project/viewTrash", {
-            team_id: this.team_id
-          })
-          .then(res =>{
-            console.log(res.data);
-            switch(res.data.code) {
-              case 200:
-                this.allproject = res.data.data;
-                break;
-              case 500:
-                ElMessage.error(res.data.message);
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-    },
-    handleClick() {
-      this.allproject=[];
-      console.log(this.status);
-      if(this.status == '1'){
-        this.getAllProject();
-        console.log('allproject');
-      }
-      else if(this.status == '0'){
-        this.getTrashProject();
-        console.log('trashproject');
-      }
-    },
-    newProject(){
-      if(this.newone.name == '' || this.newone.name == undefined || this.newone.name == null) {
-        ElMessage.warning("请输入项目名称");
-      }
-      else{
-        this.$axios
-            .post('/project/new',{
-              project_name: this.newone.name,
-              team_id: this.team_id,
-              project_info: this.newone.info
-            })
-            .then(res =>{
-              console.log(res.data.code);
-              console.log(res.data.data);
-              switch (res.data.code){
-                case 200:
-                  this.getAllProject();
-                  ElMessage.success("创建成功!");
-                  this.newone.name = '';
-                  this.newone.info = '';
-                  this.dialogVisible = false;
-                  break;
-                case 500:
-                  ElMessage.error(res.data.message);
-                  break;
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            })
-      }
-
-    },
-    openRename(oldname){
-      this.oldname = oldname;
-      this.dialogVisible1 = true;
-    },
-    rename(){
-      if(this.newname == '' || this.newname == null || this.newname == undefined){
-        ElMessage.warning("重命名不能为空")
-      }else{
-        this.$http
-            .post('/project/rename', {
-              team_id: this.team_id,
-              original_project_name: this.oldname,
-              new_project_name: this.newname
-            })
-            .then(res =>{
-              console.log(res.data.code);
-              console.log(res.data.data);
-              switch (res.data.code){
-                case 200:
-                  this.getAllProject();
-                  ElMessage.success("重命名成功!");
-                  this.newname = '';
-                  this.dialogVisible1 = false;
-                  break;
-                case 500:
-                  ElMessage.error(res.data.message);
-                  break;
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            })
-      }
-    },
-    deletePro(project_name){
-      this.$http
-          .post('/project/remove', {
-            project_name: project_name,
-            team_id: this.team_id
-          })
-          .then(res =>{
-            console.log(res.data.code);
-            console.log(res.data.data);
-            switch (res.data.code){
-              case 200:
-                this.getAllProject();
-                ElMessage.success(res.data.message);
-                break;
-              case 500:
-                ElMessage.error(res.data.message);
-                break;
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-    },
-    recover(project_name){
-      this.$http
-          .post('/project/recover', {
-            project_name: project_name,
-            team_id: this.team_id
-          })
-          .then(res =>{
-            console.log(res.data.code);
-            console.log(res.data.data);
-            switch (res.data.code){
-              case 200:
-                this.getTrashProject();
-                ElMessage.success(res.data.message);
-                break;
-              case 500:
-                ElMessage.error(res.data.message);
-                break;
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-    },
-    cleanTrash(){
-      this.$http
-          .post('/project/emptyTrash', {
-            team_id: this.team_id
-          })
-          .then(res =>{
-            console.log(res.data.code);
-            console.log(res.data.data);
-            switch (res.data.code){
-              case 200:
-                this.getTrashProject();
-                ElMessage.success(res.data.message);
-                break;
-              case 500:
-                ElMessage.error(res.data.message);
-                break;
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-    },
-    toProject(name, id){
-      this.$store.state.project_name = name;
-      this.$store.state.project_id = id;
-      this.$router.push('/projectinfo');
-    }
   },
 }
 
@@ -297,6 +145,13 @@ export default {
   height: 100%;
   position: fixed;
   overflow: auto;
+}
+.tree {
+  background-color: rgba(250, 250, 250, 0);
+  height: 100vh;
+}
+.new_btn {
+  color: #FFFFFF;
 }
 
 </style>
