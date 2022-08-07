@@ -199,10 +199,10 @@ export default {
     activePath(){ 
       if(this.$route.path.split('/')[1] == 'team')
         return '/team'
-      else if(this.$route.path.split('/')[1] == 'allproject')
-        return '/allproject'
-      else
+      else if(this.$route.path.split('/')[1] == 'documentCenter')
         return '/documentCenter'
+      else
+        return '/allproject'
     }
   },
   methods: {
