@@ -555,7 +555,7 @@ export default {
 }
 </style>
 
-<style>
+<style scoped>
 .allproject .el-tabs__item:hover {
   color: #859dda;
   border-right: 2px solid #859dda;
