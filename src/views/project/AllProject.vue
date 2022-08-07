@@ -6,7 +6,7 @@
         </el-header>
         <el-container>
         <el-aside width="150px">
-            <el-tabs v-model="status" class="demo-tabs" tab-position="left">
+            <el-tabs v-model="status" class="demo-tabs" tab-position="left" style="margin-top:30px">
             <el-tab-pane name="0">
                 <template #label>
                     <div class="tab">所有项目</div>
@@ -41,7 +41,7 @@
                     <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
                     新建项目
                 </div>
-                <el-button @click="dialogVisible=true" color="#859dda" :dark="isDark" plain>
+                <el-button @click="dialogVisible=true" color="#859dda"  plain>
                     <div><Plus style="width: 1em; height: 1em;"/></div>
                 </el-button>
             </el-card>
@@ -59,11 +59,11 @@
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
                             {{allproject[i-1].project_name}}
                         </div>
-                        <el-button class="button" color="#859dda" :dark="isDark" plain v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                        <el-button class="button" color="#859dda" plain v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
                         <span class="button1" v-if="status == 2">
                             <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
                                 <template #reference>
-                                    <el-button color="#859dda" :dark="isDark" plain>恢&nbsp;复</el-button>     
+                                    <el-button color="#82b38c">恢&nbsp;复</el-button>     
                                 </template>
                             </el-popconfirm>
                         </span>
@@ -98,20 +98,22 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                                 </template>
-                                <span class="show">{{allproject[i-1].project_info}}</span>
+                                <span class="show" v-if="allproject[i-1].info == ''">暂无简介</span>
+                                <span class="show" v-else>{{allproject[i-1].info}}</span>
                             </el-form-item>
                             <div class="button1" v-if="status == 0">
-                                <el-button @click="openRename(allproject[i-1].project_name)" color="#859dda" :dark="isDark">重命名</el-button>
+                                <el-button color="#82b38c">收藏</el-button>
+                                <el-button @click="openRename(allproject[i-1].project_name)" color="#859dda">重命名</el-button>
                                 <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(allproject[i-1].project_name)">
                                     <template #reference>
-                                    <el-button type="danger">删&nbsp;除</el-button> 
+                                    <el-button type="danger">删除</el-button> 
                                     </template>
                                 </el-popconfirm>
                             </div>  
                             <div class="button1" v-if="status == 2">
                                 <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
                                     <template #reference>
-                                        <el-button color="#859dda" :dark="isDark" plain>恢&nbsp;复</el-button>     
+                                        <el-button color="#82b38c">恢&nbsp;复</el-button>     
                                     </template>
                                 </el-popconfirm>
                             </div>                                      
@@ -147,8 +149,13 @@
         </el-form>
         <template #footer>
         <span class="dialog-footer">
+            <span>
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newProject">立即创建</el-button>
+            <span class="button2" style="margin-left:20px;">
+            <el-button @click="newProject" color="#859dda">立即创建</el-button>
+            </span>
+            </span>
+            <div class="clear"></div>
         </span>
         </template>
     </el-dialog>
@@ -206,14 +213,17 @@ export default {
             console.log("status" + oldVal + "---" + newVal)
             switch(newVal){
                 case '0':
+                    this.allproject = [];
                     this.getAllProject();
                     console.log('allproject');
                     break;
                 case '1':
+                    this.allproject = [];
                     this.getStarProject();
                     console.log('starproject');
                     break;
                 case '2':
+                    this.allproject = [];
                     this.getTrashProject();
                     console.log('trashproject');
                     break;
@@ -268,6 +278,7 @@ export default {
         getStarProject(){
 
         },
+        
         newProject(){         
             if(this.newone.name == '' || this.newone.name == undefined || this.newone.name == null) {
                 ElMessage.warning("请输入项目名称");
@@ -461,19 +472,18 @@ export default {
     margin-bottom: 20px;
 }
 .title{
-    width: 120px;
     margin-left: 50px;
     margin-top: 20px;
     padding-bottom: 5px;
     font-size: 22px;
-    color: rgb(64,158,255);
-    border-bottom:4px solid  rgb(64,158,255);
+    color: #859dda;
+    border-bottom:4px solid  #859dda;
     font-weight: 600;
     float: left;
     }
 .head{
     border-radius: 100%;
-    background-color:  rgb(64,158,255);
+    background-color:  #859dda;
     width: 40px;
     height: 40px;
     margin: 15px;
@@ -556,5 +566,11 @@ export default {
 }
 .allproject .el-tabs__active-bar{
     background-color: #859dda;
+}
+.button1 .el-button{
+    color: white;
+}
+.button2 .el-button{
+    color: white;
 }
 </style>
