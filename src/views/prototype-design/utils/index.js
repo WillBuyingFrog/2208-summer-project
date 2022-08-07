@@ -75,21 +75,27 @@ export function deepCopyComponent(item) {
  *
  */
 export function updateTreeIn(array, path, callback) {
-    path = path.slice()
-    let resultArray = array.slice()
-    let index = path.shift()
+    path = path.slice()  // 生成一个path的浅拷贝，但因为path里全是整数，所以浅拷贝之后的修改不会应用到原数组
+    let resultArray = array.slice()  // 也是浅拷贝，但注意array里面存的是一堆对象（组件），所以修改他们会影响到array的对象的值
+    let index = path.shift()  // 删除path数组中的第一个元素，index是被删除的元素
     let firstIndex = index
-    let newData = { ...resultArray[index] }
+    let newData = { ...resultArray[index] }  //
     let object = newData
+    // 以下几行代码都是为了顺着给定的path寻找控件
     while (path.length > 0) {
         index = path.shift()
         if (newData.children && newData.children.length > 0) {
             newData.children = newData.children.slice()
-            if (path.length === 0) {
+            if (path.length === 0) {  // 已经找到了要修改的组件
+                // 调用callback，传入原来的组件，获得经过callback函数计算后得到的新的组件
                 let _obj = callback({ ...newData.children[index] })
+                // 赋值新的组件，此时this.controls已更新
+                // 也同时会自动更新渲染的内容
                 newData.children[index] = _obj
+                // 一种可能的删除功能？
                 if (!_obj) newData.children.splice(index, 1)
                 resultArray[firstIndex] = object
+                // 返回由原来的array（通常是this.controls）变换而来的新array，调用完之后一般直接将返回值赋给this.controls
                 return resultArray
             } else {
                 let _obj = { ...newData.children[index] }

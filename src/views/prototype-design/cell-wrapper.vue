@@ -28,6 +28,7 @@ export default {
      * @param transform 变换
      */
     handler(e, transform) {
+      console.log("detected transform: ", transform)
       e.stopPropagation() // 停止事件传播（？）
       e.preventDefault() // 取消事件默认行为
       // 使用eventBus发起全局事件

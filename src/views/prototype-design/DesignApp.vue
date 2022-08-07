@@ -227,6 +227,7 @@ export default {
     },
     // 组件拖拽时将新的transform同步到属性编辑器中，并在end事件中进行一次数据同步
     handleTransform({ transform, type }) {
+      console.log(this.controlled)
       this.controlled = { ...this.controlled, ...transform }
       if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
         this.updateControlValue('transform', transform, false)
@@ -414,7 +415,6 @@ export default {
         this.clearCurrentComponent()
       }
       if(componentJSON === "") return
-      // 只有在根层遍历的时候要parse变量
       componentJSON = JSON.parse(componentJSON)
       // console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
       componentJSON = componentJSON['components']

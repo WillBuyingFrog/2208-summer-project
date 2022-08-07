@@ -59,7 +59,7 @@ export async function _loadCanvasInit(application){
             .then(() => {
                 application.currentPage = cur
                 // 新建一个当前页面对应的协作服务器
-                getCollaboratePrototype(cur.page_file_id)
+                getCollaboratePrototype(application, cur.page_file_id)
                 _loadCanvasByPageId(application, cur.page_file_id)
             })
     }else{
