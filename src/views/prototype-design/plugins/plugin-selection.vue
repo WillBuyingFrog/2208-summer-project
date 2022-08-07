@@ -8,6 +8,9 @@ import {Interaction} from "@/views/prototype-design/utils/dom";
 import {getComponentRef, getComponentRefsById} from "@/views/prototype-design/utils/ref";
 import {getBoundingRect} from "@/views/prototype-design/libs/ddr/helper";
 import {registerSelectionActions} from "@/views/prototype-design/plugins/plugin-selection-actions";
+import {markLocalComponentOccupation, updateCollaborateRootComponent} from "@/views/prototype-design/utils/collaborate";
+
+const {findRootComponent} = require("@/views/prototype-design/utils/collaborate");
 
 export default {
   name: "plugin-selection",
@@ -46,11 +49,13 @@ export default {
         let transform = getBoundingRect(item.transform)
         let isXContain = transform.left > rect.x && transform.right < rect.x + rect.width
         let isYContain = transform.top > rect.y && transform.bottom < rect.y + rect.height
-        return isXContain && isYContain
+        let collaborationVerify = (item.usedBy === '__none__') | (item.usedBy === this.$store.state.user.id)
+        return isXContain && isYContain && collaborationVerify
       })
       // 得出被选择的元素
       this.selectedComponents = crossComponents.map((item) => ({
         id: item.id,
+        usedBy: this.$store.state.user.id,
         ...item.transform,
       }))
     },
@@ -88,8 +93,16 @@ export default {
       let x1 = []
       let y1 = []
       let ids = []
-      console.log("Selected components:")
-      console.log(this.selectedComponents)
+      // 先给所有被选中的元素添加标记
+      this.selectedComponents.forEach((item) => {
+        // 都分三步走：
+        // 1. 找到根元素
+        let rootComponent = findRootComponent(this.application, item)
+        // 2. 根元素向下标记usedBy
+        markLocalComponentOccupation(this.application, rootComponent, this.application.$store.state.user.id)
+        // 3. 实时文档中编辑
+        updateCollaborateRootComponent(this.application, this.application.currentPage.page_file_id, rootComponent)
+      })
       this.selectedComponents.forEach((item) => {
         ids.push(item.id)
         item = getBoundingRect(item)
@@ -115,8 +128,6 @@ export default {
       this.getSelectedComponentRefs(ids, this.selectionTransform)
     },
     getSelectedComponentRefs(ids, { x, y, width, height }) {
-      console.log("componentRefs:")
-      console.log(getComponentRefsById(ids))
       this.componentRefs = getComponentRefsById(ids).map((item) => {
         // 记录组件在选区的位置和宽度百分比
         item._xPercent = (item.transform.x - x) / width

@@ -73,6 +73,11 @@ import {
 import {getSnapShot} from "@/views/prototype-design/utils/image";
 import {_exportControlsJson, _loadCanvasByPageId, _loadCanvasInit} from "@/views/prototype-design/utils/prototypeJSON";
 import {computed} from "vue";
+import {
+  findRootComponent,
+  markLocalComponentOccupation,
+  updateCollaborateRootComponent
+} from "@/views/prototype-design/utils/collaborate";
 
 let historys = [[]]
 let historyPointer = 0
@@ -241,8 +246,20 @@ export default {
     //  组件选中，右侧展示属性编辑器
     handleSelect(control) {
       // collaborate
-      // TODO: 如果userId为别的用户，则直接返回，取消选择
-      control.usedBy = this.userId
+      if(!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)){
+        // 被别的用户控制
+        // 直接return
+        return
+      }
+      // 标记usedBy标签
+      // 找到根元素
+      let rootComponent = findRootComponent(this, control)
+      // 从根元素开始向下标记usedBy标签
+      markLocalComponentOccupation(this, rootComponent, this.$store.state.user.id)
+
+      // 在实时协作文档中同步内容
+      updateCollaborateRootComponent(this, this.currentPage.page_file_id, control)
+
       this.setCurrentControl(control)
       this.updateControlStatus(true)
     },
@@ -321,6 +338,7 @@ export default {
      * @description 删除当前选中的组件
      */
     deleteComponent() {
+      console.log("hello")
       if (!this.currentId) {
         return
       }
@@ -448,7 +466,7 @@ export default {
       history.back()
     }
     if(IS_MULTIPAGE_MODE){
-      this.currentPage = await _loadCanvasInit(this)
+      await _loadCanvasInit(this)
     }else{
       console.log("You shouldn't see this")
     }

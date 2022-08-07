@@ -14,8 +14,11 @@ export const EVENT_DESIGNER_CLEAR = 'designer:clear'
 export const EVENT_DESIGNER_SAVEIMG = 'designer:saveimg'
 export const EVENT_DESIGNER_RESIZE = 'designer:resize'
 export const EVENT_DESIGNER_SWITCH = 'designer:switch'
+export const EVENT_DESIGNER_PREVIEW = 'designer:preview'
 
 export const EVENT_FUNCTION_TEST = 'function:test'
 
 
 export const COLLABORATE_EXPORT_JSON = 'collaborate:export'
+export const COLLABORATE_USER_SELECT = 'collaborate:select'
+export const COLLABORATE_USER_UNSELECT = 'collaborate:unselect'
