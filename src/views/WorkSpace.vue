@@ -273,10 +273,10 @@ export default {
         }
     },
     watch: {
-	'$route'() {
-        // 路由发生变化页面刷新
-        this.$router.go(0);
-		}
+    '$route'() {
+          // 路由发生变化页面刷新
+          this.$router.go(0);
+      }
     },
     methods: {
         getTeam(){
@@ -298,7 +298,7 @@ export default {
                 })
         },
         AllProject(id){
-            this.$store.state.teamid = id
+            this.$store.state.team_id = id
             this.$router.push({
                 path:'/allproject',
             })

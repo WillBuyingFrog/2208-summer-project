@@ -35,9 +35,6 @@
                     </el-col>
                   </el-row>
                 </div>
-                <template>
-  <el-skeleton :rows="5" />
-</template>
                 <el-descriptions direction="vertical" :column="2" border class="form">
                   <el-descriptions-item  :span="2">
                     <template #label>
@@ -75,7 +72,7 @@
                 <div v-if="identity!='0'">
                   <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
                 </div>
-                <div >
+                <div v-else>
                   <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
                   <el-popconfirm title="确认要解散该团队吗？" @confirm="deleteTeam()">
                     <template #reference>
@@ -158,7 +155,7 @@ export default {
         method:'post',
         url:'/team/change/name',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           new_name:self.newName
         },
       }).then(res=>{
@@ -173,7 +170,7 @@ export default {
         method:'post',
         url:'/team/change/info',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           new_info:self.newInfo
         },
       }).then(res=>{
@@ -188,7 +185,7 @@ export default {
         method:'post',
         url:'/team/get/single',
         params: {
-          team_id:  this.$store.state.teamid,
+          team_id:  this.$store.state.team_id,
         },
       }).then(res=>{
         this.teamName = res.data.data.team_name
@@ -206,7 +203,7 @@ export default {
         method:'post',
         url:'/team/member/get',
         params: {
-          team_id: this.$store.state.teamid
+          team_id: this.$store.state.team_id
         },
       }).then(res=>{
         tableData = res.data.data
@@ -230,7 +227,7 @@ export default {
         method:'post',
         url:'/team/remove',
         params: {
-          team_id: this.$store.state.teamid
+          team_id: this.$store.state.team_id
         },
       }).then(res=>{
         console.log(res.data);

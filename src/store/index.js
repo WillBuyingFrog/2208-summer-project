@@ -15,7 +15,7 @@ export default createStore({
             email:'',
             info:'',
         },
-        teamid: '',
+        team_id: '',
         project_id: '',
         project_name: '',
         file_name: '',

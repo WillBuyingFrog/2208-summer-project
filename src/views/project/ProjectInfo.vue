@@ -105,7 +105,7 @@ name: "projectFile",
         }
     },
     created(){
-        this.team_id = this.$store.state.teamid;
+        this.team_id = this.$store.state.team_id;
         this.project_name = this.$store.state.project_name;
         this.getProject();
     },

@@ -1,44 +1,49 @@
 <template >
-    <div style="background-color:rgba(32,80,111,0.6);">
-<!--  <div>-->
+    <div style="background-color:rgba(250, 250, 250, 0.6);height:60px">
         <el-row >
-            <el-col :span="4">
+            <el-col :span="2">
             <span style="float:left;margin-left: 30px;"> <img src="../assets/images/logo-1.png" height="58"/></span>    
             </el-col>
-            <el-col :span="6">
+            <el-col :span="2" >
+              <div style="margin-top:14px">
+                <el-button text @click="this.$router.push('/workspace')" 
+                  style="font-size:15.5px;padding-left:7px;padding-right:7px;">工作空间</el-button>
+                <el-popover
+                    placement="bottom"
+                    :width="330"
+                    trigger="click">
+                  <template #reference>
+                    <el-button text icon="CaretBottom" 
+                      style=" margin-left:0; padding-left:7px; padding-right:7px"></el-button>
+                  </template>
+                  <TeamList></TeamList>
+                </el-popover>
+              </div>            
+            </el-col>
+            <el-col :span="12" :offset="4">
                 <el-menu
                     :default-active="activePath"
                     class="el-menu-demo"
                     style="background:unset"
                     mode="horizontal"
                     :ellipsis="false"
-                    text-color="rgb(210,228,245)"
-                    active-text-color="rgb(210,228,245)"
+                    text-color="#000000"
+                    active-text-color="#409EFF"
                     @select="handleSelect"
                     router>
-                    <el-menu-item index="/allproject" class="item">
+                    <el-menu-item index="/allproject">
                         <el-icon><DataLine/></el-icon>
                         <span style="font-size: 16px;">项目管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/team" style="margin-left:80px">
+                    <el-menu-item index="/team" style="margin-left:70px">
                         <el-icon><Coordinate/></el-icon>
                         <span style="font-size: 16px;">团队管理</span>
                     </el-menu-item>
-                </el-menu>
-            </el-col>
-            <el-col :span="3" :offset="7">
-                <el-menu
-                    class="space"
-                    style="background:unset;"
-                    mode="horizontal"
-                    text-color="rgb(210,228,245)"
-                    router>
-                    <el-menu-item index="/workspace" style="padding:0 0 ;">
-                        <el-icon><Menu/></el-icon>
-                        <span
-                            style="font-size: 16px;">工作空间</span>
+                    <el-menu-item index="" style="margin-left:70px">
+                        <el-icon><DocumentCopy/></el-icon>
+                        <span style="font-size: 16px;">文档中心</span>
                     </el-menu-item>
-                </el-menu>    
+                </el-menu>
             </el-col>
             <el-col :span="1" >
               <el-popover
@@ -152,21 +157,15 @@
   .space{
     border-bottom: 0;
   }
-  .item {
-
-  }
-  .item :hover {
-    color: rgb(32,80,111);
-    background-color: rgba(255,255,255,0.3);
-  }
 </style>
 
 <script>
 import UserInfo from "@/components/UserInfo.vue";
+import TeamList from "@/components/TeamList.vue";
 import { ElMessage } from "element-plus";
 import 'element-plus/dist/index.css'
 export default {
-  components: {UserInfo},
+  components: {UserInfo,TeamList},
   data(){
     return{
         avatarColor:'',
@@ -194,7 +193,6 @@ export default {
     let G = Math.floor(Math.random() * 130+110);
     let B = Math.floor(Math.random() * 130+110);
     this.avatarColor = 'rgb(' + R + ',' + G + ',' + B + ', .5)'
-
     this.getMessage();
   },
    computed:{
@@ -359,7 +357,8 @@ export default {
           console.log(res.data);
           ElMessage.success("成功加入团队")
         })
-    }
+    },
+
   }
 }
 </script>
