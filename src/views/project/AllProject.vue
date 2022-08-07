@@ -4,90 +4,125 @@
       <el-header style="padding: 0 0 ;">
           <TopGuide/>
         </el-header>
-      <el-main>
-        <el-tabs v-model="status" class="demo-tabs" @tab-click="handleClick">
-            <el-tab-pane label="所有项目" name="0"></el-tab-pane>
-            <el-tab-pane label="回收站" name="1">
-                <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash" v-if="allproject.length!=0">
-                    <template #reference>
-                        <el-button type="danger">清空回收站</el-button>   
-                    </template>
-                </el-popconfirm>
+        <el-container>
+        <el-aside width="150px">
+            <el-tabs v-model="status" class="demo-tabs" tab-position="left">
+            <el-tab-pane name="0">
+                <template #label>
+                    <div class="tab">所有项目</div>
+                </template>
+            </el-tab-pane>
+            <el-tab-pane name="1">   
+                <template #label>
+                    <div class="tab">收藏项目</div>
+                </template>
+            </el-tab-pane>
+            <el-tab-pane name="2">   
+                <template #label>
+                    <div class="tab">回收站</div>
+                </template>            
             </el-tab-pane>
         </el-tabs>
+        </el-aside>
+      <el-main>
+        <el-row v-if="status==2 && allproject.length!=0">
+        <div class="del">
+        <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash">
+            <template #reference>
+                <el-button type="danger">清空回收站</el-button>   
+            </template>
+        </el-popconfirm>
+        </div>
+        </el-row>
         <el-space wrap size="large">
-            <el-card :key="i" class="box-card" style="width: 300px" v-if="status==0">
-                <template #header>
-                    <div class="card-header">
-                        <span class="pname">
-                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
-                            新建项目
-                        </span>
-                    <div class="clear"></div>
-                    </div>
-                </template>
-                <div class="new">
-                    <el-button @click="dialogVisible=true">
-                        <div><Plus style="width: 1em; height: 1em;"/></div>
-                    </el-button>
+            <el-card class="box-card" style="width: 300px" v-if="status==0" :body-style="{ padding: '0px' }">
+                <img :src="imgsrc[0]" class="image">
+                <div class="pname">
+                    <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
+                    新建项目
                 </div>
-                <div class="hint">快来创建新项目吧！</div>
+                <el-button @click="dialogVisible=true" color="#859dda" :dark="isDark" plain>
+                    <div><Plus style="width: 1em; height: 1em;"/></div>
+                </el-button>
             </el-card>
-            <el-card :key="i" class="box-card" style="width:300px;height: 310px;" v-if="status==1 && allproject.length==0">
+            <el-card class="box-card" style="width:300px;height: 310px;" v-if="status==2 && allproject.length==0">
                   <el-empty description="回收站无项目" />
             </el-card>
-            <el-card v-for="project in allproject" :key="project.project_id" class="box-card" style="width: 300px">
-                <template #header>
-                    <div class="card-header">
-                        <span class="pname">
-                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
-                            {{project.project_name}}
-                        </span>
-                    <el-button class="button" type="primary" plain v-if="status==0" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
-                    <div class="clear"></div>
-                    </div>
-                </template>
+            <el-card class="box-card" style="width:300px;height: 310px;" v-if="status==1 && allproject.length==0">
+                  <el-empty description="暂无收藏项目" />
+            </el-card>
+            <el-card v-for="i in allproject.length" :key="i" class="box-card" style="width: 300px" :body-style="{ padding: '0px' }">
                 <div class="textitem">
-                    <el-form :model="project" label-width="120px" label-position="left">
-                        <el-form-item>
-                            <template #label>  
-                                <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
-                            </template>
-                            <span class="show">{{project.creator}}</span>
-                        </el-form-item>
-                        <el-form-item>
-                            <template #label>  
-                                <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
-                            </template>
-                            <span class="show">{{project.create_time}}</span>
-                        </el-form-item>      
-                        <el-form-item>
-                            <template #label>  
-                                <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
-                            </template>
-                            <span class="show">{{project.project_info}}</span>
-                        </el-form-item>
-                        <div class="button1" v-if="status == 0">
-                            <el-button type="primary" @click="openRename(project.project_name)">重命名</el-button>
-                            <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(project.project_name)">
+                    <div class="both front">
+                        <img :src="imgsrc[i % 4]" class="image">
+                        <div class="pname">
+                            <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
+                            {{allproject[i-1].project_name}}
+                        </div>
+                        <el-button class="button" color="#859dda" :dark="isDark" plain v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                        <span class="button1" v-if="status == 2">
+                            <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
                                 <template #reference>
-                                <el-button type="danger">删&nbsp;除</el-button> 
+                                    <el-button color="#859dda" :dark="isDark" plain>恢&nbsp;复</el-button>     
                                 </template>
                             </el-popconfirm>
-                        </div>  
-                        <div class="button1" v-if="status == 1">
-                            <el-popconfirm title="确定要恢复此项目?" @confirm="recover(project.project_name)">
-                                <template #reference>
-                                    <el-button type="danger" >恢&nbsp;复</el-button>     
+                        </span>
+                    </div>
+                    <div class="both form">
+                        <el-form :model="allproject[i-1]" label-width="140px" label-position="left">
+                            <el-form-item>
+                                <template #label>  
+                                    <div class="label1"><el-icon><Avatar /></el-icon> 创建者:</div>
                                 </template>
-                            </el-popconfirm>
-                        </div>                                      
-                    </el-form>
+                                <span class="show">{{allproject[i-1].creator}}</span>
+                            </el-form-item>
+                            <el-form-item>
+                                <template #label>  
+                                    <div class="label1"><el-icon><Timer /></el-icon> 创建时间:</div>
+                                </template>
+                                <span class="show">{{allproject[i-1].create_time}}</span>
+                            </el-form-item>    
+                            <el-form-item>
+                                <template #label>  
+                                    <div class="label1"><el-icon><Avatar /></el-icon> 最后编辑者:</div>
+                                </template>
+                                <span class="show">{{allproject[i-1].create_time}}</span>
+                            </el-form-item>  
+                            <el-form-item>
+                                <template #label>  
+                                    <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
+                                </template>
+                                <span class="show">{{allproject[i-1].create_time}}</span>
+                            </el-form-item>
+                            <el-form-item>
+                                <template #label>  
+                                    <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
+                                </template>
+                                <span class="show">{{allproject[i-1].project_info}}</span>
+                            </el-form-item>
+                            <div class="button1" v-if="status == 0">
+                                <el-button @click="openRename(allproject[i-1].project_name)" color="#859dda" :dark="isDark">重命名</el-button>
+                                <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(allproject[i-1].project_name)">
+                                    <template #reference>
+                                    <el-button type="danger">删&nbsp;除</el-button> 
+                                    </template>
+                                </el-popconfirm>
+                            </div>  
+                            <div class="button1" v-if="status == 2">
+                                <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
+                                    <template #reference>
+                                        <el-button color="#859dda" :dark="isDark" plain>恢&nbsp;复</el-button>     
+                                    </template>
+                                </el-popconfirm>
+                            </div>                                      
+                        </el-form>
+                    </div>
                 </div>
             </el-card>
             <div class="clear"></div>
         </el-space>
       </el-main>
+        </el-container>
     </el-container>
     <el-dialog
         v-model="dialogVisible"
@@ -156,21 +191,32 @@ export default {
             dialogVisible1: false,
             status: "0",
             allproject: [],
-            // allproject: [{
-            //     project_id: '1',
-            //     project_name: '1',
-            //     team_name: '1',
-            //     creator_name: '1',
-            //     create_time: '1',
-            //     last_modification_user: '1',
-            //     last_modification_time: '1',
-            //     project_info: '1'
-            // }],
+            imgsrc: [require('../../assets/images/e.jpg'), require('../../assets/images/f.jpg'), 
+            require('../../assets/images/g.jpg'), require('../../assets/images/h.jpg')],
             newname: '',
             oldname: '',
             newone:{
                 name: "",
                 info: ""
+            }
+        }
+    },
+    watch: {
+        status: function(newVal,oldVal){
+            console.log("status" + oldVal + "---" + newVal)
+            switch(newVal){
+                case '0':
+                    this.getAllProject();
+                    console.log('allproject');
+                    break;
+                case '1':
+                    this.getStarProject();
+                    console.log('starproject');
+                    break;
+                case '2':
+                    this.getTrashProject();
+                    console.log('trashproject');
+                    break;
             }
         }
     },
@@ -219,17 +265,8 @@ export default {
                     console.log(err);
                 })
         },
-        handleClick() {
-            this.allproject=[];
-            console.log(this.status);
-            if(this.status == '1'){
-                this.getAllProject();
-                console.log('allproject');
-            }
-            else if(this.status == '0'){
-                this.getTrashProject();
-                console.log('trashproject');
-            }
+        getStarProject(){
+
         },
         newProject(){         
             if(this.newone.name == '' || this.newone.name == undefined || this.newone.name == null) {
@@ -397,18 +434,19 @@ export default {
     padding-top: 15px;
     padding-left: 10px;
 }
+.del {
+    float: left;
+}
 .el-space {
     float: left;
-    padding-left: 12%;
+    padding-left: 6%;
 }
 .el-card {
     margin: 30px 30px 0 30px;
     background-color: rgba(255, 255, 255, 0.62);
     border-radius: 1ch;
     box-shadow: 14px 15px 19px -15px #000;
-}
-.el-card .el-form{
-    margin-left: 10px;
+    height: 350px;
 }
 .el-dialog .el-form{
     margin-left:50px;
@@ -455,32 +493,68 @@ export default {
 }
 .textitem .show{
   text-align: left;
-  width: 100%;   /*一定要设置宽度，或者元素内含的百分比*/
+  width: 130px;   /*一定要设置宽度，或者元素内含的百分比*/
   overflow:hidden; /*溢出的部分隐藏*/
   white-space: nowrap; /*文本不换行*/
   text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
 .pname{
     font-size: 25px;
-    float: left;
     font-weight: 600;
-    width: 150px;
-    text-align: left;
+    width: 260px;
+    margin: 20px 20px 20px 20px;
   overflow:hidden; /*溢出的部分隐藏*/
   white-space: nowrap; /*文本不换行*/
   text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
-.button{
-    float: right;
+.image{
+    width: 300px;
+    height: 220px;
 }
-.new .el-button{
-    margin-top: 25px;
-    margin-bottom: 37px;
-    height: 100px;
-    width: 100px;
-}
-
 .hint{
     margin-bottom: 20px;
+}
+.both {
+    position: absolute;
+}
+.front{
+    backface-visibility: hidden;
+}
+.form{
+    padding: 20px 10px 10px 15px;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+}
+.textitem:hover .form{
+    transform: rotateY(0deg);
+}
+.textitem:hover .front{
+    transform: rotateY(180deg);
+}
+.demo-tabs{
+    padding: 0;
+    float: left;
+}
+.el-tabs {
+    --el-tabs-header-height: 60px;
+    margin-left: 0px !important;
+}
+.tab{
+    font-size: 16px;
+    font-weight: 600;
+}
+</style>
+
+<style>
+.allproject .el-tabs__item:hover {
+  color: #859dda;
+  border-right: 2px solid #859dda;
+}
+.allproject .el-tabs__item.is-active {
+  border-right: 2px solid #859dda !important;
+    color: #859dda;
+}
+.allproject .el-tabs__active-bar{
+    background-color: #859dda;
 }
 </style>
