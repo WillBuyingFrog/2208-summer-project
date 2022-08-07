@@ -122,14 +122,14 @@
       </el-header>
       <el-main>
         <el-space wrap size="large">
-            <el-card class="box-card" style="width: 600px" :body-style="{ padding: '0px' }">
+            <el-card class="box-card" style="width: 590px" :body-style="{ padding: '0px' }">
                 <el-row>
                 <el-col span="12">
                     <img :src="imgsrc[0]" class="image">
                 </el-col>
                 <el-col span="12">
                     <div class="textitem">
-                        <div class="pname" style="margin-bottom: 40px;">
+                        <div class="pname" style="margin-bottom: 20px;">
                             创建新的团队
                         </div>
                     <div class="clear"></div>
@@ -140,7 +140,7 @@
                 </el-col>
                 </el-row>
             </el-card>
-            <el-card v-for="i in allteam.length" :key="i" class="box-card" style="width: 600px" :body-style="{ padding: '0px' }">
+            <el-card v-for="i in allteam.length" :key="i" class="box-card" style="width: 590px" :body-style="{ padding: '0px' }">
                 <el-row>
                 <el-col span="12">
                     <img :src="imgsrc[i % 4]" class="image">
@@ -149,42 +149,42 @@
                     <div class="textitem">
                         <div class="both front">
                             <div class="pname">
-                                {{allteam[i].team_name}}
+                                {{allteam[i-1].team_name}}
                             </div>
-                            <el-form :model="allteam[i]" label-width="120px" label-position="left">
+                            <el-form :model="allteam[i-1]" label-width="120px" label-position="left">
                                 <el-form-item>
                                     <template #label>
                                         <div class="label1"><el-icon><Avatar /></el-icon> 创建时间:</div>
                                     </template>
-                                    <span class="show">{{allteam[i].create_time}}</span>
+                                    <span class="show">{{allteam[i-1].create_time}}</span>
                                 </el-form-item>
                             </el-form>
-                            <el-button class="button" color="#859dda" :dark="isDark" plain @click="AllProject(allteam[i].team_id)">进入团队</el-button>
+                            <el-button class="button" color="#859dda" :dark="isDark" plain @click="AllProject(allteam[i-1].team_id)">进入团队</el-button>
                         </div>
                         <div class="both form">
-                    <el-form :model="allteam[i]" label-width="120px" label-position="left">
+                    <el-form :model="allteam[i-1]" label-width="120px" label-position="left">
                         <el-form-item>
                             <template #label>
                                 <div class="label1"><el-icon><Avatar /></el-icon> 组长:</div>
                             </template>
-                            <span class="show">{{allteam[i].leader}}</span>
+                            <span class="show">{{allteam[i-1].leader}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>
                                 <div class="label1"><el-icon><User /></el-icon> 成员:</div>
                             </template>
-                            <span class="show" v-if="allteam[i].members == ''">暂无成员加入</span>
-                            <span class="show" v-else>{{allteam[i].members}}</span>
+                            <span class="show" v-if="allteam[i-1].members == ''">暂无成员加入</span>
+                            <span class="show" v-else>{{allteam[i-1].members}}</span>
                         </el-form-item>
                         <el-form-item>
                             <template #label>
                                 <div class="label1"><el-icon><InfoFilled /></el-icon> 团队简介:</div>
                             </template>
-                            <span class="show" v-if="allteam[i].info == ''">暂无简介</span>
-                            <span class="show" v-else>{{allteam[i].info}}</span>
+                            <span class="show" v-if="allteam[i-1].info == ''">暂无简介</span>
+                            <span class="show" v-else>{{allteam[i-1].info}}</span>
                         </el-form-item>
                     </el-form>
-                    <el-button class="button" color="#859dda" :dark="isDark" plain @click="AllProject(allteam[i].team_id)">进入团队</el-button>
+                    <el-button class="button" color="#859dda" :dark="isDark" plain @click="AllProject(allteam[i-1].team_id)">进入团队</el-button>
                     </div>
                 </div>
                 </el-col>
@@ -383,8 +383,8 @@ export default {
         return this.invite;
         else if(this.value == '1'){
           for(var i=0; i<this.invite.length; i++){
-            if(this.invite[i]._read == true)
-              data.push(this.invite[i])
+            if(this.invite[i-1]._read == true)
+              data.push(this.invite[i-1])
           }
           return data;
         }
@@ -402,8 +402,8 @@ export default {
         return this.notice;
         else if(this.value == '1'){
           for(var i=0; i<this.notice.length; i++){
-            if(this.notice[i]._read == true)
-              data.push(this.notice[i])
+            if(this.notice[i-1]._read == true)
+              data.push(this.notice[i-1])
           }
           return data;
         }
@@ -423,11 +423,11 @@ export default {
         }).then(res=>{
           console.log(res.data.data)
           for(var i=0; i<res.data.data.length; i++){
-            if(res.data.data[i].type == '1')
-              this.invite.push(res.data.data[i])
+            if(res.data.data[i-1].type == '1')
+              this.invite.push(res.data.data[i-1])
             else
-              this.notice.push(res.data.data[i])
-            if(res.data.data[i]._read == false)
+              this.notice.push(res.data.data[i-1])
+            if(res.data.data[i-1]._read == false)
             this.unreadNumber++;  
           }
         })
@@ -449,16 +449,16 @@ export default {
     readedAll(){
       if(this.status == '0'){
         for(var i=0; i<this.invite.length; i++){
-          if(this.invite[i]._read == false){
+          if(this.invite[i-1]._read == false){
             this.$http({
               method:'post',
               url:'/message/read',
               params: {
-              message_id: this.invite[i].message_id
+              message_id: this.invite[i-1].message_id
             },
             })
             this.unreadNumber--;
-            this.invite[i]._read = true;
+            this.invite[i-1]._read = true;
           }
         }
       }
@@ -538,23 +538,23 @@ html,body{
     background-color:rgba(32,80,111,0.6);
 }
 .image{
-    width: 240px;
-    height: 200px;
+    width: 230px;
+    height: 170px;
 }
 .logo {
     padding-left: 10px;
 }
 .el-space {
     float: left;
-    padding-left: 12%;
+    padding-left: 8%;
 }
 .el-card {
     padding: 0px;
-    margin: 30px 30px 0 30px;
+    margin: 2px 30px 0 30px;
     background-color:  rgba(255, 255, 255, 0.62);
     border-radius: 0 2ch 0 2ch;
     box-shadow: 14px 15px 19px -15px #000;
-    height: 200px;
+    height: 170px;
 }
 .el-card .el-form{
     margin-left: 0px;
@@ -590,7 +590,7 @@ html,body{
     margin-right: 30px;
 }
 .el-form-item {
-    margin-bottom: 10px !important;
+    margin-bottom: 6px !important;
 }
 .headleft{
     float: right;
@@ -602,12 +602,12 @@ html,body{
     clear: both;
 }
 .pname{
-    margin-top: 50px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
     font-size: 30px;
     font-weight: 600;
-    width: 320px;
+    width: 340px;
   overflow:hidden; /*溢出的部分隐藏*/
   white-space: nowrap; /*文本不换行*/
   text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
@@ -629,7 +629,7 @@ html,body{
     backface-visibility: hidden;
 }
 .form{
-    padding-top: 0px 10px 10px 0px;
+    padding: 0px 10px 10px 0px;
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
