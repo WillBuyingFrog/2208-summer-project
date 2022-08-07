@@ -11,11 +11,11 @@ const routes = [
         name: 'documentCenter',
         component: () => import('../views/document-center/DocumentCenter')
     },
-    // {
-    //     path: '/try',
-    //     name: 'lightbulb',
-    //     component: () => import('../components/TestComponent')
-    // },
+    {
+        path: '/try',
+        name: 'lightbulb',
+        component: () => import('../components/TestComponent')
+    },
     // {
     //     path: '/h2',
     //     name: 'home2',

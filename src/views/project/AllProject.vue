@@ -26,7 +26,7 @@
         </el-aside>
       <el-main>
         <el-row v-if="status==2 && allproject.length!=0">
-        <div class="del">
+        <div class="del" style="margin-left:30px">
         <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash">
             <template #reference>
                 <el-button type="danger">清空回收站</el-button>   
@@ -35,8 +35,26 @@
         </div>
         </el-row>
         <el-row v-if="status == 0 && allproject.length!=0">
-            <el-input v-model="search" placeholder="请输入项目名关键字" :prefix-icon="Search" size="large"/>
-            <el-button size="large">搜索</el-button>
+            <div class="search">
+            <el-input v-model="search" placeholder="请输入项目名关键字" size="large">
+                <template #prefix>
+                    <el-icon class="el-input__icon"><search /></el-icon>
+                </template>
+            </el-input>
+            <span class="button2"><el-button color="#82b38c">搜索</el-button></span>
+            </div>
+        </el-row>
+        <el-row>
+            <div style="margin-left: 30px;margin-top:20px">
+                <el-radio-group v-model="orderType">
+                    <el-radio :label="1">项目名(中文优先)</el-radio>
+                    <el-radio :label="2">项目名(英文优先)</el-radio>
+                    <el-radio :label="3">创建时间(升序)</el-radio>
+                    <el-radio :label="4">创建时间(降序)</el-radio>
+                    <el-radio :label="5">最后编辑时间(升序)</el-radio>
+                    <el-radio :label="6">最后编辑时间(降序)</el-radio>
+                </el-radio-group>
+            </div>
         </el-row>
         <el-space wrap size="large">
           <div class="shell">
@@ -46,9 +64,11 @@
                     <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
                     新建项目
                 </div>
-                <el-button @click="dialogVisible=true" color="#859dda"  plain>
+                <div class="button2">
+                <el-button @click="dialogVisible=true" color="#82b38c" :dark="isDark">
                     <div><Plus style="width: 1em; height: 1em;"/></div>
                 </el-button>
+                </div>
             </el-card>
             <el-card class="box-card" style="width:310px;height: 310px;" v-if="status==2 && allproject.length==0">
                   <el-empty description="回收站无项目" />
@@ -64,7 +84,9 @@
                             <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
                             {{allproject[i-1].project_name}}
                         </div>
-                        <el-button class="button" color="#859dda" plain v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                        <div class="button2">
+                        <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                        </div>
                         <span class="button1" v-if="status == 2">
                             <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
                                 <template #reference>
@@ -107,7 +129,7 @@
                                 <span class="show" v-else>{{allproject[i-1].project_info}}</span>
                             </el-form-item>
                             <div class="button1" v-if="status == 0">
-                                <el-button color="#82b38c" @click="starProject(allproject[i-1].project_name)">收藏</el-button>
+                                <el-button color="#859dda" @click="starProject(allproject[i-1].project_name)">收藏</el-button>
                                 <el-button @click="openRename(allproject[i-1].project_name)" color="#daad81">重命名</el-button>
                                 <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(allproject[i-1].project_name)">
                                     <template #reference>
@@ -118,7 +140,7 @@
                             <div class="button1" v-if="status == 1">
                                 <el-popconfirm title="确定取消收藏此项目?" @confirm="cancleStarProject(allproject[i-1].project_name)">
                                     <template #reference>
-                                        <el-button color="#82b38c">取消收藏</el-button>     
+                                        <el-button color="#859dda">取消收藏</el-button>     
                                     </template>
                                 </el-popconfirm>
                             </div>
@@ -129,10 +151,10 @@
                                     </template>
                                 </el-popconfirm>
                             </div>
-                            <span class="button2" style="margin-right:20px" v-if="status!=2">
-                        <el-button class="button" color="#468ac8" @click="copyProject(allproject[i-1].project_name)">创建副本</el-button>
-                            </span>
-                        <el-button class="button" color="#859dda" plain v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                            <span class="button2" v-if="status!=2">
+                        <el-button class="button" color="#468ac8" @click="copyProject(allproject[i-1].project_name)">创建副本</el-button>   
+                        <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
+                        </span>
                         </el-form>
                     </div>
                 </div>
@@ -215,6 +237,7 @@ export default {
     name: "allProject",
     data() {
         return {
+            orderType: 0,
             team_id: '',
             dialogVisible: false,
             dialogVisible1: false,
@@ -257,6 +280,57 @@ export default {
         this.team_id = this.$store.state.team_id;
         this.getAllProject();
         console.log("team_id: "+this.team_id);
+    },
+    computed:{
+        filterProject(){
+            let fprojects;
+            let reg = /[a-zA-Z0-9]/;
+            //过滤搜索结果
+            fprojects = this.allproject.filter(p => p.project_name.toLowerCase().indexOf(this.search.toLowerCase())!==-1);
+            fprojects.sort(function(x,y){
+                switch(this.orderType){
+                    //1 按项目名(中文优先)
+                    case 1:
+                        if(reg.test(x)|| reg.test(y)){
+                            if(x < y){
+                                return 1;
+                            }else if(x > y){
+                                return -1;
+                            }else{
+                                return 0;
+                            }
+                        }else{
+                            return x.localeCompare(y)
+                        }
+                    //2 按项目名(英文优先)
+                    case 2:
+                        if(reg.test(x)|| reg.test(y)){
+                            if(x > y){
+                                return 1;
+                            }else if(x < y){
+                                return -1;
+                            }else{
+                                return 0;
+                            }
+                        }else{
+                            return x.localeCompare(y)
+                        }
+                    //3创建时间升序
+                    case 3:
+                        return y.create_time - x.create_time;
+                    //4创建时间降序
+                    case 4:
+                        return x.create_time - y.create_time
+                    //5最后编辑时间升序
+                    case 5:
+                        return y.last_modification_time - x.last_modification_time; 
+                    //6最后编辑时间降序
+                    case 6:
+                        return x.last_modification_time - y.last_modification_time; 
+                }
+            })
+            return fprojects;
+        }
     },
     methods: {
         getAllProject(){
@@ -634,8 +708,10 @@ export default {
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
-.el-input{
+.search .el-input{
     width: 300px;
+    margin-left: 30px;
+    margin-right: 30px;
 }
 .textitem:hover .form{
     transform: rotateY(0deg);
@@ -655,28 +731,6 @@ export default {
     font-size: 16px;
     font-weight: 600;
 }
-</style>
-
-<style scoped>
-.allproject .el-tabs__item:hover {
-  color: #859dda;
-  border-right: 2px solid #859dda;
-}
-.allproject .el-tabs__item.is-active {
-  border-right: 2px solid #859dda !important;
-    color: #859dda;
-}
-.allproject .el-tabs__active-bar{
-    background-color: #859dda;
-}
-.button1 .el-button{
-    color: white;
-}
-.button2 .el-button{
-    color: white;
-}
-
-
 .shell {
     position: relative;
     display: flex;
@@ -710,3 +764,25 @@ export default {
 
 
 </style>
+
+<style>
+.allproject .el-tabs__item:hover {
+  color: #859dda;
+  border-right: 2px solid #859dda;
+}
+.allproject .el-tabs__item.is-active {
+  border-right: 2px solid #859dda !important;
+    color: #859dda;
+}
+.allproject .el-tabs__active-bar{
+    background-color: #859dda;
+}
+.allproject .button1 .el-button{
+    color: white;
+}
+.allproject .button2 .el-button{
+    color: white;
+}
+</style>
+
+
