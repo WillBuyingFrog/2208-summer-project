@@ -48,10 +48,10 @@
                      <el-scrollbar >
                     <el-table :data="invite_filter()" style="width: 100%" v-if="status=='0'" :show-header="false">
                       <el-table-column
-                        width="40">
+                        width="45">
                         <template #default="scope">
                           <el-checkbox v-if="scope.row._read == false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
-                          <el-checkbox v-else v-model="scope.row._read" disabled></el-checkbox>
+                          <el-tag v-else  type="info" size="small">已读</el-tag>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -73,10 +73,10 @@
                     </el-table>
                     <el-table :data="notice_filter()" style="width: 100%" v-else :show-header="false">
                       <el-table-column
-                        width="40">
+                        width="45">
                         <template #default="scope">
                           <el-checkbox v-if="scope.row._read==false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
-                          <el-checkbox v-else v-model="scope.row._read" disabled></el-checkbox>
+                          <el-tag v-else  type="info" size="small">已读</el-tag>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -270,6 +270,7 @@ export default {
             notice: [],
             invite:[],
             unreadNumber:'0',
+            sign:'0'
         }
     },
     watch: {
@@ -336,161 +337,162 @@ export default {
                 })
             }
         },
-        timeago (time) {
-            var data = new Date(time);
-            var dateTimeStamp = data.getTime()
-            var minute = 1000 * 60;      //把分，时，天，周，半个月，一个月用毫秒表示
-            var hour = minute * 60;
-            var day = hour * 24;
-            var week = day * 7;
-            var month = day * 30;
-            var year = month * 12;
-            var now = new Date().getTime();   //获取当前时间毫秒
-            var diffValue = now - dateTimeStamp;//时间差
+      timeago (time) {
+        var data = new Date(time);
+        var dateTimeStamp = data.getTime()
+        var minute = 1000 * 60;      //把分，时，天，周，半个月，一个月用毫秒表示
+        var hour = minute * 60;
+        var day = hour * 24;
+        var week = day * 7;
+        var month = day * 30;
+        var year = month * 12;
+        var now = new Date().getTime();   //获取当前时间毫秒
+        var diffValue = now - dateTimeStamp;//时间差
 
-            var result = "";
-            if (diffValue < 0) {
-                result = "" + "未来";
-            }
-            var minC = diffValue / minute;  //计算时间差的分，时，天，周，月
-            var hourC = diffValue / hour;
-            var dayC = diffValue / day;
-            var weekC = diffValue / week;
-            var monthC = diffValue / month;
-            var yearC = diffValue / year;
-
-            if (yearC >= 1) {
-                result = " " + parseInt(yearC) + "年前"
-            } else if (monthC >= 1 && monthC < 12) {
-                result = " " + parseInt(monthC) + "月前"
-            } else if (weekC >= 1 && weekC < 5 && dayC > 6 && monthC < 1) {
-                result = " " + parseInt(weekC) + "周前"
-            } else if (dayC >= 1 && dayC <= 6) {
-                result = " " + parseInt(dayC) + "天前"
-            } else if (hourC >= 1 && hourC <= 23) {
-                result = " " + parseInt(hourC) + "小时前"
-            } else if (minC >= 1 && minC <= 59) {
-                result = " " + parseInt(minC) + "分钟前"
-            } else if (diffValue >= 0 && diffValue <= minute) {
-                result = "刚刚"
-            }
-            return result
-        },
-
-    invite_filter(){
-        var data=[];
-        if(this.value == '0')
-        return this.invite;
-        else if(this.value == '1'){
-          for(var i=0; i<this.invite.length; i++){
-            if(this.invite[i-1]._read == true)
-              data.push(this.invite[i-1])
-          }
-          return data;
+        var result = "";
+        if (diffValue < 0) {
+          result = "" + "未来";
         }
-        else{
-          for(var j=0; j<this.invite.length; j++){
-            if(this.invite[j]._read == false)
-              data.push(this.invite[j])
-          }
-          return data;
+        var minC = diffValue / minute;  //计算时间差的分，时，天，周，月
+        var hourC = diffValue / hour;
+        var dayC = diffValue / day;
+        var weekC = diffValue / week;
+        var monthC = diffValue / month;
+        var yearC = diffValue / year;
+
+        if (yearC >= 1) {
+          result = " " + parseInt(yearC) + "年前"
+        } else if (monthC >= 1 && monthC < 12) {
+          result = " " + parseInt(monthC) + "月前"
+        } else if (weekC >= 1 && weekC < 5 && dayC > 6 && monthC < 1) {
+          result = " " + parseInt(weekC) + "周前"
+        } else if (dayC >= 1 && dayC <= 6) {
+          result = " " + parseInt(dayC) + "天前"
+        } else if (hourC >= 1 && hourC <= 23) {
+          result = " " + parseInt(hourC) + "小时前"
+        } else if (minC >= 1 && minC <= 59) {
+          result = " " + parseInt(minC) + "分钟前"
+        } else if (diffValue >= 0 && diffValue <= minute) {
+          result = "刚刚"
         }
+        return result
       },
-    notice_filter(){
-        var data=[];
-        if(this.value == '0')
-        return this.notice;
-        else if(this.value == '1'){
-          for(var i=0; i<this.notice.length; i++){
-            if(this.notice[i-1]._read == true)
-              data.push(this.notice[i-1])
+      invite_filter(){
+          var data=[];
+          if(this.value == '0')
+          return this.invite;
+          else if(this.value == '1'){
+            for(var i=0; i<this.invite.length; i++){
+              if(this.invite[i]._read == true)
+                data.push(this.invite[i])
+            }
+            return data;
           }
-          return data;
+          else{
+            for(var j=0; j<this.invite.length; j++){
+              if(this.invite[j]._read == false)
+                data.push(this.invite[j])
+            }
+            return data;
+          }
+        },
+      notice_filter(){
+          var data=[];
+          if(this.value == '0')
+          return this.notice;
+          else if(this.value == '1'){
+            for(var i=0; i<this.notice.length; i++){
+              if(this.notice[i]._read == true)
+                data.push(this.notice[i])
+            }
+            return data;
+          }
+          else{
+            for(var j=0; j<this.notice.length; j++){
+              if(this.notice[j]._read == false)
+                data.push(this.notice[j])
+            }
+            return data;
+          }
+      },
+      getMessage(){
+          const self = this;
+          self.$http({
+            method:'post',
+            url:'/message/get',
+          }).then(res=>{
+            console.log(res.data.data)
+            for(var i=0; i<res.data.data.length; i++){
+              if(res.data.data[i].type == '1')
+                this.invite.push(res.data.data[i])
+              else
+                this.notice.push(res.data.data[i])
+              if(res.data.data[i]._read == false)
+              this.unreadNumber++;  
+            }
+          })
+      },
+      readed(message_id){
+        this.sign ++;
+        if(this.sign %2 == 0)
+        return
+          const self = this;
+          self.$http({
+            method:'post',
+            url:'/message/read',
+            params: {
+            message_id: message_id
+          },
+          }).then(res=>{
+            console.log(res.data);
+            this.unreadNumber --;
+          })
+      },
+      readedAll(){
+        if(this.status == '0'){
+          for(var i=0; i<this.invite.length; i++){
+            if(this.invite[i]._read == false){
+              this.$http({
+                method:'post',
+                url:'/message/read',
+                params: {
+                message_id: this.invite[i].message_id
+              },
+              })
+              this.unreadNumber--;
+              this.invite[i]._read = true;
+            }
+          }
         }
         else{
           for(var j=0; j<this.notice.length; j++){
-            if(this.notice[j]._read == false)
-              data.push(this.notice[j])
-          }
-          return data;
-        }
-    },
-    getMessage(){
-        const self = this;
-        self.$http({
-          method:'post',
-          url:'/message/get',
-        }).then(res=>{
-          console.log(res.data.data)
-          for(var i=0; i<res.data.data.length; i++){
-            if(res.data.data[i-1].type == '1')
-              this.invite.push(res.data.data[i-1])
-            else
-              this.notice.push(res.data.data[i-1])
-            if(res.data.data[i-1]._read == false)
-            this.unreadNumber++;  
-          }
-        })
-    },
-    readed(message_id){
-        const self = this;
-        self.$http({
-          method:'post',
-          url:'/message/read',
-          params: {
-          message_id: message_id
-        },
-        }).then(res=>{
-          console.log(res.data);
-          
-        })
-        this.unreadNumber--;
-    },
-    readedAll(){
-      if(this.status == '0'){
-        for(var i=0; i<this.invite.length; i++){
-          if(this.invite[i-1]._read == false){
-            this.$http({
-              method:'post',
-              url:'/message/read',
-              params: {
-              message_id: this.invite[i-1].message_id
-            },
-            })
-            this.unreadNumber--;
-            this.invite[i-1]._read = true;
+            if(this.notice[j]._read == false){
+              this.$http({
+                method:'post',
+                url:'/message/read',
+                params: {
+                message_id: this.notice[j].message_id
+              },
+              })
+              this.unreadNumber--;
+              this.notice[j]._read = true;
+            }
           }
         }
-      }
-      else{
-        for(var j=0; j<this.notice.length; j++){
-          if(this.notice[j]._read == false){
-            this.$http({
-              method:'post',
-              url:'/message/read',
-              params: {
-              message_id: this.notice[j].message_id
-            },
-            })
-            this.unreadNumber--;
-            this.notice[j]._read = true;
-          }
-        }
-      }
-    },
-    accept(message_id){
-        const self = this;
-        self.$http({
-          method:'post',
-          url:'/message/accept',
-          params: {
-          message_id: message_id
-        },
-        }).then(res=>{
-          console.log(res.data);
-          ElMessage.success("成功加入团队")
-        })
-    }
+      },
+      accept(message_id){
+          const self = this;
+          self.$http({
+            method:'post',
+            url:'/message/accept',
+            params: {
+            message_id: message_id
+          },
+          }).then(res=>{
+            console.log(res.data);
+            ElMessage.success("成功加入团队")
+          })
+      },
     },
     created(){
         let R = Math.floor(Math.random() * 130+110);
