@@ -316,7 +316,8 @@ export default {
         },
         editFile(id, name){
             this.$store.state.file_name = name;
-            this.$store.state.file_id = id;
+          this.$store.state.file_id = id;
+            console.log(this.$store.state.file_id);
             if(this.fileType == 1){
                 this.$router.push('/prototypeDesign');
             }
