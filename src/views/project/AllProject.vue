@@ -34,6 +34,10 @@
         </el-popconfirm>
         </div>
         </el-row>
+        <el-row v-if="status == 0 && allproject.length!=0">
+            <el-input v-model="search" placeholder="请输入项目名关键字" :prefix-icon="Search" size="large"/>
+            <el-button size="large">搜索</el-button>
+        </el-row>
         <el-space wrap size="large">
             <el-card class="box-card" style="width: 300px" v-if="status==0" :body-style="{ padding: '0px' }">
                 <img :src="imgsrc[0]" class="image">
@@ -124,6 +128,9 @@
                                     </template>
                                 </el-popconfirm>
                             </div>
+                            <span class="button2" style="margin-right:20px" v-if="status!=2">
+                        <el-button class="button" color="#468ac8" @click="copyProject(allproject[i-1].project_name)">创建副本</el-button>
+                            </span>
                         <el-button class="button" color="#859dda" plain v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
                         </el-form>
                     </div>
@@ -210,6 +217,7 @@ export default {
             dialogVisible: false,
             dialogVisible1: false,
             status: "0",
+            search: '',
             allproject: [],
             imgsrc: [require('../../assets/images/e.jpg'), require('../../assets/images/f.jpg'), 
             require('../../assets/images/g.jpg'), require('../../assets/images/h.jpg')],
@@ -241,7 +249,7 @@ export default {
                     console.log('trashproject');
                     break;
             }
-        }
+        },
     },
     created(){
         this.team_id = this.$store.state.team_id;
@@ -466,6 +474,29 @@ export default {
                     console.log(err);
                 })
         },
+        copyProject(project_name){
+            this.$http
+                .post('/project/recover', {
+                    project_name: project_name,
+                    team_id: this.team_id
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            this.getTrashProject();
+                            ElMessage.success(res.data.message);
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
         cleanTrash(){
             this.$http
                 .post('/project/emptyTrash', {
@@ -524,7 +555,6 @@ export default {
 }
 .el-space {
     float: left;
-    padding-left: 6%;
 }
 .el-card {
     margin: 30px 30px 0 30px;
@@ -555,17 +585,6 @@ export default {
     font-weight: 600;
     float: left;
     }
-.head{
-    border-radius: 100%;
-    background-color:  #859dda;
-    width: 40px;
-    height: 40px;
-    margin: 15px;
-    font-size: 35px;
-    color: white;
-    text-align: center;
-    margin-right: 30px;
-}
 .headleft{
     float: right;
 }
@@ -597,6 +616,7 @@ export default {
 .image{
     width: 300px;
     height: 220px;
+    border-radius: 1ch 1ch 0 0;
 }
 .hint{
     margin-bottom: 20px;
@@ -611,6 +631,9 @@ export default {
     padding: 20px 10px 10px 15px;
     backface-visibility: hidden;
     transform: rotateY(180deg);
+}
+.el-input{
+    width: 300px;
 }
 .textitem:hover .form{
     transform: rotateY(0deg);

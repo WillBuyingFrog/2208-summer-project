@@ -65,9 +65,14 @@
         },
         enterTeam(id){
             this.$store.state.team_id = id
-            this.$router.push({
+            if(this.$route.path == '/allproject'){
+              this.$router.go(0);
+            }else{
+              this.$router.push({
                 path:'/allproject',
+                date:new Date().getTime()
             })
+            }
         }
 
       },
