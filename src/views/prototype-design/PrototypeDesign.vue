@@ -23,7 +23,7 @@
               </el-popconfirm>
             </el-col>
             <el-col :span="16">
-              <p class="name">{{this.$store.state.file_name}}</p>
+              <p class="name">{{this.page_name}}</p>
             </el-col>
             <el-col :span="5">
               <el-button
@@ -49,17 +49,11 @@
                     @close="handleClose"
                 >
                   <el-menu-item
-                      v-for="prototype in allPrototype"
-                      :key="prototype.file_id"
-                      @click="toggle(prototype)"
-                  >{{prototype.name}}</el-menu-item>
-                  <el-menu-item index="2">2</el-menu-item>
-                  <el-menu-item index="3">3</el-menu-item>
-                  <el-menu-item index="4">4</el-menu-item>
-                  <el-menu-item index="5">5</el-menu-item>
-                  <el-menu-item index="6">6</el-menu-item>
-                  <el-menu-item index="7">7</el-menu-item>
-                  <el-menu-item index="8" @click="dialogVisible = true">
+                      v-for="page in allPages"
+                      :key="page.page_index"
+                      @click="toggle(page)"
+                  >{{page.name}}</el-menu-item>
+                  <el-menu-item @click="dialogVisible = true">
                     <el-icon><Plus /></el-icon>
                   </el-menu-item>
                   <el-dialog
@@ -95,11 +89,10 @@
                     <template #footer>
                       <span class="dialog-footer">
                           <el-button @click="dialogVisible = false">取消</el-button>
-                          <el-button type="primary" @click="newPrototype">立即创建</el-button>
+                          <el-button type="primary" @click="newPage">立即创建</el-button>
                       </span>
                     </template>
                   </el-dialog>
-
                 </el-menu>
               </el-drawer>
             </el-col>
@@ -127,10 +120,13 @@ export default {
   data() {
     return {
       project_id: '',
+      file_id: '',
+      page_index: 1,
+      page_name: '',
       drawer: false,
       dialogVisible: false,
-      allPrototype: [],
-      prototypeNum: 4,
+      allPages: [],
+      pageNum: 4,
       newone:{
         name: "",
         x: "",
@@ -146,17 +142,17 @@ export default {
         this.$router.go(-1);
       }, 0);
     },
-    getPrototype(){
+    getAllPages(){
       this.$http({
         method:'post',
-        url:'/team/get/all',
+        url:'/file/page/get',
       })
           .then(res =>{
             console.log(res.data);
             switch (res.data.code) {
               case 200:
-                this.allPrototype = res.data.data;
-                this.prototypeNum = this.allPrototype.length;
+                this.allPages = res.data.data;
+                this.pageNum = this.allPages.length;
                 break;
             }
           })
@@ -165,27 +161,31 @@ export default {
           })
     },
 
-    newPrototype(){
+    newPage(){
       var id = this.$store.state.user.id;
       if(this.newone.name == undefined || this.newone.name == '' || this.newone.name == null){
         ElMessage.warning('请输入新页面的名称');
-      }else if(id == undefined || id == null || id == ''){
+      }else if(this.newone.x == undefined || this.newone.x == '' || this.newone.x == null){
+        ElMessage.warning('请输入画布大小');
+      }else if(this.newone.y == undefined || this.newone.y == '' || this.newone.y == null){
+        ElMessage.warning('请输入画布大小');
+      } else if(id == undefined || id == null || id == ''){
         ElMessage.warning('请先登录');
       }
       else{
         this.$http
-            .post("/team/new",
+            .post("/file/page/new",
                 {
-                  project_id: this.project_id,
-                  prototype_name: this.newone.name,
-                  prototype_x: this.newone.x,
-                  prototype_y: this.newone.y,
+                  page_file_id: this.file_id,
+                  page_name: this.newone.name,
                 })
             .then(res =>{
               console.log(res.data.code);
               switch (res.data.code) {
                 case 200:
-                  this.getPrototype();
+                  this.getAllPages();
+                  this.page_index = res.data.data.page_index;
+                  this.page_name = res.data.data.page_name;
                   ElMessage.success('创建成功！');
                   this.newone.name = '';
                   this.newone.x = '';
@@ -203,12 +203,15 @@ export default {
     },
 
     created(){
-      this.project_id = this.$store.state.project_id;
-      this.getPrototype();
+      this.file_id = this.$store.state.file_id;
+      console.log(this.$store.state.file_id);
+      this.getAllPages();
+      this.page_index = 1;
+      this.page_name = this.allPages[0].page_name;
     },
-    toggle(prototype){
-      this.$store.file_id = prototype.file_id;
-      this.$store.file_name = prototype.file_name;
+    toggle(page){
+      this.page_name = page.page_name;
+      this.page_index = page.page_index;
       // 标题和内容更改
     },
   },
