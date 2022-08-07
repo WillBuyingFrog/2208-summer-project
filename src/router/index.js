@@ -7,10 +7,15 @@ const routes = [
         component: () => import('../views/homepage/HomePage')
     },
     {
-        path: '/try',
-        name: 'lightbulb',
-        component: () => import('../components/TestComponent')
+        path: '/documentCenter',
+        name: 'documentCenter',
+        component: () => import('../views/document-center/DocumentCenter')
     },
+    // {
+    //     path: '/try',
+    //     name: 'lightbulb',
+    //     component: () => import('../components/TestComponent')
+    // },
     // {
     //     path: '/h2',
     //     name: 'home2',
