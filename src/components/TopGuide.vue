@@ -13,7 +13,7 @@
                     :width="330"
                     trigger="click">
                   <template #reference>
-                    <el-button text icon="CaretBottom" 
+                    <el-button text icon="DCaret" 
                       style=" margin-left:0; padding-left:7px; padding-right:7px"></el-button>
                   </template>
                   <TeamList></TeamList>

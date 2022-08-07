@@ -1,105 +1,76 @@
 <template>
-<div class="shell">
-        <div class="box">
-            <div class="images">
-                <img src="./image/1.png">
-            </div>
-            <div class="content">
-                <h2>ZeenChin</h2>
-                <p>The style in the painting integrates temptation, fantasy and strangeness
-                </p>
-            </div>
-        </div>
-        <div class="box">
-            <div class="images">
-                <img src="./image/2.png">
-            </div>
-            <div class="content">
-                <h2>ZeenChin</h2>
-                <p>The style in the painting integrates temptation, fantasy and strangeness
-                </p>
-            </div>
-        </div>
-        <div class="box">
-            <div class="images">
-                <img src="./image/3.png">
-            </div>
-            <div class="content">
-                <h2>ZeenChin</h2>
-                <p>The style in the painting integrates temptation, fantasy and strangeness
-                </p>
-            </div>
-        </div>
-        <div class="box">
-            <div class="images">
-                <img src="./image/4.png">
-            </div>
-            <div class="content">
-                <h2>ZeenChin</h2>
-                <p>The style in the painting integrates temptation, fantasy and strangeness
-                </p>
-            </div>
-        </div>
-        <div class="box">
-            <div class="images">
-                <img src="./image/5.png">
-            </div>
-            <div class="content">
-                <h2>ZeenChin</h2>
-                <p>The style in the painting integrates temptation, fantasy and strangeness
-                </p>
-            </div>
-        </div>
-    </div>
-
+    <el-container>
+      <el-header style="background: rgb(240,240,240);">
+        <el-row >
+            <el-col :span="2">
+            <span style="float:left;margin-left:30px;"> <img src="../../assets/images/logo-1.png" height="58"/></span>    
+            </el-col>
+            <el-col :span="18">
+                <h2>原型设计名字</h2>
+            </el-col>
+            <el-col :span="4">
+                <el-button>全屏预览</el-button>
+            </el-col>
+        </el-row>
+      </el-header>
+      <el-container>
+        <el-aside width="300px" style="background: rgb(240,240,240);height:100vh;">
+            <h3>页面（{{list.length}}）</h3>
+            <el-divider></el-divider>
+            <el-table :data="list" style="width: 100%;background-color:transparent;" 
+                :show-header="false"  row-style="background:transparent; height:50px">
+                <el-table-column>
+                    <template #default="scope">
+                       <el-icon><CopyDocument /></el-icon>
+                        <span style="font-size:15px; margin-left:10px"> {{scope.row.name}}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-aside>
+        <el-main>
+            <el-image :src="list[0].url" style="height:630px;"></el-image>
+        </el-main>
+      </el-container>
+    </el-container>
 </template>
 
-<style>
-
-        .shell {
-            position: relative;
-            min-width: 1000px;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            /* 设置3d变化 */
-            transform-style: preserve-3d;
-            /* 添加透视效果 */
-            perspective: 900px;
+<script>
+export default{
+    data(){
+        return{
+            list:[{
+                name:'首页',
+                url:'https://img2.baidu.com/it/u=1792249350,650626052&fm=253&fmt=auto&app=120&f=JPEG?w=1200&h=675',
+            },{
+                name:'登录、注册页',
+                url:'https://img2.baidu.com/it/u=2841427495,874700757&fm=253&fmt=auto&app=120&f=GIF?w=1017&h=800',
+            },{
+                name:'团队管理页',
+                url:'https://img1.baidu.com/it/u=3969247811,1285706727&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400',
+            },{
+                name:'工作空间',
+                url:'https://img0.baidu.com/it/u=1546227440,2897989905&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500',
+            },{
+                name:'个人信息',
+                url:'https://img2.baidu.com/it/u=1061245231,4112198693&fm=253&fmt=auto&app=138&f=JPEG?w=438&h=340',
+            }]
         }
+    },
+    // methods: {
+    //     show(row){
 
-        .shell .box {
-            position: relative;
-            width: 250px;
-            height: 350px;
-            transition: 0.3s;
-            overflow: hidden;
-            margin: 30px;
-            transform: rotateY(0deg);
-            transition-delay: .1s;
-            border-radius: 5px;
-            border: #fff 5px solid;
-        }
+    //     }
+    // },
+    // computed:{
+    //     picture(){
 
-        /* 当鼠标所有卡片的父元素点shell上时，
-        所有卡片像Y轴翻转20度 */
-        .shell:hover .box {
-            transform: rotateY(20deg);
-        }
+    //     }
+    // }
+}
 
-        /* 当鼠标悬浮在当前卡片上时，当前卡片的翻转角度为0，
-        并放大一点二五倍，加个阴影 */
-        .shell .box:hover {
-            transform: rotateY(0deg) scale(1.25);
-            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.7);
-            z-index: 1;
-        }
+</script>
 
-        /* 当鼠标悬浮在卡片上时，
-        当前卡片后面的所有卡片全部都反向翻转负20度 */
-        .shell .box:hover~.box {
-            transform: rotateY(-20deg);
-        }
 
+<style scoped>
 
 </style>
