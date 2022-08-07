@@ -86,37 +86,45 @@
                                 <template #label>  
                                     <div class="label1"><el-icon><Avatar /></el-icon> 最后编辑者:</div>
                                 </template>
-                                <span class="show">{{allproject[i-1].create_time}}</span>
+                                <span class="show">{{allproject[i-1].last_modification_user}}</span>
                             </el-form-item>  
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><Timer /></el-icon> 最后编辑时间:</div>
                                 </template>
-                                <span class="show">{{allproject[i-1].create_time}}</span>
+                                <span class="show">{{allproject[i-1].last_modification_time}}</span>
                             </el-form-item>
                             <el-form-item>
                                 <template #label>  
                                     <div class="label1"><el-icon><CollectionTag /></el-icon> 项目简介:</div>
                                 </template>
-                                <span class="show" v-if="allproject[i-1].info == ''">暂无简介</span>
-                                <span class="show" v-else>{{allproject[i-1].info}}</span>
+                                <span class="show" v-if="allproject[i-1].project_info == ''">暂无简介</span>
+                                <span class="show" v-else>{{allproject[i-1].project_info}}</span>
                             </el-form-item>
                             <div class="button1" v-if="status == 0">
-                                <el-button color="#82b38c">收藏</el-button>
-                                <el-button @click="openRename(allproject[i-1].project_name)" color="#859dda">重命名</el-button>
+                                <el-button color="#82b38c" @click="starProject(allproject[i-1].project_name)">收藏</el-button>
+                                <el-button @click="openRename(allproject[i-1].project_name)" color="#daad81">重命名</el-button>
                                 <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(allproject[i-1].project_name)">
                                     <template #reference>
                                     <el-button type="danger">删除</el-button> 
                                     </template>
                                 </el-popconfirm>
                             </div>  
+                            <div class="button1" v-if="status == 1">
+                                <el-popconfirm title="确定取消收藏此项目?" @confirm="cancleStarProject(allproject[i-1].project_name)">
+                                    <template #reference>
+                                        <el-button color="#82b38c">取消收藏</el-button>     
+                                    </template>
+                                </el-popconfirm>
+                            </div>
                             <div class="button1" v-if="status == 2">
                                 <el-popconfirm title="确定要恢复此项目?" @confirm="recover(allproject[i-1].project_name)">
                                     <template #reference>
                                         <el-button color="#82b38c">恢&nbsp;复</el-button>     
                                     </template>
                                 </el-popconfirm>
-                            </div>                                      
+                            </div>
+                        <el-button class="button" color="#859dda" plain v-if="status!=2" @click="toProject(allproject[i-1].project_name, allproject[i-1].project_id)">进入项目</el-button>
                         </el-form>
                     </div>
                 </div>
@@ -177,10 +185,15 @@
             </el-form-item>
         </el-form>
         <template #footer>
-        <span class="dialog-footer">
-            <el-button @click="dialogVisible1 = false">取消</el-button>
-            <el-button type="primary" @click="rename">确定</el-button>
-        </span>
+            <span class="dialog-footer">
+            <span>
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <span class="button2" style="margin-left:20px;">
+            <el-button @click="rename" color="#859dda">确定</el-button>
+            </span>
+            </span>
+            <div class="clear"></div>
+            </span>
         </template>
     </el-dialog>
   </div>
@@ -276,9 +289,70 @@ export default {
                 })
         },
         getStarProject(){
-
+            this.$axios
+                .post("/project/viewFavorite", {
+                    team_id: this.team_id
+                })
+                .then(res =>{
+                    console.log(res.data);
+                    switch(res.data.code) {
+                        case 200:
+                            this.allproject = res.data.data;
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         },
-        
+        starProject(project_name){
+            this.$http
+            .post('/project/favorite', {
+                project_name: project_name,
+                team_id: this.team_id
+            })
+            .then(res =>{
+                console.log(res.data.code);
+                console.log(res.data.data);
+                switch (res.data.code){
+                    case 200:
+                        this.getAllProject();
+                        ElMessage.success(res.data.message);
+                        break;
+                    case 500:
+                        ElMessage.error(res.data.message);
+                        break;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
+        cancleStarProject(project_name){
+            this.$http
+            .post('/project/cancelFavorite', {
+                project_name: project_name,
+                team_id: this.team_id
+            })
+            .then(res =>{
+                console.log(res.data.code);
+                console.log(res.data.data);
+                switch (res.data.code){
+                    case 200:
+                        this.getStarProject();
+                        ElMessage.success(res.data.message);
+                        break;
+                    case 500:
+                        ElMessage.error(res.data.message);
+                        break;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
         newProject(){         
             if(this.newone.name == '' || this.newone.name == undefined || this.newone.name == null) {
                 ElMessage.warning("请输入项目名称");
@@ -496,10 +570,13 @@ export default {
     float: right;
 }
 .label1{
-    font-size: 16px;
+    font-size: 13px;
 }
 .clear{
     clear: both;
+}
+.el-form-item {
+    margin-bottom: 13px !important;
 }
 .textitem .show{
   text-align: left;
