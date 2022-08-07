@@ -346,8 +346,8 @@ export default {
     margin-top: 20px;
     padding-bottom: 5px;
     font-size: 20px;
-    color: rgb(64,158,255);
-    border-bottom:4px solid  rgb(64,158,255);
+    color: #859dda;
+    border-bottom:4px solid  #859dda;
     font-weight: 600;
     float: left;
     }
