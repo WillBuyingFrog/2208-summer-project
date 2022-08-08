@@ -426,13 +426,21 @@ export default {
         },
         editFile(id, name){
             this.$store.state.file_name = name;
-          this.$store.state.file_id = id;
+            this.$store.state.file_id = id;
             console.log(this.$store.state.file_id);
             if(this.fileType == 1){
-                this.$router.push('/prototypeDesign');
+                let routeUrl = this.$router.resolve({
+                    path: "/prototypeDesign",
+                });
+                window.open(routeUrl.href, "_blank");
+                //this.$router.push('/prototypeDesign');
             }
             else if(this.fileType == 0){
-                this.$router.push('/documentEdit');
+                let routeUrl = this.$router.resolve({
+                    path: "/documentEdit",
+                });
+                window.open(routeUrl.href, "_blank");
+                //this.$router.push('/documentEdit');
             }
 
         },

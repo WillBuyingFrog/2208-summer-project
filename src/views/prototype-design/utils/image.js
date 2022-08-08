@@ -7,10 +7,24 @@ export const getSnapShot = async (elementId) => {
         allowTaint: false,
         useCORS: true
     })
-    const shot = canvas.toDataURL('image/png')
-    const a = document.createElement('a')
-    a.href = shot
-    a.download = "事例.png"
-    a.click()
-    return shot
+    canvas.toBlob(function(blob) {
+            let binaryData = [];
+            binaryData.push(blob);
+            let url = window.URL.createObjectURL(new Blob(binaryData))
+            console.log(url)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = "事例.png"
+            a.click()
+            return url
+    });
+    
+
+    // const shot = canvas.toDataURL('image/png')
+    // console.log(shot)
+    // const a = document.createElement('a')
+    // a.href = shot
+    // a.download = "事例.png"
+    // a.click()
+    // return shot
 }

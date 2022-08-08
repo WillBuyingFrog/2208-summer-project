@@ -9,25 +9,54 @@
                     <img src="../../assets/images/logo-1.png" height="60">
                 </div>
             </el-col>
-            <el-col  :span="2">
-              <el-popconfirm
-                  confirm-button-text="Yes"
-                  cancel-button-text="No, Thanks"
-                  icon-color="#626AEF"
-                  title="确认退出编辑?"
-                  @confirm="quit()"
-              >
-                <template #reference>
-                  <el-button link icon="Back" class="quit">退出</el-button>
+<!--            <el-col  :span="2">-->
+<!--              <el-popconfirm-->
+<!--                  confirm-button-text="Yes"-->
+<!--                  cancel-button-text="No, Thanks"-->
+<!--                  icon-color="#626AEF"-->
+<!--                  title="确认退出编辑?"-->
+<!--                  @confirm="quit()"-->
+<!--              >-->
+<!--                <template #reference>-->
+<!--                  <el-button link icon="Back" class="quit">退出</el-button>-->
+<!--                </template>-->
+<!--              </el-popconfirm>-->
+<!--            </el-col>-->
+            <el-col :span="22">
+              <p class="name">
+                {{this.page_name}}
+                <el-icon class="edit-icon" @click="dialogVisible=true"><Edit></Edit></el-icon>
+              </p>
+              <el-dialog
+                  v-model="dialogVisible"
+                  width="35%">
+                <template #header>
+                  <div class="card-header">
+                    <span class="title" style="margin-left: 10px; color: black">
+                        <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
+                        重命名页面
+                    </span>
+                  </div>
                 </template>
-              </el-popconfirm>
+                <el-form label-width="100px">
+                  <el-form-item label="新标题">
+                    <el-input v-model="newname"></el-input>
+                  </el-form-item>
+                </el-form>
+                <template #footer>
+                  <span class="dialog-footer">
+                      <span>
+                        <el-button @click="dialogVisible = false">取消</el-button>
+                        <span class="button2" style="margin-left:20px;">
+                        <el-button @click="rename" color="#859dda">确定</el-button>
+                        </span>
+                    </span>
+                  </span>
+                </template>
+              </el-dialog>
             </el-col>
-            <el-col :span="16">
-              <p class="name">{{this.page_name}}</p>
-            </el-col>
-            <el-col :span="5">
+            <el-col :span="1">
               <el-button
-                  circle
                   class="drawer-btn"
                   color="#859dda"
                   :dark="isDark"
@@ -35,6 +64,7 @@
                   text @click="drawer = true"
               >
                 <el-icon class="drawer-icon"><Fold /></el-icon>
+                页面列表
               </el-button>
               <el-drawer
                   v-model="drawer"
@@ -43,56 +73,21 @@
                   size="30%"
               >
                 <el-menu
-                    default-active="2"
+                    :default-active="activeIndex"
                     class="all-prototypes"
-                    @open="handleOpen"
-                    @close="handleClose"
+                    @select="handleSelect"
+                    text-color="#000000"
+                    active-text-color="#409EFF"
                 >
                   <el-menu-item
                       v-for="page in allPages"
                       :key="page.page_index"
+                      :index="page.page_index"
                       @click="toggle(page)"
-                  >{{page.name}}</el-menu-item>
-                  <el-menu-item @click="dialogVisible = true">
+                  >{{page.page_name}}</el-menu-item>
+                  <el-menu-item @click="newPage">
                     <el-icon><Plus /></el-icon>
                   </el-menu-item>
-                  <el-dialog
-                      v-model="dialogVisible"
-                      width="35%">
-                    <template #header>
-                      <div class="card-header">
-                        <span class="title" style="margin-left: 10px; color: black">
-                            新页面
-                        </span>
-                        <div class="clear"></div>
-                      </div>
-                    </template>
-                    <el-form :model="newone" label-width="80px">
-                      <el-form-item label="页面标题">
-                        <el-input v-model="newone.name"></el-input>
-                      </el-form-item>
-                      <el-form-item label="画布大小">
-                        <el-input
-                            placeholder="宽度X"
-                            type="number"
-                            v-model="newone.x"
-                            style="width:80px;"
-                        ></el-input>
-                        <el-input
-                            placeholder="高度Y"
-                            type="number"
-                            v-model="newone.y"
-                            style="width:80px;margin-left: 20px;"
-                        ></el-input>
-                      </el-form-item>
-                    </el-form>
-                    <template #footer>
-                      <span class="dialog-footer">
-                          <el-button @click="dialogVisible = false">取消</el-button>
-                          <el-button type="primary" @click="newPage">立即创建</el-button>
-                      </span>
-                    </template>
-                  </el-dialog>
                 </el-menu>
               </el-drawer>
             </el-col>
@@ -121,19 +116,22 @@ export default {
     return {
       project_id: '',
       file_id: '',
-      page_index: 1,
       page_name: '',
       drawer: false,
       dialogVisible: false,
       allPages: [],
-      pageNum: 4,
-      newone:{
-        name: "",
-        x: "",
-        y: ""
-      },
+      pageNum: 1,
+      newname: '',
+      activeIndex: '1',
     }
   },
+  created(){
+    this.file_id = this.$store.state.file_id;
+    console.log(this.file_id);
+    this.getAllPages(1);
+    console.log('hi');
+  },
+
   methods: {
     quit() {
       //ElMessage.success('即将回到工作空间');
@@ -142,17 +140,55 @@ export default {
         this.$router.go(-1);
       }, 0);
     },
-    getAllPages(){
-      this.$http({
-        method:'post',
-        url:'/file/page/get',
-      })
+    rename(){
+      if(this.newname == '' || this.newname == null || this.newname == undefined){
+        ElMessage.warning("新标题不能为空")
+      }else{
+        this.$http
+            .post('/file/page/rename', {
+              prototype_id: this.file_id,
+              page_name: this.newname,
+              page_index: this.page_index,
+            })
+            .then(res =>{
+              console.log(res.data.code);
+              console.log(res.data.data);
+              switch (res.data.code){
+                case 200:
+                  this.getAllPages(this.page_index);
+                  ElMessage.success("重命名成功!");
+                  this.newname = '';
+                  this.dialogVisible = false;
+                  break;
+                case 500:
+                  ElMessage.error(res.data.message);
+                  break;
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            })
+      }
+    },
+    getAllPages(index){
+      console.log(this.$store.state.file_id),
+      this.$http
+          .post('/file/page/get', {
+            prototype_id: this.$store.state.file_id,
+            team_id: this.team_id
+          })
           .then(res =>{
             console.log(res.data);
+            console.log(res.data.data.length);
+            console.log(res.data.data[0].page_name);
             switch (res.data.code) {
               case 200:
                 this.allPages = res.data.data;
                 this.pageNum = this.allPages.length;
+                this.activeIndex = index;
+                this.page_name = res.data.data[index-1].page_name;
+                console.log(this.allPages.length);
+                console.log(this.allPages[0].page_name);
                 break;
             }
           })
@@ -163,34 +199,26 @@ export default {
 
     newPage(){
       var id = this.$store.state.user.id;
-      if(this.newone.name == undefined || this.newone.name == '' || this.newone.name == null){
-        ElMessage.warning('请输入新页面的名称');
-      }else if(this.newone.x == undefined || this.newone.x == '' || this.newone.x == null){
-        ElMessage.warning('请输入画布大小');
-      }else if(this.newone.y == undefined || this.newone.y == '' || this.newone.y == null){
-        ElMessage.warning('请输入画布大小');
-      } else if(id == undefined || id == null || id == ''){
+      if(id == undefined || id == null || id == ''){
         ElMessage.warning('请先登录');
       }
-      else{
+      else {
         this.$http
             .post("/file/page/new",
                 {
-                  page_file_id: this.file_id,
-                  page_name: this.newone.name,
+                  prototype_id: this.file_id,
+                  // page_name: this.newone.name,
                 })
-            .then(res =>{
+            .then(res => {
               console.log(res.data.code);
               switch (res.data.code) {
                 case 200:
-                  this.getAllPages();
-                  this.page_index = res.data.data.page_index;
-                  this.page_name = res.data.data.page_name;
+                  this.getAllPages(res.data.data.page_index);
                   ElMessage.success('创建成功！');
-                  this.newone.name = '';
-                  this.newone.x = '';
-                  this.newone.y = '';
-                  this.dialogVisible = false;
+                  // this.newone.name = '';
+                  // this.newone.x = '';
+                  // this.newone.y = '';
+                  // this.dialogVisible = false;
                   break;
                 case 500:
                   ElMessage.error(res.data.message);
@@ -198,21 +226,18 @@ export default {
                   break;
               }
             })
-
       }
-    },
-
-    created(){
-      this.file_id = this.$store.state.file_id;
-      console.log(this.$store.state.file_id);
-      this.getAllPages();
-      this.page_index = 1;
-      this.page_name = this.allPages[0].page_name;
     },
     toggle(page){
       this.page_name = page.page_name;
-      this.page_index = page.page_index;
+      this.activeIndex = page.page_index;
+      console.log("toggle");
+      console.log(this.activeIndex);
       // 标题和内容更改
+    },
+    handleSelect(key) {
+      console.log(this.activeIndex)
+      console.log(key);
     },
   },
 }
@@ -263,13 +288,20 @@ export default {
   font-size: 20px;
   margin-top: 15px;
 }
+.edit-icon {
+  font-size: 20px;
+}
+.edit-icon :hover {
+  color: #999999;
+}
 .icon {
   margin: 0 0 10px 0;
 }
 .drawer-btn {
   float: right;
-  margin: 10px 0 0 0;
+  margin: 15px 0 0 0;
   box-shadow: 3px 3px 10px #859dda;
+  border-radius: 30px;
 }
 .mainPane {
   margin: 0 0 0 10px;
@@ -281,5 +313,8 @@ export default {
 .quit{
   line-height: 50px;
   font-size: 15px;
+}
+.button2 .el-button{
+  color: white;
 }
 </style>
