@@ -8,8 +8,7 @@
             <el-aside width="200px">
                 <el-menu router
                     :default-active="activePath"
-                    class="el-menu-vertical-demo"
-                    background-color="rgba(250, 250, 250, 0.5)"
+                    class="menu"
                     @open="handleOpen"
                     @close="handleClose"
                     style="height:100vh;"
@@ -72,6 +71,13 @@ export default {
 </script>
 
 <style scoped>
+.menu {
+  /*background-color: rgba(179, 186, 197, 0.5);*/
+  /*background-color: rgba(101, 106, 129, 0.3);*/
+  background-color: rgba(250, 250, 250, 0.6);
+
+  /*background-color: rgba(133, 137, 218, 0.3);*/
+}
 .project {
   background-image: url("../../assets/images/bg.jpg");
   background-repeat: repeat-y;
