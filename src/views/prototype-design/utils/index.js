@@ -25,6 +25,7 @@ export function findComponentPathById(array, id) {
     }
     let componentPath = []
     const component = findComponent(array, true)
+    console.log("Path inside function:", componentPath)
     return { path: componentPath, component }
 }
 

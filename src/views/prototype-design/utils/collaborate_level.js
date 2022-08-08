@@ -118,9 +118,12 @@ export function deleteCollaborateComponent(application, componentJSON){
  */
 export function level_syncComponentTransforms(application, componentJSON, isLock=true){
     let newValues = JSON.parse(componentJSON)
-    newValues['components'].map((newValue) => {
+    newValues.map((newValue) => {
         // 根据实时协作传回的id，找到组件存放的path
         let localPath = findComponentPathById(application.controls, newValue.id)
+        localPath = localPath.path
+        console.log(typeof localPath)
+
         let newControls = updateTreeIn(application.controls, localPath, (item) => {
             // 更新所有需要实时同步的属性
             monitorTransforms.map((key) => {
@@ -235,7 +238,9 @@ export function level_getCollaboratePrototype(application, file_id){
                     // 本地对应的所有层次元素都需要上锁
                     let localCurrentComponent = findComponent(application.controls,
                         (item) => {return item.id === componentServerSide.id})
+                    console.log("Get local current component:", localCurrentComponent)
                     let rootComponent = findRootComponent(application, localCurrentComponent)
+                    console.log("Root component:", rootComponent)
                     // 从根元素开始一路向下锁
                     lockComponents(application, rootComponent.id)
                     // 再同步变化
@@ -293,4 +298,10 @@ export function level_deleteCollaborateComponent(application, file_id, component
     }else{
         return -1
     }
+}
+
+
+// eslint-disable-next-line no-unused-vars
+export function level_switchPage(application, newPageIndex){
+
 }
