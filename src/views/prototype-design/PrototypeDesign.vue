@@ -9,20 +9,20 @@
                     <img src="../../assets/images/logo-1.png" height="60">
                 </div>
             </el-col>
-            <el-col  :span="2">
-              <el-popconfirm
-                  confirm-button-text="Yes"
-                  cancel-button-text="No, Thanks"
-                  icon-color="#626AEF"
-                  title="确认退出编辑?"
-                  @confirm="quit()"
-              >
-                <template #reference>
-                  <el-button link icon="Back" class="quit">退出</el-button>
-                </template>
-              </el-popconfirm>
-            </el-col>
-            <el-col :span="18">
+<!--            <el-col  :span="2">-->
+<!--              <el-popconfirm-->
+<!--                  confirm-button-text="Yes"-->
+<!--                  cancel-button-text="No, Thanks"-->
+<!--                  icon-color="#626AEF"-->
+<!--                  title="确认退出编辑?"-->
+<!--                  @confirm="quit()"-->
+<!--              >-->
+<!--                <template #reference>-->
+<!--                  <el-button link icon="Back" class="quit">退出</el-button>-->
+<!--                </template>-->
+<!--              </el-popconfirm>-->
+<!--            </el-col>-->
+            <el-col :span="22">
               <p class="name">
                 {{this.page_name}}
                 <el-icon class="edit-icon" @click="dialogVisible=true"><Edit></Edit></el-icon>
@@ -55,7 +55,7 @@
                 </template>
               </el-dialog>
             </el-col>
-            <el-col :span="3">
+            <el-col :span="1">
               <el-button
                   circle
                   class="drawer-btn"
