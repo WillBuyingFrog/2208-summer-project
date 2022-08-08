@@ -591,7 +591,7 @@ export default {
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            this.getTrashProject();
+                            this.allproject = [];
                             ElMessage.success(res.data.message);
                             break;
                         case 500:
