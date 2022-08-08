@@ -8,8 +8,6 @@ export const getSnapShot = async (elementId) => {
         useCORS: true
     })
     canvas.toBlob(function(blob) {
-        //var newImg = document.createElement("img");
-           
             let binaryData = [];
             binaryData.push(blob);
             let url = window.URL.createObjectURL(new Blob(binaryData))
