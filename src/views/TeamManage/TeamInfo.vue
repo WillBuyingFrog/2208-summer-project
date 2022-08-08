@@ -66,7 +66,8 @@
                         <el-icon><user /></el-icon>简介
                       </div>
                     </template>
-                    {{info}}
+                    <span v-if="info != ''">{{info}}</span>
+                    <span v-else>暂无简介</span>
                   </el-descriptions-item>
                 </el-descriptions>
                 <div v-if="identity!='0'" class="button1">
@@ -289,5 +290,11 @@ export default {
 }
 .button1 .el-button{
     color: white;
+}
+</style>
+
+<style>
+.hp-fill .el-menu-item.is-active{
+  color: #859dda;
 }
 </style>

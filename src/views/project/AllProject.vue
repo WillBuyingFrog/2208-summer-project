@@ -771,6 +771,13 @@ export default {
 .allproject .button2 .el-button{
     color: white;
 }
+.allproject .el-radio__input.is-checked .el-radio__inner{
+  border-color: #82b38c;
+  background-color: #82b38c;
+}
+.allproject .el-radio__input.is-checked+.el-radio__label {
+  color: #82b38c;
+}
 </style>
 
 

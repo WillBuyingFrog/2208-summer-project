@@ -37,9 +37,9 @@
                             <el-radio :label="6">管理员</el-radio>
                             <el-radio :label="9">普通成员</el-radio>
                         </el-radio-group>   
-                        <div>
-                          <el-button v-if="identity=='2'" type="primary" icon="CirclePlus" class="add"  disabled>邀请成员</el-button>
-                          <el-button v-else type="primary" icon="CirclePlus" class="add" @click="dialogVisible = true">邀请成员</el-button>
+                        <div class="button1">
+                          <el-button v-if="identity=='2'" color="#859dda" icon="CirclePlus" class="add"  disabled>邀请成员</el-button>
+                          <el-button v-else color="#859dda" icon="CirclePlus" class="add" @click="dialogVisible = true">邀请成员</el-button>
                         </div>
                         <div v-if="identity !='0'">
                           <el-popconfirm title="确认要离开该团队吗" @confirm="leaveTeam()">
@@ -91,8 +91,8 @@
                                 <el-input v-model="invite"  style="width: 200px;">
                                 </el-input>
                               </el-form-item>
-                              <el-form-item>
-                                <el-button type="primary" @click="addMember()">确定</el-button>
+                              <el-form-item class="button1">
+                                <el-button color="#859dda" @click="addMember()">确定</el-button>
                               </el-form-item>
                             </el-form>
                         </el-dialog>
@@ -173,14 +173,14 @@
                               disabled
                               style="border-radius: 7px;height: 27px;"
                               size="small"
-                              type="primary">
+                              color="#859dda">
                               编辑
                             </el-button>
                             <el-button
                               v-else
                               style="border-radius: 7px;height: 27px;"
                               size="small"
-                              type="primary">
+                              color="#859dda">
                               编辑
                             </el-button>
                             </template>
@@ -467,10 +467,22 @@ export default {
     width: 800px;
     margin-top: 80px;
   }
-
+.button1 .el-button{
+    color: white;
+}
 </style>
 <style>
 .el-table .cell{
   padding: 0 0;
+}
+.hp-fill .el-radio__input.is-checked+.el-radio__label {
+  color: #859dda;
+}
+.hp-fill .el-radio__input.is-checked .el-radio__inner{
+  border-color: #859dda;
+  background-color: #859dda;
+}
+.hp-fill .el-menu-item.is-active{
+  color: #859dda;
 }
 </style>
