@@ -2,25 +2,84 @@
     <div>
     <div class="newfile"><el-button type="primary" @click="dialogVisible = true">+新建</el-button></div>
     <div class="clear"></div>
+    <!-- 新建原型表单 -->
     <el-dialog
         v-model="dialogVisible"
+        width="60%">
+        <template #header>
+            <div class="card-header">
+                <span class="title" style="margin-left: 10px; color: black">
+                    <el-icon ><EditPen /></el-icon>新建原型
+                </span>
+            <div class="clear"></div>
+            </div>
+                </template>
+        <!-- 新建原型表单 -->
+        <el-form :model="newone" label-width="80px" v-if="fileType == 1">
+            <el-form-item label="原型名称">
+                <el-input v-model="newone.name" style="width: 400px;margin-left:15px"></el-input>
+            </el-form-item>
+            <el-form-item label="基础样式">
+                <div class="paneChoose" v-for="(item, index) in paneList" :class="{'active':currentPane==index}" @click="choosePane(index)" :key="index">
+                    <img class="paneimage" :src="item.imgsrc">
+                    <!-- index < 3 -->
+                    <div class="sub" v-if="index < 3">
+                        <el-popover
+                            placement="bottom"
+                            :width="330"
+                            trigger="click">
+                            <template #reference>
+                                <el-button link>{{item.subName[item.chosen]}}<el-icon><CaretBottom /></el-icon></el-button>
+                            </template>
+                            <el-table
+                                :data="item.subName"
+                                style="width: 100%;"
+                                :show-header="false"
+                                :row-class-name="rowClassName"
+                                @row-click="(row,column,e)=>changeChosen(row,column,e,item)">
+                                <el-table-column>
+                                    <template #default="scope">
+                                        <!-- -->
+                                        {{item.subName[scope.$index] + '('+ item.width[scope.$index] + 'x' + item.height[scope.$index] +')'}}
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-popover>
+                    </div>
+                    <!-- index = 3 -->
+                    <div v-if="index == 3">自定义</div>
+                    <div v-if="index < 3" class="bottom">
+                        {{item.width[item.chosen] + ' x ' + item.height[item.chosen]}}
+                    </div>
+                    <div v-else class="bottom">
+                        <el-input style="width:45px;margin-right:4px" size="small" v-model="newone.w" placeholder="宽"></el-input>
+                        <span> x </span>
+                        <el-input style="width:45px;margin-left:4px" size="small" v-model="newone.h" placeholder="高"></el-input>
+                    </div>
+                </div> 
+            </el-form-item>
+        </el-form>
+        <template #footer>
+        <span class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <span class="button1" style="margin-left:20px"><el-button @click="newFile" color="#859dda">立即创建</el-button></span>
+        </span>
+        </template>
+    </el-dialog>
+    <!-- 新建文档表单 -->
+    <el-dialog
+        v-model="dialogVisible2"
         width="35%">
         <template #header>
                     <div class="card-header">
-                        <span class="title" v-if="fileType == 1" style="margin-left: 10px; color: black">
-                            <el-icon ><EditPen /></el-icon>新建原型
-                        </span>
-                        <span class="title" v-if="fileType == 0" style="margin-left: 10px; color: black">
+                        <span class="title" style="margin-left: 10px; color: black">
                             <el-icon><Document /></el-icon>新建文档
-                        </span>
-                        <span class="title" v-if="fileType == 2" style="margin-left: 10px; color: black">
-                            <el-icon><Picture /></el-icon>新建图
                         </span>
                     <div class="clear"></div>
                     </div>
-                </template>
-        <el-form :model="newone" label-width="80px">
-            <el-form-item label="文件名称">
+                </template>       
+         <el-form :model="newone" label-width="80px" v-if="fileType == 0">
+            <el-form-item label="文档名称">
                 <el-input v-model="newone.name"></el-input>
             </el-form-item>
         </el-form>
@@ -69,7 +128,7 @@
                         <el-icon v-if="fileType == 2"><Picture /></el-icon>
                         {{file.file_name}}
                     </span>
-                    <el-button size="small" type="primary" @click="editFile(file.file_id, file.file_name)">编辑</el-button>
+                    <el-button color="#859dda" @click="editFile(file.file_id, file.file_name)">编辑</el-button>
                     <el-button size="small" type="primary" plain @click="openRename(file.file_id)">重命名</el-button>
                     <el-popconfirm title="确定要删除此文件?" @confirm="deleteFile(file.file_id)">
                         <template #reference>
@@ -132,6 +191,46 @@ export default {
     name: "projectFile",
     data() {
         return {
+            paneList: [
+                {
+                    name: 'phone',
+                    subName: ['iPhone 13 Pro Max', 'iPhone 13 Pro/13', 
+                    'iPhone 11 Pro/X', 'iPhone 11/11 Pro Max', 'HUAWEI P40/小米CC9',
+                    'HUAWEI Mate 40'],
+                    imgsrc: require('../../assets/images/phone.jpg'),
+                    width: ['428', '390', '375', '414 ','360', '360',],
+                    height: ['926', '844', '812', '896', '780','792',],
+                    chosenName: 'iPhone 13 Pro Max',
+                    chosen: 0,
+                },
+                {
+                    name: 'web',
+                    subName: ['网页', '智能电视', 'MacBook Pro', 'iMac'],
+                    imgsrc: require('../../assets/images/web.png'),
+                    width: ['1440', '1920', '1440 ','1280'],
+                    height: ['1204', '1080', '900', '720'],
+                    chosenName: '网页',
+                    chosen: 0,
+                },
+                {
+                    name: 'pad',
+                    subName: ['iPad mini', 'iPad Pro 11', 'iPad Pro 12.9'],
+                    imgsrc: require('../../assets/images/pad.png'),
+                    height: ['768', '834', '1024'],
+                    width: ['1024', '1194', '1366'],
+                    chosenName: 'iPad mini',
+                    chosen: 0,
+                },
+                {
+                    name:'自定义',
+                    imgsrc: require('../../assets/images/add.jpg'),
+                }
+
+            ],
+            pwidth: '',
+            pheight: '',
+            currentPane: 1,//当前被选中的画布尺寸选项,index不等时 令=index
+            isActive: false,//index相等时,判断isActive是否为true，如果为true ，isActive为false，如果是false则为true
             team_id: '',
             project_name: '',
             project_id: '',
@@ -144,6 +243,8 @@ export default {
             nowfid: '',
             newone:{
                 name: "",
+                w: '1440',
+                h: '1204'
             }
         }
     },
@@ -163,6 +264,15 @@ export default {
         this.getFile();
     },
     methods: {
+        choosePane(index){
+            if(this.currentPane == index){
+                this.isActive = !this.isActive;
+            }
+            else{
+                this.isActive = true;
+            }
+            this.currentPane = index;
+        },
         getFile(){
             this.$http
                 .post('/file/viewType', {
@@ -325,7 +435,21 @@ export default {
                 this.$router.push('/documentEdit');
             }
 
-        }
+        },
+        changeChosen(row, column, e, item){
+            let i;
+            i = column;
+            i = e;
+            for(i = 0; i < item.subName.length; i++){
+                if(item.subName[i] == row){
+                    item.chosen = i;
+                    break;
+                }
+            }
+            this.newone.w = item.width[item.chosen];
+            this.newone.h = item.height[item.chosen];
+            console.log(item.subName[item.chosen]);
+        },
     }
 
 }
@@ -359,8 +483,8 @@ export default {
     margin-top:20px;
 }
 .el-form {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 12px;
+    padding-right: 12px;
     padding-top:5px
 }
 .el-row{
@@ -381,5 +505,23 @@ export default {
 .card-header{
     border-bottom: 1px solid #D3D3D3;
     padding-bottom: 6px;
+}
+.paneChoose {
+    margin-left: 15px;
+    margin-right: 10px;
+    width: 160px;
+    height: 150px;
+    border-radius: 1ch;
+    border: 2px solid #D3D3D3;
+}
+.active {
+    border-color: #859dda;
+}
+.paneimage{
+    height: 50px;
+    margin-top:25px
+}
+.button1 .el-button{
+    color: white;
 }
 </style>
