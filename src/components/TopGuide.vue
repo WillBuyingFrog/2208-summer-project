@@ -1,5 +1,6 @@
 <template >
     <div style="background-color:rgba(32,80,111,0.6);height:60px">
+<!--      background-color:rgba(133, 180, 218, 0.3)-->
         <el-row >
             <el-col :span="2">
             <span style="float:left;margin-left: 30px;"> <img src="../assets/images/logo-1.png" height="58"/></span>    
@@ -201,7 +202,7 @@ export default {
     this.getMessage();
   },
    computed:{
-    activePath(){ 
+    activePath(){
       if(this.$route.path.split('/')[1] == 'team')
         return '/team'
       else if(this.$route.path.split('/')[1] == 'documentCenter')

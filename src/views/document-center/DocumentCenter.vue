@@ -7,7 +7,7 @@
       <el-container>
         <el-aside
             width="300px"
-            style="background-color: rgba(250, 250, 250, 0.5);"
+            style="background-color: rgba(250, 250, 250, 0.6);"
         >
           <span></span>
           <el-icon
