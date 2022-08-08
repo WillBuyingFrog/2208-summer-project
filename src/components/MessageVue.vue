@@ -1,26 +1,10 @@
 <template >
-    <div style="background-color:rgba(250, 250, 250, 0.6);height:60px">
+    <div style="background-color:rgba(250, 250, 250, 0.6);">
         <el-row >
-            <el-col :span="2">
+            <el-col :span="4">
             <span style="float:left;margin-left: 30px;"> <img src="../assets/images/logo-1.png" height="58"/></span>    
             </el-col>
-            <el-col :span="2" >
-              <div style="margin-top:14px">
-                <el-button text @click="this.$router.push('/workspace')" 
-                  style="font-size:15.5px;padding-left:7px;padding-right:7px;">工作空间</el-button>
-                <el-popover
-                    placement="bottom"
-                    :width="330"
-                    trigger="click">
-                  <template #reference>
-                    <el-button text icon="DCaret" 
-                      style=" margin-left:0; padding-left:7px; padding-right:7px"></el-button>
-                  </template>
-                  <TeamList></TeamList>
-                </el-popover>
-              </div>            
-            </el-col>
-            <el-col :span="12" :offset="4">
+            <el-col :span="6">
                 <el-menu
                     :default-active="activePath"
                     class="el-menu-demo"
@@ -35,15 +19,23 @@
                         <el-icon><DataLine/></el-icon>
                         <span style="font-size: 16px;">项目管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/team" style="margin-left:70px">
+                    <el-menu-item index="/team" style="margin-left:80px">
                         <el-icon><Coordinate/></el-icon>
                         <span style="font-size: 16px;">团队管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/documentCenter" style="margin-left:70px">
-                        <el-icon><DocumentCopy/></el-icon>
-                        <span style="font-size: 16px;">文档中心</span>
-                    </el-menu-item>
                 </el-menu>
+            </el-col>
+            <el-col :span="3" :offset="7">
+                <el-menu
+                    class="space"
+                    style="background:unset;"
+                    mode="horizontal"
+                    router>
+                    <el-menu-item index="/workspace" style="padding:0 0 ;">
+                        <el-icon><Menu/></el-icon>
+                        <span style="font-size: 16px;">工作空间</span>
+                    </el-menu-item>
+                </el-menu>    
             </el-col>
             <el-col :span="1" >
               <el-popover
@@ -79,10 +71,10 @@
                      <el-scrollbar >
                     <el-table :data="invite_filter()" style="width: 100%" v-if="status=='0'" :show-header="false">
                       <el-table-column
-                        width="45">
+                        width="40">
                         <template #default="scope">
                           <el-checkbox v-if="scope.row._read == false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
-                          <el-tag v-else  type="info" size="small">已读</el-tag>
+                          <el-checkbox v-else v-model="scope.row._read" disabled></el-checkbox>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -104,10 +96,10 @@
                     </el-table>
                     <el-table :data="notice_filter()" style="width: 100%" v-else :show-header="false">
                       <el-table-column
-                        width="45">
+                        width="40">
                         <template #default="scope">
-                          <el-checkbox v-if="scope.row._read == false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
-                          <el-tag v-else  type="info" size="small">已读</el-tag>
+                          <el-checkbox v-if="scope.row._read==false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
+                          <el-checkbox v-else v-model="scope.row._read" disabled></el-checkbox>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -161,11 +153,10 @@
 
 <script>
 import UserInfo from "@/components/UserInfo.vue";
-import TeamList from "@/components/TeamList.vue";
 import { ElMessage } from "element-plus";
 import 'element-plus/dist/index.css'
 export default {
-  components: {UserInfo,TeamList},
+  components: {UserInfo},
   data(){
     return{
         avatarColor:'',
@@ -186,7 +177,6 @@ export default {
         notice: [],
         invite:[],
         unreadNumber:'0',
-        sign:'0'
     }
   },
   created(){
@@ -199,15 +189,13 @@ export default {
    computed:{
     activePath(){ 
       if(this.$route.path.split('/')[1] == 'team')
-        return '/team'
-      else if(this.$route.path.split('/')[1] == 'documentCenter')
-        return '/documentCenter'
+      return '/team' 
       else
-        return '/allproject'
+      return '/allproject'
     }
   },
   methods: {
-    timeago (time) {
+      timeago (time) {
       var data = new Date(time);
       var dateTimeStamp = data.getTime()
       var minute = 1000 * 60;      //把分，时，天，周，半个月，一个月用毫秒表示
@@ -247,6 +235,7 @@ export default {
       }
       return result
     },
+
     invite_filter(){
         var data=[];
         if(this.value == '0')
@@ -303,9 +292,6 @@ export default {
         })
     },
     readed(message_id){
-      this.sign ++;
-      if(this.sign %2 == 0)
-      return
         const self = this;
         self.$http({
           method:'post',
@@ -315,7 +301,7 @@ export default {
         },
         }).then(res=>{
           console.log(res.data);
-          this.unreadNumber --;
+          this.unreadNumber--;
         })
     },
     readedAll(){
@@ -362,8 +348,7 @@ export default {
           console.log(res.data);
           ElMessage.success("成功加入团队")
         })
-    },
-
+    }
   }
 }
 </script>

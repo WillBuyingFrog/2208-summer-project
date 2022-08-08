@@ -26,23 +26,15 @@
           <el-main>
               <el-card class="card" body-style="padding:0px">
                 <div class="title">
-                  <el-row style="margin-top: 30px;">
-                    <el-col :span="4">
-                    <el-row>
-                      <span style="font-size:20px;margin-left:40px; font-weight:700;">团 队</span>
-                    </el-row>
-                    <el-row>
-                      <span style="font-size:20px;margin-left:50px; font-weight:700;">名 称</span>
-                    </el-row>
+                  <el-row >
+                    <el-col :span="6" style="height: 80px;">
+                      <span style="font-size:20px;font-weight:700;line-height: 80px;">团 队 名 称</span>
                     </el-col>
-                    <el-col :span="20">
-                      <span style="font-size:18px;float:left;margin-top:15px;font-weight:600;">{{teamName}}</span>
+                    <el-col :span="18" style="height: 80px;" >
+                      <span style="font-size:18px;float:left;line-height: 80px;font-weight:600;">{{teamName}}</span>
                     </el-col>
                   </el-row>
                 </div>
-                <template>
-  <el-skeleton :rows="5" />
-</template>
                 <el-descriptions direction="vertical" :column="2" border class="form">
                   <el-descriptions-item  :span="2">
                     <template #label>
@@ -80,7 +72,7 @@
                 <div v-if="identity!='0'">
                   <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
                 </div>
-                <div >
+                <div v-else>
                   <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
                   <el-popconfirm title="确认要解散该团队吗？" @confirm="deleteTeam()">
                     <template #reference>
@@ -163,7 +155,7 @@ export default {
         method:'post',
         url:'/team/change/name',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           new_name:self.newName
         },
       }).then(res=>{
@@ -178,7 +170,7 @@ export default {
         method:'post',
         url:'/team/change/info',
         params: {
-          team_id: this.$store.state.teamid,
+          team_id: this.$store.state.team_id,
           new_info:self.newInfo
         },
       }).then(res=>{
@@ -193,7 +185,7 @@ export default {
         method:'post',
         url:'/team/get/single',
         params: {
-          team_id:  this.$store.state.teamid,
+          team_id:  this.$store.state.team_id,
         },
       }).then(res=>{
         this.teamName = res.data.data.team_name
@@ -211,7 +203,7 @@ export default {
         method:'post',
         url:'/team/member/get',
         params: {
-          team_id: this.$store.state.teamid
+          team_id: this.$store.state.team_id
         },
       }).then(res=>{
         tableData = res.data.data
@@ -227,7 +219,6 @@ export default {
             break;
           }
         }
-        console.log('身份'+this.identity)
       })
     },
     deleteTeam(){
@@ -236,7 +227,7 @@ export default {
         method:'post',
         url:'/team/remove',
         params: {
-          team_id: this.$store.state.teamid
+          team_id: this.$store.state.team_id
         },
       }).then(res=>{
         console.log(res.data);
@@ -280,7 +271,6 @@ export default {
   .title{
     height: 80px;
     border-bottom:1px solid rgb(230, 230, 230) ;
-
   }
   .form{
     border-radius: 60px;

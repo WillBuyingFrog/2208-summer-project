@@ -156,7 +156,7 @@ export default {
         }
     },
     created(){
-        this.team_id = this.$store.state.teamid;
+        this.team_id = this.$store.state.team_id;
         this.project_name = this.$store.state.project_name;
         this.project_id = this.$store.state.project_id;
         console.log(this.fileType);
@@ -316,7 +316,8 @@ export default {
         },
         editFile(id, name){
             this.$store.state.file_name = name;
-            this.$store.state.file_id = id;
+          this.$store.state.file_id = id;
+            console.log(this.$store.state.file_id);
             if(this.fileType == 1){
                 this.$router.push('/prototypeDesign');
             }
@@ -346,8 +347,8 @@ export default {
     margin-top: 20px;
     padding-bottom: 5px;
     font-size: 20px;
-    color: rgb(64,158,255);
-    border-bottom:4px solid  rgb(64,158,255);
+    color: #859dda;
+    border-bottom:4px solid  #859dda;
     font-weight: 600;
     float: left;
     }

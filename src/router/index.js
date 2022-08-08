@@ -7,6 +7,11 @@ const routes = [
         component: () => import('../views/homepage/HomePage')
     },
     {
+        path: '/documentCenter',
+        name: 'documentCenter',
+        component: () => import('../views/document-center/DocumentCenter')
+    },
+    {
         path: '/try',
         name: 'lightbulb',
         component: () => import('../components/TestComponent')
@@ -94,6 +99,11 @@ const routes = [
         path: '/dtest',
         name: 'TextEditorTest',
         component: () => import('../components/TipTapDemo')
+    },
+    {
+        path: '/test',
+        component: () => import('../views/TeamManage/TestVue.vue')
+        
     }
 ]
 
