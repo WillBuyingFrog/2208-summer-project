@@ -122,7 +122,6 @@ export function level_syncComponentTransforms(application, componentJSON, isLock
         // 根据实时协作传回的id，找到组件存放的path
         let localPath = findComponentPathById(application.controls, newValue.id)
         localPath = localPath.path
-        console.log(typeof localPath)
 
         let newControls = updateTreeIn(application.controls, localPath, (item) => {
             // 更新所有需要实时同步的属性

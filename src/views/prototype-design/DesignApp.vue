@@ -422,6 +422,12 @@ export default {
     },
     handleUnselect() {
       if (!this.currentId) return
+      let realComponent = findComponent(this.controls, (item) => {return this.currentId === item.id})
+      realComponent.usedBy = '__none__'
+      realComponent.active = true
+      realComponent.resizable = true
+      realComponent.draggable = true
+      level_updateCollaborateComponent(this, this.currentPage.page_file_id, realComponent)
       this.updateControlStatus(false)
       this.clearCurrentComponent()
     },
