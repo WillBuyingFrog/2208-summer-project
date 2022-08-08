@@ -73,7 +73,7 @@
                   size="30%"
               >
                 <el-menu
-                    default-active="2"
+                    :default-active="1"
                     class="all-prototypes"
                     @open="handleOpen"
                     @close="handleClose"
@@ -87,43 +87,6 @@
                   <el-menu-item @click="newPage">
                     <el-icon><Plus /></el-icon>
                   </el-menu-item>
-<!--                  <el-dialog-->
-<!--                      v-model="dialogVisible"-->
-<!--                      width="35%">-->
-<!--                    <template #header>-->
-<!--                      <div class="card-header">-->
-<!--                        <span class="title" style="margin-left: 10px; color: black">-->
-<!--                            新页面-->
-<!--                        </span>-->
-<!--                        <div class="clear"></div>-->
-<!--                      </div>-->
-<!--                    </template>-->
-<!--                    <el-form :model="newone" label-width="80px">-->
-<!--                      <el-form-item label="页面标题">-->
-<!--                        <el-input v-model="newone.name"></el-input>-->
-<!--                      </el-form-item>-->
-<!--&lt;!&ndash;                      <el-form-item label="画布大小">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <el-input&ndash;&gt;-->
-<!--&lt;!&ndash;                            placeholder="宽度X"&ndash;&gt;-->
-<!--&lt;!&ndash;                            type="number"&ndash;&gt;-->
-<!--&lt;!&ndash;                            v-model="newone.x"&ndash;&gt;-->
-<!--&lt;!&ndash;                            style="width:80px;"&ndash;&gt;-->
-<!--&lt;!&ndash;                        ></el-input>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <el-input&ndash;&gt;-->
-<!--&lt;!&ndash;                            placeholder="高度Y"&ndash;&gt;-->
-<!--&lt;!&ndash;                            type="number"&ndash;&gt;-->
-<!--&lt;!&ndash;                            v-model="newone.y"&ndash;&gt;-->
-<!--&lt;!&ndash;                            style="width:80px;margin-left: 20px;"&ndash;&gt;-->
-<!--&lt;!&ndash;                        ></el-input>&ndash;&gt;-->
-<!--&lt;!&ndash;                      </el-form-item>&ndash;&gt;-->
-<!--                    </el-form>-->
-<!--                    <template #footer>-->
-<!--                      <span class="dialog-footer">-->
-<!--                          <el-button @click="dialogVisible = false">取消</el-button>-->
-<!--                          <el-button type="primary" @click="newPage">立即创建</el-button>-->
-<!--                      </span>-->
-<!--                    </template>-->
-<!--                  </el-dialog>-->
                 </el-menu>
               </el-drawer>
             </el-col>
@@ -175,6 +138,7 @@ export default {
         this.$router.go(-1);
       }, 0);
     },
+
     rename(){
       if(this.newname == '' || this.newname == null || this.newname == undefined){
         ElMessage.warning("新标题不能为空")
