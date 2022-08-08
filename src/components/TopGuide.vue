@@ -1,5 +1,5 @@
 <template >
-    <div style="background-color:rgba(32,80,111,0.6);height:60px">
+    <div style="background-color:rgba(32,80,111,0.6);height:60px" class="topguide">
 <!--      background-color:rgba(133, 180, 218, 0.3)-->
         <el-row >
             <el-col :span="2">
@@ -7,8 +7,10 @@
             </el-col>
             <el-col :span="2" >
               <div style="margin-top:14px">
+                <span class="work">
                 <el-button text @click="this.$router.push('/workspace')" 
                   style="font-size:15.5px;padding-left:7px;padding-right:7px; color:rgb(210,228,245)">工作空间</el-button>
+                </span>
                 <el-popover
                     placement="bottom"
                     :width="330"
@@ -130,7 +132,7 @@
                 </el-container>
                 <template #reference>
                   <el-badge :value="unreadNumber" class="item" style="margin-top:15px;">
-                    <el-button icon="ChatDotRound" @click="visible = !visible">消息</el-button>
+                    <el-button icon="ChatDotRound" @click="visible = !visible" color="rgba(250,250,250,0.6)">消息</el-button>
                   </el-badge>
                 </template>
               </el-popover>
@@ -162,6 +164,33 @@
     border: 0;
   }
   
+</style>
+
+<style>
+.topguide .el-menu-item:hover{
+  background-color: rgba(32,80,111,0.6) !important;
+}
+.topguide .el-button:hover{
+  background: rgba(32,80,111,0) !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #ffffff;
+}
+.topguide .el-button:focus{
+  background: rgba(32,80,111,0) !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #ffffff;
+}
+.topguide .el-tabs__item:hover {
+  color: #859dda;
+  border-right: 2px solid #859dda;
+}
+.topguide .el-tabs__item.is-active {
+  border-right: 2px solid #859dda !important;
+    color: #859dda;
+}
+.topguide .el-tabs__active-bar{
+    background-color: #859dda;
+}
 </style>
 
 <script>

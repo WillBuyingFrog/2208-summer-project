@@ -98,7 +98,7 @@
                 </el-container>
                 <template #reference>
                   <el-badge :value="unreadNumber" class="item" style="margin-top:15px;">
-                    <el-button icon="ChatDotRound" @click="visible = !visible">消息</el-button>
+                    <el-button icon="ChatDotRound" @click="visible = !visible" color="rgba(250,250,250,0.6)">消息</el-button>
                   </el-badge>
                 </template>
               </el-popover>
@@ -219,7 +219,7 @@
         <template #footer>
         <span class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newTeam">立即创建</el-button>
+            <span class="button2"><el-button color="#859dda" @click="newTeam">立即创建</el-button></span>
         </span>
         </template>
     </el-dialog>
@@ -569,6 +569,10 @@ html,body{
 .dialog-footer {
     float: calc();
 }
+.button2 .el-button{
+  color: white;
+  margin-left: 20px;
+}
 .title{
     width: 120px;
     margin-left: 50px;
@@ -641,6 +645,20 @@ html,body{
 .textitem:hover .front{
     transform: rotateY(180deg);
 
+}
+</style>
+
+<style>
+.workspace .el-tabs__item:hover {
+  color: #859dda;
+  border-right: 2px solid #859dda;
+}
+.workspace .el-tabs__item.is-active {
+  border-right: 2px solid #859dda !important;
+    color: #859dda;
+}
+.workspace .el-tabs__active-bar{
+    background-color: #859dda;
 }
 </style>
 

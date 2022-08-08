@@ -167,6 +167,7 @@
                               @click=" modifyAuthority(scope.row.username);">确认</el-button>
                             </div>
                             <template #reference>
+                              <span class="button1" style="margin-right:10px">
                               <el-button
                               v-if="(scope.row.username==this.$store.state.user.name)||
                               (identity == '1' && scope.row.authority=='leader' ) || identity == '2'"
@@ -183,6 +184,7 @@
                               color="#859dda">
                               编辑
                             </el-button>
+                            </span>
                             </template>
                           </el-popover>
                           <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)" >
