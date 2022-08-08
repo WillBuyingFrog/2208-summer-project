@@ -47,12 +47,13 @@
                     class="all-prototypes"
                     @open="handleOpen"
                     @close="handleClose"
+                    text-color="#000000"
                 >
                   <el-menu-item
                       v-for="page in allPages"
                       :key="page.page_index"
                       @click="toggle(page)"
-                  >{{page.name}}</el-menu-item>
+                  >{{page.page_name}}</el-menu-item>
                   <el-menu-item @click="dialogVisible = true">
                     <el-icon><Plus /></el-icon>
                   </el-menu-item>
@@ -126,13 +127,19 @@ export default {
       drawer: false,
       dialogVisible: false,
       allPages: [],
-      pageNum: 4,
+      pageNum: 1,
       newone:{
         name: "",
         x: "",
         y: ""
       },
     }
+  },
+  created(){
+    this.file_id = this.$store.state.file_id;
+    console.log(this.file_id);
+    this.getAllPages(1);
+    console.log('hi');
   },
   methods: {
     quit() {
@@ -142,17 +149,25 @@ export default {
         this.$router.go(-1);
       }, 0);
     },
-    getAllPages(){
-      this.$http({
-        method:'post',
-        url:'/file/page/get',
-      })
+    getAllPages(index){
+      console.log(this.$store.state.file_id),
+      this.$http
+          .post('/file/page/get', {
+            prototype_id: this.$store.state.file_id,
+            team_id: this.team_id
+          })
           .then(res =>{
             console.log(res.data);
+            console.log(res.data.data.length);
+            console.log(res.data.data[0].page_name);
             switch (res.data.code) {
               case 200:
                 this.allPages = res.data.data;
                 this.pageNum = this.allPages.length;
+                this.page_index = index;
+                this.page_name = res.data.data[index-1].page_name;
+                console.log(this.allPages.length);
+                console.log(this.allPages[0].page_name);
                 break;
             }
           })
@@ -176,16 +191,14 @@ export default {
         this.$http
             .post("/file/page/new",
                 {
-                  page_file_id: this.file_id,
+                  prototype_id: this.file_id,
                   page_name: this.newone.name,
                 })
             .then(res =>{
               console.log(res.data.code);
               switch (res.data.code) {
                 case 200:
-                  this.getAllPages();
-                  this.page_index = res.data.data.page_index;
-                  this.page_name = res.data.data.page_name;
+                  this.getAllPages(res.data.data.page_index);
                   ElMessage.success('创建成功！');
                   this.newone.name = '';
                   this.newone.x = '';
@@ -200,14 +213,6 @@ export default {
             })
 
       }
-    },
-
-    created(){
-      this.file_id = this.$store.state.file_id;
-      console.log(this.$store.state.file_id);
-      this.getAllPages();
-      this.page_index = 1;
-      this.page_name = this.allPages[0].page_name;
     },
     toggle(page){
       this.page_name = page.page_name;

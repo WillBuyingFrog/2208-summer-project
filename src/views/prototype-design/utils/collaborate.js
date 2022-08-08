@@ -134,7 +134,8 @@ export function enableComponent(application, componentId){
 export const sharedDocMap = new Map()
 
 export function getCollaboratePrototype(application, file_id){
-
+    return ;
+    // eslint-disable-next-line no-unreachable
     if(sharedDocMap.get(file_id)){
         // 已经创建了该file_id对应的房间
         return sharedDocMap.get(file_id)
@@ -182,6 +183,7 @@ export function getCollaboratePrototype(application, file_id){
         })
     })
 
+    // eslint-disable-next-line no-unreachable
     sharedDocMap.set(file_id, collaboratePrototypeConfig)
 
     return collaboratePrototypeConfig
