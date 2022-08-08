@@ -517,6 +517,7 @@ export default {
 </script>
 
 <style lang="less">
+@import "./libs/customComponents.css";
 .ds-app{
   display: flex;
   flex-direction: column;

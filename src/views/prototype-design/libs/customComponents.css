@@ -1,0 +1,14 @@
+.custom-bouncy-button{
+    box-shadow: rgb(24, 49, 83) 0 6px 0 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(24, 49, 83);
+    border-radius: 6px;
+    cursor: pointer;
+
+    height: 100%;
+    min-width: 60px;
+}
+.custom-bouncy-button:active{
+    box-shadow: rgb(24, 49, 83) 0 1px 0 0;
+    margin: 5px 0 0 0;
+}

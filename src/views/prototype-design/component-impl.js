@@ -1,6 +1,30 @@
 // 这里写出所有需要的component
 import EditorView from './editor-view'
 
+
+const El_Menu = {
+    props: {
+        params: {
+
+        }
+    }
+}
+
+const BouncyButton = {
+    props: {
+        params: {
+            default: () => ({
+
+            })
+        }
+    },
+    render(){
+        return (
+            <div class="custom-bouncy-button">{this.params.value}</div>
+        )
+    }
+}
+
 const Img = {
     props: {
         params: {
@@ -8,7 +32,10 @@ const Img = {
         },
     },
     render() {
-        return <img draggable="false" class="match-parent" src={this.params.url} />
+        return(
+                <img draggable="false" className="match-parent" src={this.params.url}/>
+            )
+
     },
 }
 const Label = {
@@ -105,4 +132,6 @@ export default {
     rect: Rect,
     label: Label,
     container: Container,
+    El_Menu: El_Menu,
+    BouncyButton: BouncyButton
 }
