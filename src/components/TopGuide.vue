@@ -8,14 +8,14 @@
             <el-col :span="2" >
               <div style="margin-top:14px">
                 <el-button text @click="this.$router.push('/workspace')" 
-                  style="font-size:15.5px;padding-left:7px;padding-right:7px; color:rgb(210,228,245)">工作空间</el-button>
+                  style="font-size:15.5px;padding-left:7px;padding-right:7px; color:rgb(210,228,240)">工作空间</el-button>
                 <el-popover
                     placement="bottom"
                     :width="330"
                     trigger="click">
                   <template #reference>
                     <el-button text icon="DCaret" 
-                      style=" margin-left:0; padding-left:7px; padding-right:7px;color:rgb(210,228,245)"></el-button>
+                      style=" margin-left:0; padding-left:7px; padding-right:7px;color:rgb(210,228,240)"></el-button>
                   </template>
                   <TeamList></TeamList>
                 </el-popover>
@@ -28,7 +28,7 @@
                     style="background:unset"
                     mode="horizontal"
                     :ellipsis="false"
-                    text-color="rgb(210,228,245)"
+                    text-color="rgb(210,228,240)"
                     active-text-color="#ffffff"
                     @select="handleSelect"
                     router>
@@ -130,7 +130,7 @@
                 </el-container>
                 <template #reference>
                   <el-badge :value="unreadNumber" class="item" style="margin-top:15px;">
-                    <el-button icon="ChatDotRound" @click="visible = !visible">消息</el-button>
+                    <el-button icon="ChatDotRound" @click="visible = !visible" style="messageBtn">消息</el-button>
                   </el-badge>
                 </template>
               </el-popover>
@@ -160,6 +160,10 @@
   }
   .el-menu{
     border: 0;
+  }
+  .messageBtn :hover{
+    background-color: #dbe6f0;
+    color: #7fa9cc;
   }
   
 </style>

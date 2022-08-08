@@ -20,8 +20,10 @@
       <el-table-column>
         <template #default="scope">
             <el-button v-if="scope.row.team_id != this.$store.state.team_id" size="small"
-                @click="enterTeam(scope.row.team_id)">进入团队</el-button>
-            <el-tag v-else size="large">当前团队</el-tag>
+                @click="enterTeam(scope.row.team_id)"
+                color="#88bcdd"
+                style="height:27px;color:white">进入团队</el-button>
+            <el-tag v-else size="large" color="#b6cee2" effect="dark" style="border:0;">当前团队</el-tag>
         </template>
       </el-table-column>
     </el-table>
