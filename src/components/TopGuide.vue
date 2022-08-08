@@ -1,5 +1,5 @@
 <template >
-    <div style="background-color:rgba(250, 250, 250, 0.6);height:60px">
+    <div style="background-color:rgba(32,80,111,0.6);height:60px">
         <el-row >
             <el-col :span="2">
             <span style="float:left;margin-left: 30px;"> <img src="../assets/images/logo-1.png" height="58"/></span>    
@@ -7,14 +7,14 @@
             <el-col :span="2" >
               <div style="margin-top:14px">
                 <el-button text @click="this.$router.push('/workspace')" 
-                  style="font-size:15.5px;padding-left:7px;padding-right:7px;">工作空间</el-button>
+                  style="font-size:15.5px;padding-left:7px;padding-right:7px; color:rgb(210,228,245)">工作空间</el-button>
                 <el-popover
                     placement="bottom"
                     :width="330"
                     trigger="click">
                   <template #reference>
                     <el-button text icon="DCaret" 
-                      style=" margin-left:0; padding-left:7px; padding-right:7px"></el-button>
+                      style=" margin-left:0; padding-left:7px; padding-right:7px;color:rgb(210,228,245)"></el-button>
                   </template>
                   <TeamList></TeamList>
                 </el-popover>
@@ -27,8 +27,8 @@
                     style="background:unset"
                     mode="horizontal"
                     :ellipsis="false"
-                    text-color="#000000"
-                    active-text-color="#409EFF"
+                    text-color="rgb(210,228,245)"
+                    active-text-color="#ffffff"
                     @select="handleSelect"
                     router>
                     <el-menu-item index="/allproject">
@@ -157,6 +157,10 @@
   .space{
     border-bottom: 0;
   }
+  .el-menu{
+    border: 0;
+  }
+  
 </style>
 
 <script>
