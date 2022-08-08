@@ -237,3 +237,9 @@ export default {
 }
 
 </style>
+
+<style>
+.bg .el-menu-item.is-active{
+  color: #859dda;
+}
+</style>

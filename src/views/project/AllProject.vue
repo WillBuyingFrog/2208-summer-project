@@ -27,7 +27,11 @@
       <el-main>
         <el-row v-if="status==2 && allproject.length!=0">
         <div class="del" style="margin-left:30px;margin-bottom:20px">
-        <el-popconfirm title="确定要清空回收站?" @confirm="cleanTrash">
+        <el-popconfirm title="确定要清空回收站?" 
+            confirm-button-text="确定"
+            cancel-button-text="取消"
+            icon-color="#7fa9cc"
+            @confirm="cleanTrash">
             <template #reference>
                 <el-button type="danger">清空回收站</el-button>   
             </template>
@@ -87,7 +91,11 @@
                         <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
                         </div>
                         <span class="button1" v-if="status == 2">
-                            <el-popconfirm title="确定要恢复此项目?" @confirm="recover(project.project_name)">
+                            <el-popconfirm title="确定要恢复此项目?" 
+                                confirm-button-text="确定"
+                                cancel-button-text="取消"
+                                icon-color="#7fa9cc"
+                                @confirm="recover(project.project_name)">
                                 <template #reference>
                                     <el-button color="#82b38c">恢&nbsp;复</el-button>     
                                 </template>
@@ -130,21 +138,33 @@
                             <div class="button1" v-if="status == 0">
                                 <el-button color="#859dda" @click="starProject(project.project_name)" style="margin-right:-5px">收藏</el-button>
                                 <el-button @click="openRename(project.project_name)" color="#daad81">重命名</el-button>
-                                <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(project.project_name)">
+                                <el-popconfirm title="确定要删除此项目?" 
+                                    confirm-button-text="确定"
+                                    cancel-button-text="取消"
+                                    icon-color="#7fa9cc"
+                                    @confirm="deletePro(project.project_name)">
                                     <template #reference>
                                     <el-button type="danger" style="margin-left:-5px">删除</el-button> 
                                     </template>
                                 </el-popconfirm>
                             </div>  
                             <div class="button1" v-if="status == 1">
-                                <el-popconfirm title="确定取消收藏此项目?" @confirm="cancleStarProject(project.project_name)">
+                                <el-popconfirm title="确定取消收藏此项目?" 
+                                    confirm-button-text="确定"
+                                    cancel-button-text="取消"
+                                    icon-color="#7fa9cc"
+                                    @confirm="cancleStarProject(project.project_name)">
                                     <template #reference>
                                         <el-button color="#859dda">取消收藏</el-button>     
                                     </template>
                                 </el-popconfirm>
                             </div>
                             <div class="button1" v-if="status == 2" style="margin-top:30px">
-                                <el-popconfirm title="确定要恢复此项目?" @confirm="recover(project.project_name)">
+                                <el-popconfirm title="确定要恢复此项目?" 
+                                    confirm-button-text="确定"
+                                    cancel-button-text="取消"
+                                    icon-color="#7fa9cc"
+                                    @confirm="recover(project.project_name)">
                                     <template #reference>
                                         <el-button color="#82b38c">恢&nbsp;复</el-button>     
                                     </template>
@@ -755,21 +775,28 @@ export default {
 
 <style>
 .allproject .el-tabs__item:hover {
-  color: #859dda;
-  border-right: 2px solid #859dda;
+  color: #82b38c;
+  border-right: 2px solid #82b38c;
 }
 .allproject .el-tabs__item.is-active {
-  border-right: 2px solid #859dda !important;
-    color: #859dda;
+  border-right: 2px solid #82b38c !important;
+    color: #82b38c;
 }
 .allproject .el-tabs__active-bar{
-    background-color: #859dda;
+    background-color: #82b38c;
 }
 .allproject .button1 .el-button{
     color: white;
 }
 .allproject .button2 .el-button{
     color: white;
+}
+.allproject .el-radio__input.is-checked .el-radio__inner{
+  border-color: #82b38c;
+  background-color: #82b38c;
+}
+.allproject .el-radio__input.is-checked+.el-radio__label {
+  color: #82b38c;
 }
 </style>
 

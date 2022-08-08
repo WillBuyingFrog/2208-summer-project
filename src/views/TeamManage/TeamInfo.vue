@@ -4,12 +4,11 @@
           <TopGuide/>
       </el-header>
       <el-container>
-          <el-aside width="200px" style="height: 100vh;background-color:rgba(83,127,165,0.6)">
+          <el-aside width="200px" style="height: 100vh;background-color:rgba(250, 250, 250, 0.5)">
                 <el-menu
                 :default-active="activePath"
                 class="el-menu-vertical-demo"
                 background-color="rgba(250, 250, 250, 0)"
-                text-color="rgb(210,228,245)"
                 @open="handleOpen"
                 @close="handleClose"
                 router>
@@ -66,17 +65,23 @@
                         <el-icon><user /></el-icon>简介
                       </div>
                     </template>
-                    {{info}}
+                    <span v-if="info != ''">{{info}}</span>
+                    <span v-else>暂无简介</span>
                   </el-descriptions-item>
                 </el-descriptions>
-                <div v-if="identity!='0'">
-                  <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
+                <div v-if="identity!='0'" class="button1">
+                  <el-button color="#859dda" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
                 </div>
-                <div v-else>
-                  <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
-                  <el-popconfirm title="确认要解散该团队吗？" @confirm="deleteTeam()">
+                <div v-else class="button1">
+                  <el-button color="#859dda" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
+                  <el-popconfirm title="确认要解散该团队吗？" 
+                          confirm-button-text="确定"
+                          cancel-button-text="取消"
+                          icon-color="#7fa9cc"
+                          @confirm="deleteTeam()">
                     <template #reference>
-                      <el-button type="danger" icon="Delete" class="edit" style="margin-left:60px">解散团队</el-button>
+                      <el-button  icon="Delete" class="edit" style="margin-left:60px"
+                      color="#e98176">解散团队</el-button>
                     </template>
                   </el-popconfirm>
                 </div>
@@ -286,5 +291,14 @@ export default {
   .cell-item {
   display: flex;
   align-items: center;
+}
+.button1 .el-button{
+    color: white;
+}
+</style>
+
+<style>
+.hp-fill .el-menu-item.is-active{
+  color: #859dda;
 }
 </style>

@@ -37,20 +37,24 @@
                             <el-radio :label="6">管理员</el-radio>
                             <el-radio :label="9">普通成员</el-radio>
                         </el-radio-group>   
-                        <div>
-                          <el-button v-if="identity=='2'" type="primary" icon="CirclePlus" class="add"  disabled>邀请成员</el-button>
-                          <el-button v-else type="primary" icon="CirclePlus" class="add" @click="dialogVisible = true">邀请成员</el-button>
+                        <div class="button1">
+                          <el-button v-if="identity=='2'" color="#859dda" icon="CirclePlus" class="add"  disabled>邀请成员</el-button>
+                          <el-button v-else color="#859dda" icon="CirclePlus" class="add" @click="dialogVisible = true">邀请成员</el-button>
                         </div>
                         <div v-if="identity !='0'">
-                          <el-popconfirm title="确认要离开该团队吗" @confirm="leaveTeam()">
+                          <el-popconfirm title="确认要离开该团队吗" 
+                          confirm-button-text="确定"
+                          cancel-button-text="取消"
+                          icon-color="#7fa9cc"
+                          @confirm="leaveTeam()">
                             <template #reference>
-                              <el-button v-if="identity=='0'" disabled icon="Delete" class="leave" type="danger" >离开团队</el-button>
-                              <el-button v-else icon="Delete" class="leave" type="danger" >离开团队</el-button>
+                              <el-button v-if=" identity=='0'" disabled icon="Delete" class="leave" color="#ea867b"  style="color:white;">离开团队</el-button>
+                              <el-button v-else icon="Delete" class="leave" color="#ea867b" style="color:white;">离开团队</el-button>
                             </template>
                           </el-popconfirm>
                         </div> 
                         <div>
-                          <el-button v-if="identity=='0'" icon="Refresh" type="danger"
+                          <el-button v-if="identity=='0'" icon="Refresh"  color="#e98176" style="color:white"
                           class="deliver" @click="dialogVisible1 = true">转交团队</el-button>
                           <el-dialog
                               title="转交团队"
@@ -77,8 +81,9 @@
                                   </el-row>
                                 </el-option>
                               </el-select>
-                              <el-button type="primary" icon="CircleCheck" round 
-                                  @click="changeLeader()" style="margin-left:20px">确认</el-button>
+                              <el-button type="primary" icon="CircleCheck" 
+                                  @click="changeLeader()" 
+                                  color="#859dda" style="margin-left:20px; color:white">确认</el-button>
                           </el-dialog>                      
                         </div>
                         <el-dialog
@@ -91,8 +96,8 @@
                                 <el-input v-model="invite"  style="width: 200px;">
                                 </el-input>
                               </el-form-item>
-                              <el-form-item>
-                                <el-button type="primary" @click="addMember()">确定</el-button>
+                              <el-form-item class="button1">
+                                <el-button color="#859dda" @click="addMember()">确定</el-button>
                               </el-form-item>
                             </el-form>
                         </el-dialog>
@@ -143,7 +148,7 @@
                           label="身份"
                           width="150">
                             <template #default="scope">
-                            <el-tag v-if="scope.row.authority === 'member'">普通成员</el-tag>
+                            <el-tag v-if="scope.row.authority === 'member'" color="#99c2ff" style="color:white">普通成员</el-tag>
                             <el-tag v-else-if="scope.row.authority === 'admin'" type="success">管理员</el-tag>
                             <el-tag v-else type="warning">所有者</el-tag>
                             </template>
@@ -167,48 +172,53 @@
                               @click=" modifyAuthority(scope.row.username);">确认</el-button>
                             </div>
                             <template #reference>
+                              <span class="button1" style="margin-right:10px">
                               <el-button
                               v-if="(scope.row.username==this.$store.state.user.name)||
                               (identity == '1' && scope.row.authority=='leader' ) || identity == '2'"
                               disabled
                               style="border-radius: 7px;height: 27px;"
                               size="small"
-                              type="primary">
+                              color="#859dda">
                               编辑
                             </el-button>
                             <el-button
                               v-else
                               style="border-radius: 7px;height: 27px;"
                               size="small"
-                              type="primary">
+                              color="#859dda">
                               编辑
                             </el-button>
+                            </span>
                             </template>
                           </el-popover>
-                          <el-popconfirm title="确认要移除该成员吗" @confirm="removeMember(scope.row.username)" >
+                          <el-popconfirm title="确认要移除该成员吗" 
+                          confirm-button-text="确定"
+                          cancel-button-text="取消"
+                          icon-color="#7fa9cc"
+                          @confirm="removeMember(scope.row.username)" >
                             <template #reference>
                               <el-button
                                 v-if="(scope.row.username==this.$store.state.user.name)||
                               (identity == '1' && scope.row.authority!='member' ) || identity == '2'"
                                 disabled
-                                style="border-radius: 7px;height: 27px;"
                                 size="small"
-                                type="danger"
+                                color="#e98176"
+                                style="border-radius: 7px;height: 27px; color:white"
                                 @click="handleDelete(scope.$index, scope.row)">
                                 移除
                               </el-button>
                               <el-button
                                 v-else
-                                style="border-radius: 7px;height: 27px;"
                                 size="small"
-                                type="danger"
+                                color="#e98176"
+                                style="border-radius: 7px;height: 27px; color:white"
                                 @click="handleDelete(scope.$index, scope.row)">
                                 移除
                               </el-button>
                               
                             </template>
                             </el-popconfirm>
-                            
                           </template>
                         </el-table-column>
                       </el-table>
@@ -467,10 +477,32 @@ export default {
     width: 800px;
     margin-top: 80px;
   }
-
+.button1 .el-button{
+    color: white;
+}
 </style>
 <style>
 .el-table .cell{
   padding: 0 0;
+}
+.hp-fill .el-radio__input.is-checked+.el-radio__label {
+  color: #859dda;
+}
+.hp-fill .el-radio__input.is-checked .el-radio__inner{
+  border-color: #859dda;
+  background-color: #859dda;
+}
+.hp-fill .el-menu-item.is-active{
+  color: #859dda;
+}
+.el-select-dropdown__item.selected {
+    color: #859dda;
+    font-weight: 700;
+}
+.el-select .el-input.is-focus .el-input__wrapper {
+    box-shadow: 0 0 0 1px #cccccc inset!important;
+}
+.el-select .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1px #cccccc inset!important;
 }
 </style>

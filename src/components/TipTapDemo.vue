@@ -135,7 +135,7 @@ export default {
 .editor {
   display: flex;
   flex-direction: column;
-  height: 90%;
+  height: 95%;
   color: #0D0D0D;
   background-color: rgba(250, 250, 250, 0.6);
   border: 0px solid #0D0D0D;

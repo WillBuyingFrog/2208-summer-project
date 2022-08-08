@@ -1,6 +1,11 @@
 <template>
     <div>
-    <div class="newfile"><el-button type="primary" @click="dialogVisible = true">+新建</el-button></div>
+        <el-row>
+        <div class="button1" style="margin-left: 10%;">
+            <el-button v-if="fileType == 1" color="#859dda" @click="dialogVisible = true">+新建</el-button>
+            <el-button v-if="fileType == 0" color="#859dda" @click="dialogVisible2 = true">+新建</el-button>
+        </div>
+        </el-row>
     <div class="clear"></div>
     <!-- 新建原型表单 -->
     <el-dialog
@@ -85,8 +90,8 @@
         </el-form>
         <template #footer>
         <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newFile">立即创建</el-button>
+            <el-button @click="dialogVisible2 = false">取消</el-button>
+            <span class="button1" style="margin-left:20px"><el-button @click="newFile" color="#859dda">立即创建</el-button></span>
         </span>
         </template>
     </el-dialog>
@@ -120,6 +125,9 @@
         </template>
     </el-dialog>
     <el-space direction="vertical">
+        <el-card class="box-card" v-if="allFile.length==0" style="width: 300px;">
+            <el-empty description="暂无文件" />
+        </el-card>
             <el-card v-for="file in allFile" :key="file.file_id" class="box-card" style="width: 900px">
                 <div class="card-header">
                     <span class="pname">
@@ -128,15 +136,20 @@
                         <el-icon v-if="fileType == 2"><Picture /></el-icon>
                         {{file.file_name}}
                     </span>
-                    <el-button color="#859dda" @click="editFile(file.file_id, file.file_name, file.index)">编辑</el-button>
-                    <el-button size="small" type="primary" plain @click="openRename(file.file_id)">重命名</el-button>
-                    <el-popconfirm title="确定要删除此文件?" @confirm="deleteFile(file.file_id)">
+                    <span class="button1">
+                    <el-button size="small" color="#859dda" @click="editFile(file.file_id, file.file_name)">编辑</el-button>
+                    <el-button size="small" color="#daad81" @click="openRename(file.file_id)">重命名</el-button>
+                    </span>
+                    <el-popconfirm title="确定要删除此文件?"
+                            confirm-button-text="确定"
+                            cancel-button-text="取消"
+                            icon-color="#7fa9cc" 
+                            @confirm="deleteFile(file.file_id)">
                         <template #reference>
                         <el-button size="small" type="danger">删除</el-button>
                         </template>
                     </el-popconfirm>
                     <div class="clear"></div>
-                <el-button class="button" type="primary" plain v-if="status==0">进入项目</el-button>
                 <div class="clear"></div>
                 </div>
             <div class="text item">
@@ -237,6 +250,7 @@ export default {
             fileType: "1",
             dialogVisible: false,
             dialogVisible1: false,
+            dialogVisible2: false,
             allFile: [],
             newFileid: '',
             newName: '',
@@ -319,6 +333,7 @@ export default {
                             this.newone.name = '';
                             this.newFileid = res.data.data;
                             this.dialogVisible = false;
+                            this.dialogVisible2 = false;
                             //是否跳转到编辑页？
                             // this.$router.push('/prototypeDesign');
                             break;
@@ -466,10 +481,6 @@ export default {
 </script>
 
 <style scoped>
-.newfile {
-    float: left;
-    margin-left: 10%;
-}
 .el-space {
     margin-left: 10%;
     margin-right: 5%;
