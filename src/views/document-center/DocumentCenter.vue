@@ -75,24 +75,47 @@
             </template>
           </el-dialog>
           <el-menu
-              default-active="2"
+              default-active="activeIndex"
               class="docs"
-              @open="handleOpen"
-              @close="handleClose"
+              @select="handleSelect"
           >
             <el-sub-menu index="1">
               <template #title>
                 <el-icon><Folder /></el-icon>
-                <span>Navigator One</span>
+                <span>项目文档区</span>
               </template>
-              <el-menu-item-group title="Group One">
-                <el-menu-item index="1-1">item one</el-menu-item>
-                <el-menu-item index="1-2">item one</el-menu-item>
+              <el-menu-item-group
+                  v-for="project in allProject"
+                  :key="project.index"
+                  :index="`1-${project.index}`"
+                  :title="project.project_name"
+              >
+                <el-menu-item
+                    v-for="(file,index) in project.file"
+                    :key="file.file_id"
+                    :index="`1-${project.index}-${index}`"
+                >
+                  {{file.name}}
+                </el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group title="Group Two">
-                <el-menu-item index="1-3">item three</el-menu-item>
-              </el-menu-item-group>
-                <el-menu-item index="1-4">item four</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu
+                v-for="folder in allFolder"
+                :key="folder.file_id"
+                :index="folder.index"
+            >
+              <template #title>
+                <el-icon><Folder /></el-icon>
+                <span>{{folder.name}}</span>
+              </template>
+              <el-menu-item
+                  v-for="(file,index) in allCommonFile"
+                  :key="file.file_id"
+                  :index="`${folder.index}-${index}`"
+              >
+                {{file.name}}
+              </el-menu-item>
+
             </el-sub-menu>
             <el-menu-item index="2">
               <el-icon><Document /></el-icon>
@@ -126,9 +149,27 @@ export default {
   data() {
     return {
       team_id: '',
+      activeIndex: '',
       dialogVisible: false,
       dialogVisible1: false,
       allFile: [],
+      allFolder: [],
+      allProject: [],
+      allProjectFile: [],
+      allCommonFile: [],
+      project:{
+        index: 0,
+        project_id: "",
+        file_id: "",
+        project_name: "",
+        file: [],
+      },
+      folder: {
+        index: 1,
+        folder_id: "",
+        folder_name: "",
+        file: [],
+      },
       newfile:{
         name: "",
         router: "",
@@ -154,61 +195,71 @@ export default {
       }],
       value: '',
 
-      data: [{
-        label: '一级 1',
-        children: [{
-          label: '二级 1-1',
-          children: [{
-            label: '三级 1-1-1'
-          }]
-        }]
-      }, {
-        label: '一级 2',
-        children: [{
-          label: '二级 2-1',
-          children: [{
-            label: '三级 2-1-1'
-          }]
-        }, {
-          label: '二级 2-2',
-          children: [{
-            label: '三级 2-2-1'
-          }]
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          label: '二级 3-1',
-          children: [{
-            label: '三级 3-1-1'
-          }]
-        }, {
-          label: '二级 3-2',
-          children: [{
-            label: '三级 3-2-1'
-          }]
-        }]
-      }],
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      }
     };
   },
   created(){
-    this.team_id = this.$store.state.teamid;
+    this.team_id = this.$store.state.team_id;
     console.log("team_id: "+this.team_id);
+    this.getAllFile();
   },
   methods: {
     handleNodeClick(data) {
       console.log(data);
     },
+    getAllFile() {
+      this.$http
+          .post('/file/fileList', {
+            team_id: this.team_id
+          })
+          .then(res =>{
+            console.log(res.data);
+            console.log(res.data.data.length);
+            switch (res.data.code) {
+              case 200:
+                this.allFile = res.data.data;
+                for (var file in this.allFile){
+                  if (file.type == 11) {
+                    this.folder.index++;
+                    this.folder.folder_id = file.file_id;
+                    this.folder.folder_name = file.name;
+                    this.allFolder.push(this.folder);
+                  }else if (file.type == 12) {
+                    this.project.index++;
+                    this.project.project_id = file.id;
+                    this.project.project_name = file.name;
+                    this.project.file_id = file.file_id;
+                    this.allProject.push(this.project);
+                  }else if (file.type == 0) {
+                    for (var pro in this.allProject) {
+                      if (pro.file_id == file.id) {
+                        pro.file.push(file);
+                      }
+                    }
+                    this.allProjectFile.push(file);
+                  }else if (file.type == 2){
+                    for (var folder in this.allFolder) {
+                      if (folder.folder_id == file.id) {
+                        folder.file.push(file);
+                      }
+                    }
+                    this.allCommonFile.push(file);
+                  }
+                }
+                break;
+            }
+          })
+          .catch(err =>{
+            console.log(err);
+          })
+    },
+
     newFolder() {
 
     },
     newFile() {
 
     }
+
 
   },
 }

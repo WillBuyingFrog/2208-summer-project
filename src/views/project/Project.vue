@@ -93,8 +93,10 @@ export default {
   color: #859dda;
 }
 .title{
-    float: left;
-    margin-left: 25px;
+    width: 180px;   /*一定要设置宽度，或者元素内含的百分比*/
+  overflow:hidden; /*溢出的部分隐藏*/
+  white-space: nowrap; /*文本不换行*/
+  text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
 .clear{
     clear: both;
@@ -102,5 +104,11 @@ export default {
 .uml-link {
   text-decoration-line: none;
   COLOR: #000000; 
+}
+</style>
+
+<style>
+.project .el-menu-item.is-active{
+  color: #859dda;
 }
 </style>

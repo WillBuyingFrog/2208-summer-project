@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="projectfile">
         <el-row>
         <div class="button1" style="margin-left: 10%;">
             <el-button v-if="fileType == 1" color="#859dda" @click="dialogVisible = true">+新建</el-button>
@@ -545,3 +545,4 @@ export default {
     color: white;
 }
 </style>
+
