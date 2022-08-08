@@ -150,7 +150,7 @@ export default {
     watch:{
         //查询参数改变，再次执行数据获取方法
         '$route'(){
-            this.fileType = parseInt(this.$route.query.filetype);
+            this.fileType = this.$route.query.filetype;
             this.allFile = {};
             this.getFile();
         }
