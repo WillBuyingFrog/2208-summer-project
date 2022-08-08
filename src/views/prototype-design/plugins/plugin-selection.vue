@@ -8,6 +8,8 @@ import {Interaction} from "@/views/prototype-design/utils/dom";
 import {getComponentRef, getComponentRefsById} from "@/views/prototype-design/utils/ref";
 import {getBoundingRect} from "@/views/prototype-design/libs/ddr/helper";
 import {registerSelectionActions} from "@/views/prototype-design/plugins/plugin-selection-actions";
+import {level_updateCollaborateComponent} from "@/views/prototype-design/utils/collaborate_level";
+import {findComponent} from "@/views/prototype-design/utils";
 
 
 export default {
@@ -74,6 +76,7 @@ export default {
       this.getContains()
     },
     handleSelectionEnd() {
+      console.log("selectionEnd")
       if (this.selectedComponents.length == 1) {
         this.application.handleSelect({
             control: this.application.controls.find((item) => item.id === this.selectedComponents[0].id),
@@ -82,6 +85,12 @@ export default {
         )
         this.selectedComponents = []
       } else if (this.selectedComponents.length > 1) {
+        // 更新状态
+        console.log("Updating multiple elements...")
+        this.selectedComponents.map((item) => {
+          level_updateCollaborateComponent(this.application, this.application.currentPage.page_file_id,
+          item)
+        })
         this.application.handleUnselect()
         this.createSelectionTransform()
       }
@@ -106,8 +115,6 @@ export default {
         x1.push(item.right)
         y1.push(item.bottom)
       })
-      console.log("Get ids:")
-      console.log(ids)
       let left = Math.min(...x)
       let top = Math.min(...y)
       let right = Math.max(...x1)
@@ -165,6 +172,10 @@ export default {
       })
       this.selectionTransform = transform
       this.application.batchUpdateControlValue(changes)
+      this.componentRefs.forEach((item) => {
+        let realComponent = findComponent(this.application.controls, (obj) => {return obj.id === item.id})
+        level_updateCollaborateComponent(this.application, this.application.currentPage.page_file_id, realComponent)
+      })
     },
 
     handleSelectionResize(e) {

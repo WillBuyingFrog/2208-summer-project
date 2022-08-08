@@ -78,7 +78,7 @@ import {
 } from "@/views/prototype-design/utils/prototypeJSON";
 import {computed} from "vue";
 import {
-  level_deleteCollaborateComponent,
+  level_deleteCollaborateComponent, level_getCollaboratePrototype,
   level_updateCollaborateComponent
 } from "@/views/prototype-design/utils/collaborate_level";
 
@@ -485,7 +485,7 @@ export default {
   },
   async mounted(){
 
-    const IS_LEVELDB = true
+    const IS_LEVELDB = false
 
     if(IS_LEVELDB){
       this.file_id = this.$store.state.file_id // 原型设计的id
@@ -507,6 +507,12 @@ export default {
       // }else{
       //   console.log("You shouldn't see this")
       // }
+      this.currentPage = {
+        page_index: 1,
+        page_file_id: "testtest",
+        page_name: "lalala"
+      }
+      level_getCollaboratePrototype(this, this.currentPage.page_file_id)
       console.log("You shouldn't see this")
     }
 

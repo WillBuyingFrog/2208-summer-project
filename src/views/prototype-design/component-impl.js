@@ -20,7 +20,7 @@ const BouncyButton = {
     },
     render(){
         return (
-            <div class="custom-bouncy-button">{this.params.value}</div>
+            <div draggable="false" class="custom-bouncy-button">{this.params.value}</div>
         )
     }
 }
@@ -33,7 +33,11 @@ const Img = {
     },
     render() {
         return(
+            <div draggable="false" class="match-parent">
+                <span style={{display: "none"}}>test</span>
                 <img draggable="false" className="match-parent" src={this.params.url}/>
+            </div>
+
             )
 
     },
