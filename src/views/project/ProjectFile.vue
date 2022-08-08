@@ -128,7 +128,7 @@
                         <el-icon v-if="fileType == 2"><Picture /></el-icon>
                         {{file.file_name}}
                     </span>
-                    <el-button color="#859dda" @click="editFile(file.file_id, file.file_name)">编辑</el-button>
+                    <el-button color="#859dda" @click="editFile(file.file_id, file.file_name, file.index)">编辑</el-button>
                     <el-button size="small" type="primary" plain @click="openRename(file.file_id)">重命名</el-button>
                     <el-popconfirm title="确定要删除此文件?" @confirm="deleteFile(file.file_id)">
                         <template #reference>
@@ -424,9 +424,10 @@ export default {
                 })
             }
         },
-        editFile(id, name){
+        editFile(id, name, index){
             this.$store.state.file_name = name;
             this.$store.state.file_id = id;
+            this.$store.state.file_index = index;
             console.log(this.$store.state.file_id);
             if(this.fileType == 1){
                 let routeUrl = this.$router.resolve({

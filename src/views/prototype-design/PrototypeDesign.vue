@@ -133,13 +133,6 @@ export default {
   },
 
   methods: {
-    quit() {
-      //ElMessage.success('即将回到工作空间');
-      setTimeout(() => {
-        // this.$router.push('/workspace')
-        this.$router.go(-1);
-      }, 0);
-    },
     rename(){
       if(this.newname == '' || this.newname == null || this.newname == undefined){
         ElMessage.warning("新标题不能为空")
