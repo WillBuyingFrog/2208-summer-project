@@ -90,19 +90,32 @@
                   :index="`1-${project.index}`"
                   :title="project.project_name"
               >
-                <el-menu-item>
-
+                <el-menu-item
+                    v-for="(file,index) in project.file"
+                    :key="file.file_id"
+                    :index="`1-${project.index}-${index}`"
+                >
+                  {{file.name}}
                 </el-menu-item>
+              </el-menu-item-group>
+            </el-sub-menu>
+            <el-sub-menu
+                v-for="folder in allFolder"
+                :key="folder.file_id"
+                :index="folder.index"
+            >
+              <template #title>
+                <el-icon><Folder /></el-icon>
+                <span>{{folder.name}}</span>
+              </template>
+              <el-menu-item
+                  v-for="(file,index) in allCommonFile"
+                  :key="file.file_id"
+                  :index="`${folder.index}-${index}`"
+              >
+                {{file.name}}
+              </el-menu-item>
 
-              </el-menu-item-group>
-              <el-menu-item-group title="Group One">
-                <el-menu-item index="1-1">item one</el-menu-item>
-                <el-menu-item index="1-2">item one</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group Two">
-                <el-menu-item index="1-3">item three</el-menu-item>
-              </el-menu-item-group>
-                <el-menu-item index="1-4">item four</el-menu-item>
             </el-sub-menu>
             <el-menu-item index="2">
               <el-icon><Document /></el-icon>
@@ -149,6 +162,12 @@ export default {
         project_id: "",
         file_id: "",
         project_name: "",
+        file: [],
+      },
+      folder: {
+        index: 1,
+        folder_id: "",
+        folder_name: "",
         file: [],
       },
       newfile:{
@@ -200,7 +219,10 @@ export default {
                 this.allFile = res.data.data;
                 for (var file in this.allFile){
                   if (file.type == 11) {
-                    this.allFolder.push(file);
+                    this.folder.index++;
+                    this.folder.folder_id = file.file_id;
+                    this.folder.folder_name = file.name;
+                    this.allFolder.push(this.folder);
                   }else if (file.type == 12) {
                     this.project.index++;
                     this.project.project_id = file.id;
@@ -208,8 +230,18 @@ export default {
                     this.project.file_id = file.file_id;
                     this.allProject.push(this.project);
                   }else if (file.type == 0) {
+                    for (var pro in this.allProject) {
+                      if (pro.file_id == file.id) {
+                        pro.file.push(file);
+                      }
+                    }
                     this.allProjectFile.push(file);
                   }else if (file.type == 2){
+                    for (var folder in this.allFolder) {
+                      if (folder.folder_id == file.id) {
+                        folder.file.push(file);
+                      }
+                    }
                     this.allCommonFile.push(file);
                   }
                 }
