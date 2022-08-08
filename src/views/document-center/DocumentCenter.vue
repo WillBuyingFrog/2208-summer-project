@@ -132,7 +132,7 @@
           </el-menu>
         </el-aside>
         <el-main>
-          <tip-tap-demo></tip-tap-demo>
+<!--          <tip-tap-demo></tip-tap-demo>-->
         </el-main>
       </el-container>
     </el-container>
@@ -141,11 +141,11 @@
 
 <script>
 import 'element-plus/dist/index.css'
-import TipTapDemo from "@/components/TipTapDemo";
+// import TipTapDemo from "@/components/TipTapDemo";
 
 export default {
   name: "DocumentCenter",
-  components: {TipTapDemo},
+  // components: {TipTapDemo},
   data() {
     return {
       team_id: '',
@@ -233,6 +233,7 @@ export default {
                     for (var pro in this.allProject) {
                       if (pro.file_id == file.id) {
                         pro.file.push(file);
+                        break;
                       }
                     }
                     this.allProjectFile.push(file);
@@ -240,12 +241,17 @@ export default {
                     for (var folder in this.allFolder) {
                       if (folder.folder_id == file.id) {
                         folder.file.push(file);
+                        break;
                       }
                     }
                     this.allCommonFile.push(file);
                   }
                 }
-                break;
+                console.log(this.allFile);
+                console.log(this.allFolder);
+                console.log(this.allProject);
+                console.log(this.allProjectFile);
+                console.log(this.allCommonFile);
             }
           })
           .catch(err =>{
