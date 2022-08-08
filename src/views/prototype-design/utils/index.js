@@ -46,6 +46,7 @@ export function findComponent(array, fn) {
                 if (ele && fn(ele)) return ele
             }
         }
+        return null
     }
     return findComponent(array)
 }

@@ -3,8 +3,6 @@ import eventBus from "@/views/prototype-design/utils/eventBus";
 import {
   EVENT_COMPONENT_DELETE,
   EVENT_COMPONENT_DUPLICATE,
-  EVENT_DESIGNER_UNDO,
-  EVENT_DESIGNER_REDO,
   EVENT_DESIGNER_CLEAR,
   COLLABORATE_EXPORT_JSON,
   EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE,
@@ -28,7 +26,6 @@ export default {
       let newMargin = (100 - this.expr_width) / 2
       newMargin = newMargin.toFixed(4)
       let newMarginText = newMargin.toString() + "%"
-      console.log("ready to set new size", newWidth, newHeight, newMarginText)
       eventBus.$emit(EVENT_DESIGNER_RESIZE, {newWidth: newWidth, newHeight: newHeight, margins:newMarginText})
     }
   },
@@ -47,18 +44,6 @@ export default {
                 onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
             >
               <Delete class="icon"></Delete>
-            </el-icon>
-            <el-icon
-                className="icon-contain"
-                onClick={() => eventBus.$emit(EVENT_DESIGNER_UNDO)}
-            >
-              <RefreshLeft class="icon"></RefreshLeft>
-            </el-icon>
-            <el-icon
-                className="icon-contain"
-                onClick={() => eventBus.$emit(EVENT_DESIGNER_REDO)}
-            >
-              <RefreshRight class="icon"></RefreshRight>
             </el-icon>
             <el-icon
                 className="icon-contain"

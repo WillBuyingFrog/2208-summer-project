@@ -71,13 +71,16 @@ import {
 } from "@/views/prototype-design/utils"
 
 import {getSnapShot} from "@/views/prototype-design/utils/image";
-import {_exportControlsJson, _loadCanvasByPageId, _loadCanvasInit} from "@/views/prototype-design/utils/prototypeJSON";
+import {
+  _exportControlsJson,
+  _level_loadCanvasInit,
+  _loadCanvasByPageId,
+} from "@/views/prototype-design/utils/prototypeJSON";
 import {computed} from "vue";
 import {
-  findRootComponent,
-  markLocalComponentOccupation,
-  updateCollaborateRootComponent
-} from "@/views/prototype-design/utils/collaborate";
+  level_deleteCollaborateComponent,
+  level_updateCollaborateComponent
+} from "@/views/prototype-design/utils/collaborate_level";
 
 let historys = [[]]
 let historyPointer = 0
@@ -93,6 +96,7 @@ export default {
       file_id: "-1",
       file_name: "-1",
       userId: "-1",
+      layer: 0,   // 当前组件的层数
       pages: [],  // 所有Page的完整json
       currentPage: null  // 当前Page的完整json
     }
@@ -154,6 +158,7 @@ export default {
      * @params {{components:Array,parentId:string?}}
      */
     addControl({ components, parentId, isReload=0 }) {
+      console.log("Into addControl function.")
       let controls = []
       let newComponents = null
       if(isReload){
@@ -173,14 +178,24 @@ export default {
         controls = this.controls.concat(newComponents)
       }
       this.setControls(controls)
-
-      // console.log("controls now:", this.controls)
+      console.log("New set of controls:", controls)
 
       // 默认选中最后一个
       let { component } = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
 
-      // 默认选中最后一个
-      this.handleSelect(component)
+      console.log("Newly added component:", component)
+
+      // isReload=2代表协作模式，协作模式下跳过选中环节
+      // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
+      if(isReload === 2 || isReload === 1){
+        console.log("This function is in special mode.")
+        level_updateCollaborateComponent(this, this.currentPage.page_file_id, component)
+        return
+      }
+
+
+      // 否则，默认选中这一个元素并更新
+      this.handleSelect({control: component, needUpdate: 1})
     },
     /**
      * @description 根据变更id的数据进行批量更新
@@ -227,10 +242,16 @@ export default {
     },
     // 组件拖拽时将新的transform同步到属性编辑器中，并在end事件中进行一次数据同步
     handleTransform({ transform, type }) {
-      console.log(this.controlled)
       this.controlled = { ...this.controlled, ...transform }
       if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
+        console.log("Detected transform type", type)
         this.updateControlValue('transform', transform, false)
+
+        let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
+        console.log("The currently controlled element is", realComponent)
+        // 实时协作中，需要更新组件信息
+        this.controlled.usedBy = this.$store.state.user.id
+        level_updateCollaborateComponent(this, this.currentPage.page_file_id, realComponent)
       }
     },
     /**
@@ -245,21 +266,20 @@ export default {
       this.setControls(controls)
     },
     //  组件选中，右侧展示属性编辑器
-    handleSelect(control) {
-      // collaborate
+    handleSelect({control, needUpdate=0}) {
+      console.log("handleSelect called")
       if(!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)){
         // 被别的用户控制
         // 直接return
         return
       }
       // 标记usedBy标签
-      // 找到根元素
-      let rootComponent = findRootComponent(this, control)
-      // 从根元素开始向下标记usedBy标签
-      markLocalComponentOccupation(this, rootComponent, this.$store.state.user.id)
+      control.usedBy = this.$store.state.user.id
 
       // 在实时协作文档中同步内容
-      updateCollaborateRootComponent(this, this.currentPage.page_file_id, control)
+      // console.log("okokok")
+      if(needUpdate)
+        level_updateCollaborateComponent(this, this.currentPage.page_file_id, control)
 
       this.setCurrentControl(control)
       this.updateControlStatus(true)
@@ -343,9 +363,12 @@ export default {
       if (!this.currentId) {
         return
       }
+      let idToDelete = this.controlled.id
       let controls = updateTreeIn(this.controls, this.currentPath, () => false)
       this.setControls(controls)
       this.clearCurrentComponent()
+      // 本地删除后，要和远程同步
+      level_deleteCollaborateComponent(this, this.currentPage.page_file_id, idToDelete)
     },
     duplicateComponent() {
       if (!this.currentId) {
@@ -455,21 +478,33 @@ export default {
     eventBus.$on(EVENT_DESIGNER_SWITCH, this.handleSwitchPage)
   },
   async mounted(){
-    const IS_MULTIPAGE_MODE = true
 
-    this.file_id = this.$store.state.file_id // 原型设计的id
-    this.file_name = this.$store.state.file_name  // 原型设计名称
-    this.userId = this.$store.state.user.id
+    const IS_LEVELDB = true
 
-    if((!IS_MULTIPAGE_MODE) && this.$store.state.file_id === ''){
-      alert("文件ID错误！")
-      history.back()
-    }
-    if(IS_MULTIPAGE_MODE){
-      await _loadCanvasInit(this)
-    }else{
+    if(IS_LEVELDB){
+      this.file_id = this.$store.state.file_id // 原型设计的id
+      this.file_name = this.$store.state.file_name  // 原型设计名称
+      this.userId = this.$store.state.user.id
+      // 只需要一个函数进行初始化
+      _level_loadCanvasInit(this)
+    } else {
+      this.file_id = this.$store.state.file_id // 原型设计的id
+      this.file_name = this.$store.state.file_name  // 原型设计名称
+      this.userId = this.$store.state.user.id
+
+      // if((!IS_MULTIPAGE_MODE) && this.$store.state.file_id === ''){
+      //   alert("文件ID错误！")
+      //   history.back()
+      // }
+      // if(IS_MULTIPAGE_MODE){
+      //   await _loadCanvasInit(this)
+      // }else{
+      //   console.log("You shouldn't see this")
+      // }
       console.log("You shouldn't see this")
     }
+
+
   }
 
 }
