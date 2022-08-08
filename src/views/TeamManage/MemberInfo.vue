@@ -93,19 +93,27 @@
                             :before-close="handleClose">
                             <el-form :inline="true" class="demo-form-inline">
                               <el-form-item label="用户名">
-                                <el-select
+                                <!-- <el-select
                                   v-model="invite"
                                   filterable
                                   placeholder="请输入用户名关键字"
                                   :remote-method="remoteMethod"
                                   :loading="loading">
                                   <el-option
-                                    v-for="item in userList"
+                                    v-for="item in data"
                                     :key="item"
                                     :label="item"
                                     :value="item"
                                   />
-                                </el-select>
+                                </el-select> -->
+                                <el-autocomplete
+                                          class="el-input"
+                                          v-model="invite"
+                                          :fetch-suggestions="querySearchAsync"
+                                          placeholder="请输入用户名关键字"
+                                          :trigger-on-focus="false"
+                                          >
+                                </el-autocomplete>
                               </el-form-item>
                               <el-form-item class="button1">
                                 <el-button color="#859dda" @click="addMember()">确定</el-button>
@@ -278,6 +286,12 @@ export default {
     activePath(){
       return this.$route.path
     },
+    data(){
+      if(this.invite == '')
+      return [];
+      else 
+      return this.userList
+    }
   },
   methods: {
      handleSelect(key, keyPath) {
@@ -328,10 +342,14 @@ export default {
         console.log(res.data);
         switch(res.data.code){
           case 200:
-            this.userList = res.data.data;
-            this.userList.sort((x, y)=>{
-              return x.localeCompare(y);
-            });
+            
+            for(var i=0; i<res.data.data.length; i++){
+              this.userList.push({'value':res.data.data[i]})
+            }
+            //this.userList = res.data.data;
+            // this.userList.sort((x, y)=>{
+            //   return x.localeCompare(y);
+            // });
             break;
           case 500:
             console.log(res.data.message);
@@ -450,8 +468,20 @@ export default {
         this.dialogVisible1 = false
         this.getList();
       })        
-    }
     },
+    createStateFilter(queryString) {
+        return (houseNumber) => {
+          return (houseNumber.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
+        };
+      },
+     querySearchAsync(queryString, cb) {
+        let userList = this.userList;
+        let results = queryString ? userList.filter(this.createStateFilter(queryString)) : userList;
+        cb(results)
+      },
+    },
+    
+
   }
 
 </script>
