@@ -89,6 +89,9 @@ export default {
   position: fixed;
   overflow: auto;
 }
+.project .el-menu-item.is-active{
+  color: #859dda;
+}
 .title{
     float: left;
     margin-left: 25px;

@@ -759,7 +759,7 @@ export default {
 /* 当鼠标悬浮在当前卡片上时，当前卡片的翻转角度为0，
 并放大一点二五倍，加个阴影 */
 .shell .box-card:hover {
-    transform: rotateY(0deg) scale(1.08);
+    transform: rotateY(0deg) scale(1.06);
     box-shadow: 0 25px 40px rgba(0, 0, 0, 0.7);
     z-index: 1;
 }

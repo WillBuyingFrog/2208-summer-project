@@ -100,7 +100,7 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="submit1">确定</el-button>
+                    <el-button type="primary" @click="submit1" color="#859dda" style="color:white" >确定</el-button>
                   </el-form-item>
                 </el-form>
                 <el-form :inline="true" class="demo-form-inline">
@@ -112,7 +112,7 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="submit2">确定</el-button>
+                    <el-button type="primary" @click="submit2" color="#859dda" style="color:white">确定</el-button>
                   </el-form-item>
                 </el-form>
               </el-dialog>

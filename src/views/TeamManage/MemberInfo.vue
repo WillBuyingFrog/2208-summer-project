@@ -159,8 +159,8 @@
                           label="身份"
                           width="150">
                             <template #default="scope">
-                            <el-tag v-if="scope.row.authority === 'member'" color="#99c2ff" style="color:white">普通成员</el-tag>
-                            <el-tag v-else-if="scope.row.authority === 'admin'" type="success">管理员</el-tag>
+                            <el-tag v-if="scope.row.authority === 'member'" color="#e5ecff" style="color:#8a9fff">普通成员</el-tag>
+                            <el-tag v-else-if="scope.row.authority === 'admin'" color="#ecf9f2" style="color:#53c68c">管理员</el-tag>
                             <el-tag v-else type="warning">所有者</el-tag>
                             </template>
                         </el-table-column>
@@ -172,7 +172,7 @@
                             title="更改权限"
                             :width="150"
                             trigger="click">
-                            <div style="margin-top: 10px">
+                            <div style="margin-top: 10px" class="changeRadio">
                               <el-radio-group v-model="authority" size="small">
                                 <el-radio-button label="1" >管理员</el-radio-button>
                                 <el-radio-button label="2" >普通成员</el-radio-button>
@@ -180,7 +180,8 @@
                             </div>
                             <div>
                               <el-button type="primary" plain style="margin-top:15px; margin-left:35px; border-radius:5px;height:20px;"
-                              @click=" modifyAuthority(scope.row.username);">确认</el-button>
+                              @click=" modifyAuthority(scope.row.username);"
+                              color="#a4c2db">确认</el-button>
                             </div>
                             <template #reference>
                               <span class="button1" style="margin-right:10px">
@@ -535,5 +536,15 @@ export default {
 }
 .el-select .el-input__wrapper.is-focus {
     box-shadow: 0 0 0 1px #cccccc inset!important;
+}
+
+</style>
+
+<style lang="scss">
+.el-radio-button__original-radio:checked+.el-radio-button__inner {
+    color: var(--el-radio-button-checked-text-color,var(--el-color-white));
+    background-color: #7fa9cc;
+    border-color: var(--el-radio-button-checked-border-color,var(--el-color-primary));
+    box-shadow: -1px 0 0 0var(--el-radio-button-checked-border-color,var(--el-color-primary));
 }
 </style>

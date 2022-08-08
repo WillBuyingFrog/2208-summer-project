@@ -487,17 +487,23 @@ export default {
         }
       },
       accept(message_id){
-          const self = this;
-          self.$http({
-            method:'post',
-            url:'/message/accept',
-            params: {
-            message_id: message_id
-          },
-          }).then(res=>{
-            console.log(res.data);
-            ElMessage.success("成功加入团队")
-          })
+        const self = this;
+        self.$http({
+          method:'post',
+          url:'/message/accept',
+          params: {
+          message_id: message_id
+        },
+        }).then(res=>{
+          console.log(res.data);
+          ElMessage.success("成功加入团队")
+          for(var i=0; i<this.invite.length; i++){
+            if(this.invite[i].message_id == message_id){
+              this.invite.splice(i,1)
+              break
+            }
+          }
+        })
       },
     },
     created(){
@@ -652,6 +658,14 @@ html,body{
     transform: rotateY(180deg);
 
 }
+  .messageBtn:hover{
+    background-color: #a4c2db;
+    color: #ffffff;
+  }
+  .messageBtn:focus{
+    background-color: #a4c2db;
+    color: #ffffff;
+  }
 
 </style>
 
