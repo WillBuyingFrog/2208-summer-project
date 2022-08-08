@@ -109,13 +109,13 @@ export const monitorKeys = [
 export function syncComponentTransforms(application, componentJSON){
     let parsedComponents = JSON.parse(componentJSON)
     parsedComponents['components'].forEach((item) => {
+        // eslint-disable-next-line no-unused-vars
         let localComponent = findComponent(application.controls, (obj) => {return item.id === obj.id})
         // 在这里可以直接更改这个component的值
         // 仿照官方写法更改component的值：找到path => updateTreeIn
         let path = findComponentPathById(application.controls, item.id)
+        // eslint-disable-next-line no-unused-vars
         let modifiedLocalComponent = updateTreeIn(application.controls, path, (obj) => {
-            let originalComponent = obj
-
         })
     })
 }
