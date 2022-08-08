@@ -73,15 +73,16 @@
                   size="30%"
               >
                 <el-menu
-                    :default-active="1"
+                    :default-active="activeIndex"
                     class="all-prototypes"
-                    @open="handleOpen"
-                    @close="handleClose"
+                    @select="handleSelect"
                     text-color="#000000"
+                    active-text-color="#409EFF"
                 >
                   <el-menu-item
                       v-for="page in allPages"
                       :key="page.page_index"
+                      :index="page.page_index"
                       @click="toggle(page)"
                   >{{page.page_name}}</el-menu-item>
                   <el-menu-item @click="newPage">
@@ -115,13 +116,13 @@ export default {
     return {
       project_id: '',
       file_id: '',
-      page_index: 1,
       page_name: '',
       drawer: false,
       dialogVisible: false,
       allPages: [],
       pageNum: 1,
       newname: '',
+      activeIndex: '1',
     }
   },
   created(){
@@ -130,6 +131,7 @@ export default {
     this.getAllPages(1);
     console.log('hi');
   },
+
   methods: {
     quit() {
       //ElMessage.success('即将回到工作空间');
@@ -138,7 +140,6 @@ export default {
         this.$router.go(-1);
       }, 0);
     },
-
     rename(){
       if(this.newname == '' || this.newname == null || this.newname == undefined){
         ElMessage.warning("新标题不能为空")
@@ -184,7 +185,7 @@ export default {
               case 200:
                 this.allPages = res.data.data;
                 this.pageNum = this.allPages.length;
-                this.page_index = index;
+                this.activeIndex = index;
                 this.page_name = res.data.data[index-1].page_name;
                 console.log(this.allPages.length);
                 console.log(this.allPages[0].page_name);
@@ -198,12 +199,6 @@ export default {
 
     newPage(){
       var id = this.$store.state.user.id;
-      // if(this.newone.name == undefined || this.newone.name == '' || this.newone.name == null){
-      //   ElMessage.warning('请输入新页面的名称');
-      // }else if(this.newone.x == undefined || this.newone.x == '' || this.newone.x == null){
-      //   ElMessage.warning('请输入画布大小');
-      // }else if(this.newone.y == undefined || this.newone.y == '' || this.newone.y == null){
-      //   ElMessage.warning('请输入画布大小');
       if(id == undefined || id == null || id == ''){
         ElMessage.warning('请先登录');
       }
@@ -235,8 +230,14 @@ export default {
     },
     toggle(page){
       this.page_name = page.page_name;
-      this.page_index = page.page_index;
+      this.activeIndex = page.page_index;
+      console.log("toggle");
+      console.log(this.activeIndex);
       // 标题和内容更改
+    },
+    handleSelect(key) {
+      console.log(this.activeIndex)
+      console.log(key);
     },
   },
 }
