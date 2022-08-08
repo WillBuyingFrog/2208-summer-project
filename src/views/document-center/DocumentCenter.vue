@@ -13,6 +13,7 @@
           <el-icon
               style="padding: 20px 10px 0 0;font-size: 20px"
               @click="dialogVisible = true"
+              class="newOne"
           ><FolderAdd /></el-icon>
           <el-dialog
               v-model="dialogVisible"
@@ -39,6 +40,7 @@
           <el-icon
               style="padding: 20px 0 0 10px;font-size: 20px"
               @click="dialogVisible1 = true"
+              class="newOne"
           ><DocumentAdd /></el-icon>
           <el-dialog
               v-model="dialogVisible1"
@@ -107,7 +109,7 @@
           </el-menu>
         </el-aside>
         <el-main>
-
+          <tip-tap-demo></tip-tap-demo>
         </el-main>
       </el-container>
     </el-container>
@@ -116,9 +118,11 @@
 
 <script>
 import 'element-plus/dist/index.css'
+import TipTapDemo from "@/components/TipTapDemo";
 
 export default {
   name: "DocumentCenter",
+  components: {TipTapDemo},
   data() {
     return {
       team_id: '',
@@ -227,6 +231,9 @@ export default {
   background-color: rgba(250, 250, 250, 0);
   height: 100vh;
 
+}
+.newOne :hover{
+  color: #999999;
 }
 
 </style>

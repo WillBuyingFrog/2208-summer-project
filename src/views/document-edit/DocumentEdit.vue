@@ -78,8 +78,8 @@
           </el-row>
         </el-header>
         <el-main class="mainPane">
-          <div class="editor">
-            <QuillTest></QuillTest>
+          <div class="tiptap">
+            <TipTapDemo></TipTapDemo>
           </div>
         </el-main>
       </el-container>
@@ -89,12 +89,13 @@
 
 <script>
 //import { InfoFilled } from '@element-plus/icons-vue';
-import QuillTest from "@/components/QuillTest";
+// import QuillTest from "@/components/QuillTest";
 import {ElMessage} from "element-plus";
+import TipTapDemo from "@/components/TipTapDemo";
 //import {ElMessage} from "element-plus";
 export default {
   name: "DocumentEdit",
-  components: {QuillTest},
+  components: {TipTapDemo},
   data() {
     return {
       project_id: '',
@@ -235,7 +236,7 @@ export default {
   overflow: auto;
 }
 .bg-plus {
-  background-color: rgba(255, 255, 255, 0.50);
+  /*background-color: rgba(255, 255, 255, 0.50);*/
   min-height: 800px;
   overflow: auto;
   background-position:center;
@@ -280,21 +281,14 @@ export default {
 .button2 .el-button{
   color: white;
 }
-.leftPane {
-  margin: 0 0 0 20px;
-  background-color: rgba(190, 190, 190, 0.25);
-  border-radius: 10px;
-  box-shadow: 3px 3px 10px #bebebe;
-}
-.icon {
-  margin: 0 0 10px 0;
-}
+
 .mainPane {
+  margin: 20px 20px 0 20px;
   padding: 0;
-  height: 100%;
+  height: 95%;
 }
-.editor {
-  height: 98%;
+.tiptap {
+  height: 100%;
 }
 .online-users {
 

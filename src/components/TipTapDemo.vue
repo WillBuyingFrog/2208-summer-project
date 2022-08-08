@@ -135,18 +135,19 @@ export default {
 .editor {
   display: flex;
   flex-direction: column;
-  max-height: 26rem;
+  height: 95%;
   color: #0D0D0D;
-  background-color: #FFF;
-  border: 3px solid #0D0D0D;
+  background-color: rgba(250, 250, 250, 0.6);
+  border: 0px solid #0D0D0D;
   border-radius: 0.75rem;
+  box-shadow: 3px 3px 10px #bebebe;
   &__header {
     display: flex;
     align-items: center;
     flex: 0 0 auto;
     flex-wrap: wrap;
     padding: 0.25rem;
-    border-bottom: 3px solid #0D0D0D;
+    border-bottom: 1px solid #0D0D0D;
   }
   &__content {
     padding: 1.25rem 1rem;
@@ -162,7 +163,7 @@ export default {
     justify-content: space-between;
     flex-wrap: wrap;
     white-space: nowrap;
-    border-top: 3px solid #0D0D0D;
+    border-top: 1px solid #0D0D0D;
     font-size: 12px;
     font-weight: 600;
     color: #0D0D0D;
