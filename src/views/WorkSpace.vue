@@ -574,14 +574,14 @@ html,body{
   margin-left: 20px;
 }
 .title{
-    width: 120px;
+    width: 110px;
     margin-left: 50px;
-    margin-top: 20px;
-    padding-bottom: 5px;
+    margin-top: 15px;
+    padding-bottom: 8px;
     font-size: 22px;
     color: rgb(210,228,245);
-    border-bottom:4px solid  rgb(210,228,245);
-    font-weight: 600;
+    border-bottom:3px solid  rgb(210,228,245);
+    font-weight: 550;
     float: left;
     }
 .head{
