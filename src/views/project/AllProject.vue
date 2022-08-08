@@ -755,15 +755,15 @@ export default {
 
 <style>
 .allproject .el-tabs__item:hover {
-  color: #859dda;
-  border-right: 2px solid #859dda;
+  color: #82b38c;
+  border-right: 2px solid #82b38c;
 }
 .allproject .el-tabs__item.is-active {
-  border-right: 2px solid #859dda !important;
-    color: #859dda;
+  border-right: 2px solid #82b38c !important;
+    color: #82b38c;
 }
 .allproject .el-tabs__active-bar{
-    background-color: #859dda;
+    background-color: #82b38c;
 }
 .allproject .button1 .el-button{
     color: white;
