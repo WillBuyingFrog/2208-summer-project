@@ -88,8 +88,19 @@
                             :before-close="handleClose">
                             <el-form :inline="true" class="demo-form-inline">
                               <el-form-item label="用户名">
-                                <el-input v-model="invite"  style="width: 200px;">
-                                </el-input>
+                                <el-select
+                                  v-model="invite"
+                                  filterable
+                                  placeholder="请输入用户名关键字"
+                                  :remote-method="remoteMethod"
+                                  :loading="loading">
+                                  <el-option
+                                    v-for="item in userList"
+                                    :key="item"
+                                    :label="item"
+                                    :value="item"
+                                  />
+                                </el-select>
                               </el-form-item>
                               <el-form-item class="button1">
                                 <el-button color="#859dda" @click="addMember()">确定</el-button>
@@ -238,6 +249,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getAllUser();
   },
   data () {
     return {
@@ -249,13 +261,14 @@ export default {
       invite:'',
       authority:'1',
       newLeader:'',
-      tableData: []
+      tableData: [],
+      userList: [],
     };
   },
   computed:{
     activePath(){
       return this.$route.path
-    }
+    },
   },
   methods: {
      handleSelect(key, keyPath) {
@@ -297,7 +310,25 @@ export default {
           background: 'rgb(' + R + ',' + G + ',' + B + ', .5)'
       };
     },
-    
+    getAllUser(){
+      const self = this;
+      self.$http({
+        method:'post',
+        url:'user/viewAllUser',
+      }).then(res=>{
+        console.log(res.data);
+        switch(res.data.code){
+          case 200:
+            this.userList = res.data.data;
+            this.userList.sort((x, y)=>{
+              return x.localeCompare(y);
+            });
+            break;
+          case 500:
+            console.log(res.data.message);
+        }
+      })
+    },
     getList(){
       const self = this;
       self.$http({
