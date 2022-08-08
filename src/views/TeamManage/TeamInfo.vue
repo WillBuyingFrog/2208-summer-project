@@ -69,11 +69,11 @@
                     {{info}}
                   </el-descriptions-item>
                 </el-descriptions>
-                <div v-if="identity!='0'">
-                  <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
+                <div v-if="identity!='0'" class="button1">
+                  <el-button color="#859dda" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
                 </div>
-                <div v-else>
-                  <el-button type="primary" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
+                <div v-else class="button1">
+                  <el-button color="#859dda" icon="Edit" class="edit" @click="dialogVisible = true">修改信息</el-button>
                   <el-popconfirm title="确认要解散该团队吗？" @confirm="deleteTeam()">
                     <template #reference>
                       <el-button type="danger" icon="Delete" class="edit" style="margin-left:60px">解散团队</el-button>
@@ -286,5 +286,8 @@ export default {
   .cell-item {
   display: flex;
   align-items: center;
+}
+.button1 .el-button{
+    color: white;
 }
 </style>

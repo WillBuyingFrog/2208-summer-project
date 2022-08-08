@@ -435,9 +435,10 @@ export default {
                 })
             }
         },
-        editFile(id, name){
+        editFile(id, name, index){
             this.$store.state.file_name = name;
             this.$store.state.file_id = id;
+            this.$store.state.file_index = index;
             console.log(this.$store.state.file_id);
             if(this.fileType == 1){
                 let routeUrl = this.$router.resolve({
