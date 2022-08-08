@@ -128,11 +128,11 @@
                                 <span class="show" v-else>{{project.project_info}}</span>
                             </el-form-item>
                             <div class="button1" v-if="status == 0">
-                                <el-button color="#859dda" @click="starProject(project.project_name)">收藏</el-button>
+                                <el-button color="#859dda" @click="starProject(project.project_name)" style="margin-right:-5px">收藏</el-button>
                                 <el-button @click="openRename(project.project_name)" color="#daad81">重命名</el-button>
                                 <el-popconfirm title="确定要删除此项目?" @confirm="deletePro(project.project_name)">
                                     <template #reference>
-                                    <el-button type="danger">删除</el-button> 
+                                    <el-button type="danger" style="margin-left:-5px">删除</el-button> 
                                     </template>
                                 </el-popconfirm>
                             </div>  
