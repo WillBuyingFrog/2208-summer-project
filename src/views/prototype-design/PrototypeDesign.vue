@@ -57,7 +57,6 @@
             </el-col>
             <el-col :span="1">
               <el-button
-                  circle
                   class="drawer-btn"
                   color="#859dda"
                   :dark="isDark"
@@ -65,6 +64,7 @@
                   text @click="drawer = true"
               >
                 <el-icon class="drawer-icon"><Fold /></el-icon>
+                页面列表
               </el-button>
               <el-drawer
                   v-model="drawer"
@@ -299,8 +299,9 @@ export default {
 }
 .drawer-btn {
   float: right;
-  margin: 10px 0 0 0;
+  margin: 15px 0 0 0;
   box-shadow: 3px 3px 10px #859dda;
+  border-radius: 30px;
 }
 .mainPane {
   margin: 0 0 0 10px;
