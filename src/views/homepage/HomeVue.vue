@@ -22,7 +22,7 @@
                         :dark="isDark"
                         style="border-radius: 12px;height:40px;margin-top:20px;font-size:17px"
                         plain>
-                        免费使用</el-button>
+                        立即体验</el-button>
                 </el-col>
             </el-row>
         </el-header>
@@ -32,7 +32,7 @@
                 <el-col :span="6">
                     <el-card  class="card1">
                         <div style="height:120px">
-                            <img src="../../assets/icon/1.png"   />
+                            <img src="../../assets/icon/1.jpg"   />
                         </div>
                         <div class="line1">
                             团队工作平台
@@ -45,7 +45,7 @@
                 <el-col :span="6">
                     <el-card  class="card1">
                         <div style="height:120px">
-                            <img src="../../assets/icon/2.png"   />
+                            <img src="../../assets/icon/2.jpg"   />
                         </div>
                         <div class="line1">
                             专业原型设计
@@ -58,7 +58,7 @@
                 <el-col :span="6">
                     <el-card  class="card1">
                         <div style="height:120px">
-                            <img src="../../assets/icon/3.png"   />
+                            <img src="../../assets/icon/3.jpg"   />
                         </div>
                         <div class="line1">
                             快速文档编辑
@@ -71,7 +71,7 @@
                 <el-col :span="6">
                     <el-card  class="card1">
                         <div style="height:120px">
-                            <img src="../../assets/icon/4.png"   />
+                            <img src="../../assets/icon/4.jpg"   />
                         </div>
                         <div class="line1">
                             高效协同工作
@@ -100,7 +100,7 @@
                 style="border-radius:24px;height:80px;width:150px;
                 font-size:25px;margin-top:70px;left:45% ;"
                 plain>
-                免费使用</el-button>   
+                立即体验</el-button>   
         
         <el-card  class="card3">
             <el-row style="height:100%">
@@ -124,7 +124,7 @@
                         style="border-radius:20px;height:50px;width:120px;
                         font-size:20px;"
                         plain>
-                        免费使用</el-button>  </div>
+                        立即体验</el-button>  </div>
                 </el-col>
                 <el-col :span="14">
                     <el-carousel  height="400px">
@@ -164,7 +164,7 @@
                         style="border-radius:20px;height:50px;width:120px;
                         font-size:20px; z-index: 2;"
                         plain>
-                        免费使用</el-button> 
+                        立即体验</el-button> 
                 </el-col>
                 
             </el-row>
@@ -191,7 +191,7 @@
                         style="border-radius:20px;height:50px;width:120px;
                         font-size:20px; z-index: 2;"
                         plain>
-                        免费使用</el-button> 
+                        立即体验</el-button> 
                 </el-col>
                 <el-col :span="14">
                     <el-carousel height="400px" direction="vertical" >
@@ -230,7 +230,7 @@
                         style="border-radius:20px;height:50px;width:120px;
                         font-size:20px; z-index: 2;"
                         plain>
-                        免费使用</el-button> 
+                        立即体验</el-button> 
                 </el-col>
                 
             </el-row>
@@ -257,9 +257,9 @@
             }
         },
         methods:{
-            gotoLogin(){
-                console.log('clieck')
-            }
+            gotoLogin() {
+                this.$router.push('/login');
+            },
         },
     }
 </script>

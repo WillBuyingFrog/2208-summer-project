@@ -42,7 +42,8 @@
                         <el-icon><Coordinate/></el-icon>
                         <span style="font-size: 16px;">团队管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/documentCenter" style="margin-left:70px">
+                    <el-menu-item index="/documentCenter" style="margin-left:70px"
+                        @click="link">
                         <el-icon><DocumentCopy/></el-icon>
                         <span style="font-size: 16px;">文档中心</span>
                     </el-menu-item>
@@ -146,7 +147,7 @@
             <el-col :span="1">
                 <el-popover
                     placement="bottom"
-                    :width="200"
+                    :width="240"
                     trigger="click">
                   <template #reference>
                     <el-avatar :style="{background:avatarColor}" :size="36" 
@@ -240,7 +241,7 @@ export default {
           label: '未读'
         }],
         value: '0',
-        status:'0',
+        status:'1',
         checked:'',
         notice: [],
         invite:[],
@@ -420,6 +421,7 @@ export default {
         }).then(res=>{
           console.log(res.data);
           ElMessage.success("成功加入团队")
+          this.unreadNumber--;
           for(var i=0; i<this.invite.length; i++){
             if(this.invite[i].message_id == message_id){
               this.invite.splice(i,1)
@@ -428,6 +430,12 @@ export default {
           }
         })
     },
+    link(){
+      let routeUrl = this.$router.resolve({
+          path: "/documentCenter",
+      });
+      window.open(routeUrl.href, "_blank");
+    }
 
   }
 }

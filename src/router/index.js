@@ -4,7 +4,7 @@ const routes = [
     {
         path: '/',
         name: 'Homepage',
-        component: () => import('../views/homepage/HomePage')
+        component: () => import('../views/homepage/HomeVue')
     },
     {
         path: '/documentCenter',
