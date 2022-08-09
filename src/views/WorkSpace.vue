@@ -497,6 +497,7 @@ export default {
         }).then(res=>{
           console.log(res.data);
           ElMessage.success("成功加入团队")
+          this.unreadNumber--;
           for(var i=0; i<this.invite.length; i++){
             if(this.invite[i].message_id == message_id){
               this.invite.splice(i,1)
