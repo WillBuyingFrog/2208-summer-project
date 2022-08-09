@@ -40,7 +40,9 @@ export default {
       rows: 3,
       cols: 4,
       cssHTML: 
-`ul,
+`
+<style>
+  ul,
   ol {
     padding: 0 1rem;
   }
