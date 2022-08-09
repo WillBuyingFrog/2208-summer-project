@@ -147,7 +147,7 @@
             <el-col :span="1">
                 <el-popover
                     placement="bottom"
-                    :width="200"
+                    :width="240"
                     trigger="click">
                   <template #reference>
                     <el-avatar :style="{background:avatarColor}" :size="36" 
@@ -241,7 +241,7 @@ export default {
           label: '未读'
         }],
         value: '0',
-        status:'0',
+        status:'1',
         checked:'',
         notice: [],
         invite:[],

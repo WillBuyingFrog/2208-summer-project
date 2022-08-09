@@ -29,11 +29,9 @@
                     <el-icon><Document /></el-icon>
                     <span>文档编辑</span>
                     </el-menu-item>
-                    <el-menu-item index="/projectfile?filetype=2">
-                      <a href="https://app.diagrams.net" target="_blank" class="uml-link">
+                    <el-menu-item index="/draw">
                         <el-icon><Picture /></el-icon>
                         <span>绘制图</span>
-                      </a >
                     </el-menu-item>
                 </el-menu>
             </el-aside>

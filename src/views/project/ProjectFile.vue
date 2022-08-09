@@ -63,6 +63,19 @@
                     </div>
                 </div> 
             </el-form-item>
+            <el-form-item label="选择模板">
+                <div class="paneChoose" :class="{'active':currentDemo1==0}" @click="chooseDemo1(0)">
+                    <div class="demoimage"></div>
+                    <div class="modename" >空白原型</div>
+                </div>
+                <div class="paneChoose" v-for="(item, index) in demoList1" :class="{'active':currentDemo1==(index + 1)}" @click="chooseDemo1(index + 1)" :key="index">
+                    <div class="demoimage">
+                    <img>
+                    <!--  src="imgsrcDemo1[index - 1]" -->
+                    </div>
+                    <div class="modename">{{item.template_name}}</div>
+                </div>
+            </el-form-item>
         </el-form>
         <template #footer>
         <span class="dialog-footer">
@@ -74,7 +87,7 @@
     <!-- 新建文档表单 -->
     <el-dialog
         v-model="dialogVisible2"
-        width="35%">
+        width="60%">
         <template #header>
                     <div class="card-header">
                         <span class="title" style="margin-left: 10px; color: black">
@@ -85,7 +98,20 @@
                 </template>       
          <el-form :model="newone" label-width="80px" v-if="fileType == 0">
             <el-form-item label="文档名称">
-                <el-input v-model="newone.name"></el-input>
+                <el-input v-model="newone.name" style="width: 400px;margin-left:15px"></el-input>
+            </el-form-item>
+            <el-form-item label="选择模板">
+                <div class="paneChoose" :class="{'active':currentDemo0==0}" @click="chooseDemo0(0)">
+                    <div class="demoimage"></div>
+                    <div class="modename" >空白文档</div>
+                </div>
+                <div class="paneChoose" v-for="(item, index) in demoList0" :class="{'active':currentDemo0==(index + 1)}" @click="chooseDemo0(index + 1)" :key="index">
+                    <div class="demoimage">
+                    <img>
+                    <!--  src="imgsrcDemo0[index - 1]" -->
+                    </div>
+                    <div class="modename" >{{item.template_name}}</div>
+                </div>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -105,9 +131,6 @@
                         </span>
                         <span class="title" v-if="fileType == 0" style="margin-left: 10px; color: black">
                             <el-icon><Document /></el-icon>重命名文档
-                        </span>
-                        <span class="title" v-if="fileType == 2" style="margin-left: 10px; color: black">
-                            <el-icon><Picture /></el-icon>重命名图
                         </span>
                     <div class="clear"></div>
                     </div>
@@ -240,10 +263,9 @@ export default {
                 }
 
             ],
-            pwidth: '',
-            pheight: '',
             currentPane: 1,//当前被选中的画布尺寸选项,index不等时 令=index
-            isActive: false,//index相等时,判断isActive是否为true，如果为true ，isActive为false，如果是false则为true
+            currentDemo1: 0, //当前原型设计模板
+            currentDemo0: 0, //当前文档模板
             team_id: '',
             project_name: '',
             project_id: '',
@@ -258,8 +280,14 @@ export default {
             newone:{
                 name: "",
                 w: '1440',
-                h: '1204'
-            }
+                h: '1204',
+                demo0_id: '',
+                demo1_id: '',
+            },
+            imgsrcDemo0: [],//文档模板图片路径
+            imgsrcDemo1: [],//原型模板图片路径
+            demoList0: [],//文档模板
+            demoList1: [],//原型模板
         }
     },
     watch:{
@@ -276,16 +304,71 @@ export default {
         this.project_id = this.$store.state.project_id;
         console.log(this.fileType);
         this.getFile();
+        this.getAllDemo0();
+        this.getAlllDemo1();
     },
     methods: {
         choosePane(index){
-            if(this.currentPane == index){
-                this.isActive = !this.isActive;
-            }
-            else{
-                this.isActive = true;
-            }
             this.currentPane = index;
+            let i = this.paneList[index].chosen;
+            this.newone.w = this.paneList[index].width[i];
+            this.newone.h = this.paneList[index].height[i];
+        },
+        chooseDemo1(index){
+            this.currentDemo1 = index;
+            if(index > 0){
+                this.newone.demo1_id = this.demoList1[index - 1].template_id;
+            }else{
+                this.newone.demo1_id = '';
+            }
+        },
+        chooseDemo0(index){
+            this.currentDemo0 = index;
+            if(index > 0){
+                this.newone.demo0_id = this.demoList0[index - 1].template_id;
+            }else{
+                this.newone.demo0_id = '';
+            }
+        },
+        //获取原型模板
+        getAlllDemo1(){
+            this.$http
+            .post('/template/viewProtoTemplate')
+            .then(res =>{
+                console.log(res.data.data);
+                switch (res.data.code){
+                    case 200:
+                        console.log(res.data.data);
+                        this.demoList1 = res.data.data;
+                        break;
+                    case 500:
+                        ElMessage.error(res.data.message);
+                        break;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
+        //获取文档模板
+        getAllDemo0(){
+            this.$http
+            .post('/template/viewDocTemplate')
+            .then(res =>{
+                console.log(res.data.data);
+                switch (res.data.code){
+                    case 200:
+                        console.log(res.data.data);
+                        this.demoList0 = res.data.data;
+                        break;
+                    case 500:
+                        ElMessage.error(res.data.message);
+                        break;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
         },
         getFile(){
             this.$http
@@ -310,12 +393,120 @@ export default {
                     console.log(err);
                 })
         },
+        //替换文件内容为模板，writeDoc表示写入文档，writeDesign表示写入原型; 
+        //content、pages为从后端拉取的模板的内容，为string类型，详见yapi文档
+        //具体请求过程见demoToFile函数
+        //新建的文件id:this.newFileid
+        writeDoc(content){
+            return content;//占位防报错，记得删
+        },
+        writeDesign(pages, width, height){
+            return [pages, width, height];//占位防报错，记得删
+        },
+        //请求模板并写入文件，type:0表示文档 1表示原型；tid: 用于请求的模板的template_id
+        demoToFile(type, tid){
+            //文档
+            if(type == 0){
+                let content;
+                //拉取模板
+                this.$http
+                .post('/template/getDocTemplate',{
+                    template_id: tid
+                })
+                .then(res =>{
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            console.log(res.data.data);
+                            content = res.data.data.content;
+                            //把模板内容写入文件
+                            this.writeDoc(content);
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+            //原型
+            else if(type == 1){
+                let pages;
+                let width;
+                let height;
+                //拉取模板
+                this.$http
+                .post('/template/getPrptoTemplate',{
+                    template_id: tid
+                })
+                .then(res =>{
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            console.log(res.data.data);
+                            pages = res.data.data.pages;
+                            width = res.data.data.template_width;
+                            height = res.data.data.template_height;
+                            this.writeDesign(pages, width, height);
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+                
+        },
+        //新建文件
         newFile(){
             if(this.newone.name == '' || this.newone.name == null || this.newone.name == undefined){
                 ElMessage.warning("请输入文件名");
             }
-            //设计原型、文档
-            else if(this.fileType == 1 || this.fileType == 0){
+            //设计原型
+            else if(this.fileType == 1 ){
+                this.$http
+                .post('/file/json/new', {
+                    project_id: this.project_id,
+                    file_name: this.newone.name,
+                    type: this.fileType,
+                    height: this.newone.h,
+                    width: this.newone.w
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            console.log(res.data.data);
+                            this.getFile();
+                            ElMessage.success("创建成功！")
+                            this.newone.name = '';
+                            this.newFileid = res.data.data;
+                            this.dialogVisible = false;
+                            this.newone.w = '1440';
+                            this.newone.h = '1204';
+                            this.currentPane = 1;
+                            this.currentDemo1 = 0;
+                            this.newone.demo1_id = '';
+                            this.newFileid = res.data.data;
+                            this.demoToFile(1, this.newone.demo1_id);
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+            //文档
+            else if(this.fileType == 0){
                 this.$http
                 .post('/file/json/new', {
                     project_id: this.project_id,
@@ -332,10 +523,10 @@ export default {
                             ElMessage.success("创建成功！")
                             this.newone.name = '';
                             this.newFileid = res.data.data;
-                            this.dialogVisible = false;
                             this.dialogVisible2 = false;
-                            //是否跳转到编辑页？
-                            // this.$router.push('/prototypeDesign');
+                            this.currentDemo0 = 0;
+                            this.newone.demo0_id = '';
+                            this.demoToFile(0, this.newone.demo0_id);
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -543,6 +734,18 @@ export default {
 }
 .button1 .el-button{
     color: white;
+}
+.demoimage {
+    width: 160px;
+    height: 115px;
+    border-radius: 1ch 1ch 0 0;
+    border-bottom: 1px solid #D3D3D3;
+}
+.modename {
+    width: 160px;
+    overflow:hidden; /*溢出的部分隐藏*/
+  white-space: nowrap; /*文本不换行*/
+  text-overflow:ellipsis;/*ellipsis:文本溢出显示省略号（...）*/
 }
 </style>
 
