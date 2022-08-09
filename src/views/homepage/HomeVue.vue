@@ -257,9 +257,9 @@
             }
         },
         methods:{
-            gotoLogin(){
-                console.log('clieck')
-            }
+            gotoLogin() {
+                this.$router.push('/login');
+            },
         },
     }
 </script>
