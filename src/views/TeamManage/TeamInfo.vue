@@ -38,7 +38,7 @@
                   <el-descriptions-item  :span="2">
                     <template #label>
                       <div class="cell-item">
-                        <el-icon><user /></el-icon>队长
+                        <el-icon><UserFilled /></el-icon>队长
                       </div>
                     </template>
                     {{leader}}
@@ -46,7 +46,7 @@
                   <el-descriptions-item>
                     <template #label>
                       <div class="cell-item">
-                        <el-icon><user /></el-icon>创建者
+                        <el-icon><Avatar /></el-icon>创建者
                       </div>
                     </template>
                     {{creator}}
@@ -54,7 +54,7 @@
                   <el-descriptions-item>
                     <template #label>
                       <div class="cell-item">
-                        <el-icon><user /></el-icon>创建时间
+                        <el-icon><Timer /></el-icon>创建时间
                       </div>
                     </template>
                     {{time}}
@@ -166,6 +166,7 @@ export default {
       }).then(res=>{
         console.log(res.data);
         ElMessage.success('修改成功！')
+        this.newName=''
         this.teamName = this.newName
       })
     },
@@ -181,6 +182,7 @@ export default {
       }).then(res=>{
         console.log(res.data);
         ElMessage.success('修改成功！')
+        this.newInfo=''
         this.info = this.newInfo
       })
     },
