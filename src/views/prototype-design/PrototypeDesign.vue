@@ -101,7 +101,7 @@
         <el-container class="inner-container">
           <el-main class="mainPane">
             <div class="editor">
-              <DesignApp class="editor"></DesignApp>
+              <DesignApp class="editor" :initWidth="900" :initHeight="900"></DesignApp>
             </div>
           </el-main>
         </el-container>

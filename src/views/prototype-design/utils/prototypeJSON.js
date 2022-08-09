@@ -7,8 +7,8 @@ export async function _exportControlsJson(application){
     let fullData = {
         components: result,
         // TODO 从application中保存页面
-        width: '1200px',
-        height: '900px',
+        width: application.currentPage.width,
+        height: application.currentPage.height,
     }
     result = JSON.stringify(fullData)
     // console.log(result)

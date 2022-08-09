@@ -328,3 +328,37 @@ export function level_switchPage(application, newPageFileId){
     level_getCollaboratePrototype(application, newPageFileId)
 
 }
+
+
+
+
+
+/**
+ * 脱机模式下的多页面调试函数。
+ * @param application
+ */
+
+export function level_multiPageDemo(application){
+    application.file_id = application.$store.state.file_id // 原型设计的id
+    application.file_name = application.$store.state.file_name  // 原型设计名称
+    application.userId = application.$store.state.user.id
+
+    application.pages.push({
+        page_index: 1,
+        page_file_id: "testtest",
+        page_name: "lalala",
+        width: 900,
+        height: 900
+    })
+    application.pages.push({
+        page_index: 2,
+        page_file_id: "anotherPage",
+        page_name: "lelele",
+        width: 900,
+        height: 900
+    })
+    application.currentPage = application.pages[0]
+    application.$store.state.user.id = prompt("输入测试用户名")
+    application.$store.state.user.name = application.$store.state.user.id + "---"
+    level_getCollaboratePrototype(application, application.currentPage.page_file_id)
+}

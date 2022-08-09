@@ -1,39 +1,57 @@
 <template>
-  <div class="ds-app" id="frog-design-application">
-    <div class="content">
-      <el-container>
-        <el-aside width="200px" class="leftpane">
-          <DesignAppComponents />
-        </el-aside>
-        <el-main class="mainPane">
-          <el-container>
+  <div :style="{display: this.isPreviewMode ? 'none' : 'block'}">
+    <div class="ds-app" id="frog-design-application">
+      <div class="content">
+        <el-container>
+          <el-aside width="200px" class="leftpane">
+            <DesignAppComponents />
+          </el-aside>
+          <el-main class="mainPane">
             <el-container>
-              <el-header class="header">
-                <DesignAppHeader />
-              </el-header>
-              <el-main class="workpane">
-                <div
-                  style="height: 1200px; width: 1200px;"
-                >
-                  <DesignEditorView ref="editor" :value="this.controls">
-                    <template #default>
-                      <PluginSelection :application="this" />
-                    </template>
-                  </DesignEditorView>
-                </div>
+              <el-container>
+                <el-header class="header">
+                  <DesignAppHeader />
+                </el-header>
+                <el-main class="workpane">
+                  <div
+                      :style="{width: this.initWidth + 'px', height: this.initHeight + 'px'}"
+                  >
+                    <DesignEditorView ref="editor" :value="this.controls">
+                      <template #default>
+                        <PluginSelection :application="this" />
+                      </template>
+                    </DesignEditorView>
+                  </div>
 
-              </el-main>
+                </el-main>
+              </el-container>
+              <el-aside width="240px" class="rightpane">
+                <PropInspector
+                    @propChange="this.handleChange"
+                    :controlled="this.controlled" />
+              </el-aside>
             </el-container>
-            <el-aside width="240px" class="rightpane">
-              <PropInspector
-                  @propChange="this.handleChange"
-                  :controlled="this.controlled" />
-            </el-aside>
-          </el-container>
-        </el-main>
-      </el-container>
+          </el-main>
+        </el-container>
+      </div>
     </div>
   </div>
+  <div :style="{display: this.isPreviewMode ? 'block' : 'none'}">
+    <div class="ds-app" id="frog-design-application-pre">
+    </div>
+
+    Welcome to preview mode!
+    <div
+        :style="{width: this.initWidth + 'px', height: this.initHeight + 'px'}"
+    >
+      <DesignEditorView ref="editor" :value="this.controls">
+        <template #default>
+          <PluginSelection :application="this" />
+        </template>
+      </DesignEditorView>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -98,7 +116,10 @@ export default {
       userId: "-1",
       layer: 0,   // 当前组件的层数
       pages: [],  // 所有Page的完整json
-      currentPage: null  // 当前Page的完整json
+      currentPage: null,  // 当前Page的完整json
+      initWidth: 900,   // 测试数据
+      initHeight: 900,  // 测试数据
+      isPreviewMode: 1
     }
   },
   components:{
@@ -505,19 +526,12 @@ export default {
       this.file_name = this.$store.state.file_name  // 原型设计名称
       this.userId = this.$store.state.user.id
 
-      // if((!IS_MULTIPAGE_MODE) && this.$store.state.file_id === ''){
-      //   alert("文件ID错误！")
-      //   history.back()
-      // }
-      // if(IS_MULTIPAGE_MODE){
-      //   await _loadCanvasInit(this)
-      // }else{
-      //   console.log("You shouldn't see this")
-      // }
       this.currentPage = {
         page_index: 1,
         page_file_id: "testtest",
-        page_name: "lalala"
+        page_name: "lalala",
+        width: 800,
+        height: 800
       }
       this.$store.state.user.id = prompt("输入测试用户名")
       this.$store.state.user.name = this.$store.state.user.id + "---"
