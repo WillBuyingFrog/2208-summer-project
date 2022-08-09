@@ -606,7 +606,10 @@ export default {
         toProject(name, id){
             this.$store.state.project_name = name;
             this.$store.state.project_id = id;
-            this.$router.push('/projectinfo');
+            let routeUrl = this.$router.resolve({
+                    path: "/projectinfo",
+                });
+                window.open(routeUrl.href, "_blank");
         }
     },
 }
