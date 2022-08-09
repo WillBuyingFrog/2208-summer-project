@@ -217,34 +217,42 @@ export default {
             switch (res.data.code) {
               case 200:
                 this.allFile = res.data.data;
-                for (var file in this.allFile){
-                  if (file.type == 11) {
+                for (var i in this.allFile){
+                  console.log('hi there');
+                  console.log(this.allFile[i].type);
+                  console.log(this.allFile);
+                  console.log(this.allFile[0]);
+                  if (this.allFile[i].type == 11) {
                     this.folder.index++;
-                    this.folder.folder_id = file.file_id;
-                    this.folder.folder_name = file.name;
+                    this.folder.folder_id = this.allFile[i].file_id;
+                    this.folder.folder_name = this.allFile[i].name;
+                    console.log(this.folder);
                     this.allFolder.push(this.folder);
-                  }else if (file.type == 12) {
+                  }else if (this.allFile[i].type == 12) {
+                    console.log(12);
                     this.project.index++;
-                    this.project.project_id = file.id;
-                    this.project.project_name = file.name;
-                    this.project.file_id = file.file_id;
+                    this.project.project_id = this.allFile[i].id;
+                    this.project.project_name = this.allFile[i].name;
+                    this.project.file_id = this.allFile[i].file_id;
+                    console.log('project');
+                    console.log(this.project);
                     this.allProject.push(this.project);
-                  }else if (file.type == 0) {
-                    for (var pro in this.allProject) {
-                      if (pro.file_id == file.id) {
-                        pro.file.push(file);
+                  }else if (this.allFile[i].type == 0) {
+                    for (var j in this.allProject) {
+                      if (this.allProject[j].file_id == this.allFile[i].id) {
+                        this.allProject[j].file.push(this.allFile[i]);
                         break;
                       }
                     }
-                    this.allProjectFile.push(file);
-                  }else if (file.type == 2){
-                    for (var folder in this.allFolder) {
-                      if (folder.folder_id == file.id) {
-                        folder.file.push(file);
+                    this.allProjectFile.push(this.allFile[i]);
+                  }else if (this.allFile[i].type == 2){
+                    for (var k in this.allFolder) {
+                      if (this.allFolder[k].folder_id == this.allFile[i].id) {
+                        this.allFolder[k].file.push(this.allFile[i]);
                         break;
                       }
                     }
-                    this.allCommonFile.push(file);
+                    this.allCommonFile.push(this.allFile[i]);
                   }
                 }
                 console.log(this.allFile);
