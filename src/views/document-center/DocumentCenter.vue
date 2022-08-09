@@ -10,6 +10,7 @@
             style="background-color: rgba(250, 250, 250, 0.6);"
         >
           <span></span>
+<!--          new folder-->
           <el-icon
               style="padding: 20px 10px 0 0;font-size: 20px"
               @click="dialogVisible = true"
@@ -31,12 +32,13 @@
               </el-form-item>
             </el-form>
             <template #footer>
-        <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newFolder">立即创建</el-button>
-        </span>
+              <span class="dialog-footer">
+                  <el-button @click="dialogVisible = false">取消</el-button>
+                  <el-button type="primary" @click="newFolder">立即创建</el-button>
+              </span>
             </template>
           </el-dialog>
+<!--          new file-->
           <el-icon
               style="padding: 20px 0 0 10px;font-size: 20px"
               @click="dialogVisible1 = true"
@@ -108,56 +110,55 @@
                     </span>
                     <template #dropdown>
                       <el-dropdown-menu >
-                        <el-dropdown-item @click="delete_pro_doc=true">删除</el-dropdown-item>
-                        <el-dropdown-item @click="rename_pro_doc=true">重命名</el-dropdown-item>
+                        <el-dropdown-item @click="toDelete(file)">删除</el-dropdown-item>
+                        <el-dropdown-item @click="toRename(file)">重命名</el-dropdown-item>
                       </el-dropdown-menu>
                     </template>
                   </el-dropdown>
-<!--                  项目文档删除dialog-->
-                  <el-dialog
-                      v-model="delete_pro_doc"
-                      width="20%">
-                    <template #header>
-                      <div class="card-header">
-                        <span class="title" style="margin-left: 10px; color: black">
-                            <el-icon ><Delete /></el-icon>确定删除？
-                        </span>
-                      </div>
-                    </template>
-                    <span class="dialog-footer">
-                          <el-button @click="delete_pro_doc = false">取消</el-button>
-                          <el-button type="primary" @click="deleteProDoc(file)">确认</el-button>
-                      </span>
-                  </el-dialog>
-<!--                  项目文档重命名dialog-->
-                  <el-dialog
-                      v-model="rename_pro_doc"
-                      width="35%">
-                    <template #header>
-                      <div class="card-header">
-                        <span class="title" style="margin-left: 10px; color: black">
-                            <el-icon ><Edit /></el-icon>
-                            重命名项目
-                        </span>
-                      </div>
-                    </template>
-                    <el-form :model="newname" label-width="100px">
-                      <el-form-item label="新名称">
-                        <el-input v-model="newname"></el-input>
-                      </el-form-item>
-                    </el-form>
-                    <template #footer>
-                      <span class="dialog-footer">
-                        <span>
-                          <el-button @click="rename_pro_doc = false">取消</el-button>
-                          <span class="button2" style="margin-left:20px;">
-                            <el-button @click="renameProDoc(file)" color="#859dda">确定</el-button>
-                          </span>
-                        </span>
-                        <div class="clear"></div>
-                      </span>
-                    </template>
-                  </el-dialog>
+<!--                  <el-dialog-->
+<!--                      v-model="delete_pro_doc"-->
+<!--                      width="20%">-->
+<!--                    <template #header>-->
+<!--                      <div class="card-header">-->
+<!--                        <span class="title" style="margin-left: 10px; color: black">-->
+<!--                            <el-icon ><Delete /></el-icon>确定删除？-->
+<!--                        </span>-->
+<!--                      </div>-->
+<!--                    </template>-->
+<!--                    <span class="dialog-footer">-->
+<!--                          <el-button @click="delete_pro_doc = false">取消</el-button>-->
+<!--                          <el-button type="primary" @click="deleteProDoc(file)">确认</el-button>-->
+<!--                      </span>-->
+<!--                  </el-dialog>-->
+<!--&lt;!&ndash;                  项目文档重命名dialog&ndash;&gt;-->
+<!--                  <el-dialog-->
+<!--                      v-model="rename_pro_doc"-->
+<!--                      width="35%">-->
+<!--                    <template #header>-->
+<!--                      <div class="card-header">-->
+<!--                        <span class="title" style="margin-left: 10px; color: black">-->
+<!--                            <el-icon ><Edit /></el-icon>-->
+<!--                            重命名项目-->
+<!--                        </span>-->
+<!--                      </div>-->
+<!--                    </template>-->
+<!--                    <el-form :model="newname" label-width="100px">-->
+<!--                      <el-form-item label="新名称">-->
+<!--                        <el-input v-model="newname"></el-input>-->
+<!--                      </el-form-item>-->
+<!--                    </el-form>-->
+<!--                    <template #footer>-->
+<!--                      <span class="dialog-footer">-->
+<!--                        <span>-->
+<!--                          <el-button @click="rename_pro_doc = false">取消</el-button>-->
+<!--                          <span class="button2" style="margin-left:20px;">-->
+<!--                            <el-button @click="renameProDoc(file)" color="#859dda">确定</el-button>-->
+<!--                          </span>-->
+<!--                        </span>-->
+<!--                        <div class="clear"></div>-->
+<!--                      </span>-->
+<!--                    </template>-->
+<!--                  </el-dialog>-->
                 </el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
@@ -170,7 +171,22 @@
               <template #title>
 
                 <el-icon><Folder /></el-icon>
-                <span>{{folder.folder_name}}</span>
+                <span>{{folder.file_name}}</span>
+                <el-dropdown
+                    trigger="click"
+                >
+                    <span>
+                      <el-icon class="icon">
+                        <EditPen />
+                      </el-icon>
+                    </span>
+                  <template #dropdown>
+                    <el-dropdown-menu >
+                      <el-dropdown-item @click="toDelete(folder)">删除</el-dropdown-item>
+                      <el-dropdown-item @click="toRename(folder)">重命名</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
               </template>
               <el-menu-item
                   v-for="(file,index) in folder.file"
@@ -178,7 +194,22 @@
                   :index="`${folder.index}-${index}`"
               >
                 <el-icon><Document /></el-icon>
-                <span>{{file.name}}</span>
+                <span>{{file.file_name}}</span>
+                <el-dropdown
+                    trigger="click"
+                >
+                    <span>
+                      <el-icon class="icon">
+                        <EditPen />
+                      </el-icon>
+                    </span>
+                  <template #dropdown>
+                    <el-dropdown-menu >
+                      <el-dropdown-item @click="toDelete(file)">删除</el-dropdown-item>
+                      <el-dropdown-item @click="toRename(file)">重命名</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
               </el-menu-item>
             </el-sub-menu>
             <el-menu-item
@@ -187,26 +218,84 @@
                 :index="`${index+folderNum}`"
             >
               <el-icon><Document /></el-icon>
-              <span>{{file.name}}</span>
+              <span>{{file.file_name}}</span>
               <el-dropdown
                   trigger="click"
-                  @command="handleCommand"
               >
-                <span class="el-dropdown-link">
-                  <el-icon class="el-icon--right">
-                    <EditPen />
-                  </el-icon>
-                </span>
+                    <span>
+                      <el-icon class="icon">
+                        <EditPen />
+                      </el-icon>
+                    </span>
                 <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item command="a">删除</el-dropdown-item>
-                  <el-dropdown-item command="b">重命名</el-dropdown-item>
-                </el-dropdown-menu>
+                  <el-dropdown-menu >
+                    <el-dropdown-item @click="toDelete(file)">删除</el-dropdown-item>
+                    <el-dropdown-item @click="toRename(file)">重命名</el-dropdown-item>
+                  </el-dropdown-menu>
                 </template>
               </el-dropdown>
-
+<!--              <el-dropdown-->
+<!--                  trigger="click"-->
+<!--                  @command="handleCommand"-->
+<!--              >-->
+<!--                <span class="el-dropdown-link">-->
+<!--                  <el-icon class="el-icon&#45;&#45;right">-->
+<!--                    <EditPen />-->
+<!--                  </el-icon>-->
+<!--                </span>-->
+<!--                <template #dropdown>-->
+<!--                <el-dropdown-menu>-->
+<!--                  <el-dropdown-item command="a">删除</el-dropdown-item>-->
+<!--                  <el-dropdown-item command="b">重命名</el-dropdown-item>-->
+<!--                </el-dropdown-menu>-->
+<!--                </template>-->
+<!--              </el-dropdown>-->
             </el-menu-item>
           </el-menu>
+          <!--删除文件dialog-->
+          <el-dialog
+              v-model="deleteVisible"
+              width="20%">
+            <template #header>
+              <div class="card-header">
+                        <span class="title" style="margin-left: 10px; color: black">
+                            <el-icon ><Delete /></el-icon> 确定删除？
+                        </span>
+              </div>
+            </template>
+            <span class="dialog-footer">
+                          <el-button @click="deleteVisible = false">取消</el-button>
+                          <el-button type="primary" @click="deleteFile()">确认</el-button>
+                      </span>
+          </el-dialog>
+          <!--                  项目文档重命名dialog-->
+          <el-dialog
+              v-model="renameVisible"
+              width="35%">
+            <template #header>
+              <div class="card-header">
+                <span class="title" style="margin-left: 10px; color: black">
+                    <el-icon ><Edit /></el-icon> 重命名项目
+                </span>
+              </div>
+            </template>
+            <el-form :model="newname" label-width="100px">
+              <el-form-item label="新名称">
+                <el-input v-model="newname"></el-input>
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <span class="dialog-footer">
+                <span>
+                  <el-button @click="renameVisible = false">取消</el-button>
+                  <span class="button2" style="margin-left:20px;">
+                    <el-button @click="renameFile" color="#859dda">确定</el-button>
+                  </span>
+                </span>
+                <div class="clear"></div>
+              </span>
+            </template>
+          </el-dialog>
         </el-aside>
         <el-main>
 <!--          <tip-tap-demo></tip-tap-demo>-->
@@ -222,8 +311,8 @@ import {ElMessage} from "element-plus";
 // import TipTapDemo from "@/components/TipTapDemo";
 function Folder(index, folder_id, folder_name) {
   this.index = index;
-  this.folder_id = folder_id;
-  this.folder_name = folder_name;
+  this.file_id = folder_id;
+  this.file_name = folder_name;
   this.file = [];
 }
 function Project(index, project_id, file_id, project_name) {
@@ -241,7 +330,7 @@ function File(type, file_id, id, name) {
   this.type = type;
   this.file_id = file_id;
   this.id = id;
-  this.name = name;
+  this.file_name = name;
 }
 
 export default {
@@ -256,8 +345,11 @@ export default {
       dialogVisible: false,
       dialogVisible1: false,
 
-      delete_pro_doc: false,
-      rename_pro_doc: false,
+      deleteVisible: false,
+      renameVisible: false,
+
+      fileToDelete: '',
+      fileToRename: '',
 
       newname: '',
 
@@ -278,6 +370,9 @@ export default {
         label: 'root'
       }],
       value: '',
+      editOptions: [],
+      editValue: '',
+
       project: {
         index: 0,
         project_id: "",
@@ -335,7 +430,7 @@ export default {
                     this.folderNum++;
                     var folder = new Folder(this.folderNum, this.allFile[i].file_id, this.allFile[i].name);
                     this.allFolder.push(folder);
-                    var op = new Op(folder.folder_name, folder.folder_name);
+                    var op = new Op(folder.file_name, folder.file_name);
                     this.options.push(op);
                   }else if (this.allFile[i].type == 12) {
                     this.projectNum++;
@@ -354,11 +449,13 @@ export default {
                     this.allProjectFile.push(this.allFile[i]);
                   }else if (this.allFile[i].type == 2){
                     if (this.allFile[i].id == this.root_id){
-                      this.rootFile.push(this.allFile[i]);
+                      var f1 = new File(2,this.allFile[i].file_id,this.allFile[i].id,this.allFile[i].name);
+                      this.rootFile.push(f1);
                     }else {
                       for (var k in this.allFolder) {
-                        if (this.allFolder[k].folder_id == this.allFile[i].id) {
-                          this.allFolder[k].file.push(this.allFile[i]);
+                        if (this.allFolder[k].file_id == this.allFile[i].id) {
+                          var f2 = new File(2,this.allFile[i].file_id,this.allFile[i].id,this.allFile[i].name);
+                          this.allFolder[k].file.push(f2);
                           break;
                         }
                       }
@@ -445,8 +542,8 @@ export default {
               // console.log(j);
               // console.log(this.allFolder[j]);
               // console.log(this.allFolder[j].folder_name);
-              if (this.allFolder[j].folder_name == par_name) {
-                this.newfile.parent_id = this.allFolder[j].folder_id;
+              if (this.allFolder[j].file_name == par_name) {
+                this.newfile.parent_id = this.allFolder[j].file_id;
                 break;
               }
             }
@@ -466,35 +563,36 @@ export default {
                 case 200:
                   ElMessage.success('创建成功！');
                   console.log(this.newfile);
-                  var file = new File(this.newfile.type, res.data.data,'', this.newfile.name);
-                  // console.log(file);
-                  if (this.newfile.type == 0){
-                    for (var i in this.allProject){
-                      if (this.allProject[i].project_id == this.newfile.project_id) {
-                        file.id = this.allProject[i].file_id;
-                        this.allProject[i].file.push(file);
-                        break;
-                      }
-                    }
-                  }else {
-                    file.id = this.newfile.parent_id;
-                    if (file.id == this.root_id) {
-                      this.rootFile.push(file);
-                    }else {
-                      for (var j in this.allFolder){
-                        if (this.allFolder[j].folder_id == file.id) {
-                          this.allFolder[j].file.push(file);
-                          break;
-                        }
-                      }
-                    }
-                  }
+                  // var file = new File(this.newfile.type, res.data.data,'', this.newfile.name);
+                  // // console.log(file);
+                  // if (this.newfile.type == 0){
+                  //   for (var i in this.allProject){
+                  //     if (this.allProject[i].project_id == this.newfile.project_id) {
+                  //       file.file_id = this.allProject[i].file_id;
+                  //       this.allProject[i].file.push(file);
+                  //       break;
+                  //     }
+                  //   }
+                  // }else {
+                  //   file.id = this.newfile.parent_id;
+                  //   if (file.id == this.root_id) {
+                  //     this.rootFile.push(file);
+                  //   }else {
+                  //     for (var j in this.allFolder){
+                  //       if (this.allFolder[j].file_id == file.file_id) {
+                  //         this.allFolder[j].file.push(file);
+                  //         break;
+                  //       }
+                  //     }
+                  //   }
+                  // }
                   this.newfile.name = "";
                   this.newfile.parent_id = "";
                   this.newfile.project_id = "";
                   this.newfile.route = "";
                   this.newfile.type = 1;
                   this.dialogVisible1 = false;
+                  this.getAllFile();
                   // console.log("hi");
                   // console.log(this.allFolder);
                   break;
@@ -507,14 +605,50 @@ export default {
       }
     },
 
-    renameProDoc() {
+    toDelete(file) {
+      this.fileToDelete = file;
+      this.deleteVisible = true;
+    },
+    toRename(file) {
+      this.fileToRename = file;
+      this.renameVisible = true;
+    },
+
+    renameFile() {
       console.log("rename");
       console.log(this.newname);
-      this.rename_pro_doc = false;
+      var id = this.$store.state.user.id;
+      if(id == undefined || id == null || id == ''){
+        ElMessage.warning('请先登录');
+      }else {
+        this.$http({
+          method:'post',
+          url:'/file/json/update',
+          params: {
+            file_id: this.fileToRename.file_id,
+            file_name: this.newname,
+          },
+        })
+            .then(res => {
+              switch (res.data.code) {
+                case 200:
+                  ElMessage.success('删除成功！');
+                  this.getAllFile();
+                  break;
+                case 500:
+                  ElMessage.error(res.data.message);
+                  console.log(res.data.message);
+                  break;
+              }
+            })
+      }
+      this.renameVisible = false;
+      this.newname = '';
     },
-    deleteProDoc(file) {
+
+    deleteFile() {
       console.log("delete");
-      console.log(file);
+      console.log(this.fileToDelete);
       var id = this.$store.state.user.id;
       if(id == undefined || id == null || id == ''){
         ElMessage.warning('请先登录');
@@ -523,7 +657,7 @@ export default {
           method:'post',
           url:'/file/json/delete',
           params: {
-            file_id: file.file_id,
+            file_id: this.fileToDelete.file_id,
           },
         })
         .then(res => {
@@ -539,7 +673,7 @@ export default {
           }
         })
       }
-      this.delete_pro_doc = false;
+      this.deleteVisible = false;
     },
 
   },
