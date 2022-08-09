@@ -13,7 +13,7 @@
           <el-icon
               style="padding: 20px 10px 0 0;font-size: 20px"
               @click="dialogVisible = true"
-              class="newOne"
+              class="icon"
           ><FolderAdd /></el-icon>
           <el-dialog
               v-model="dialogVisible"
@@ -40,7 +40,7 @@
           <el-icon
               style="padding: 20px 0 0 10px;font-size: 20px"
               @click="dialogVisible1 = true"
-              class="newOne"
+              class="icon"
           ><DocumentAdd /></el-icon>
           <el-dialog
               v-model="dialogVisible1"
@@ -78,9 +78,9 @@
           <el-menu
               default-active="activeIndex"
               class="docs"
-              @select="handleSelect"
           >
             <el-sub-menu index="1">
+
               <template #title>
                 <el-icon><Folder /></el-icon>
                 <span>项目文档区</span>
@@ -98,15 +98,77 @@
                 >
                   <el-icon><Document /></el-icon>
                   <span>{{file.name}}</span>
+                  <el-dropdown
+                      trigger="click"
+                  >
+                    <span>
+                      <el-icon class="icon">
+                        <EditPen />
+                      </el-icon>
+                    </span>
+                    <template #dropdown>
+                      <el-dropdown-menu >
+                        <el-dropdown-item @click="delete_pro_doc=true">删除</el-dropdown-item>
+                        <el-dropdown-item @click="rename_pro_doc=true">重命名</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+<!--                  项目文档删除dialog-->
+                  <el-dialog
+                      v-model="delete_pro_doc"
+                      width="20%">
+                    <template #header>
+                      <div class="card-header">
+                        <span class="title" style="margin-left: 10px; color: black">
+                            <el-icon ><Delete /></el-icon>确定删除？
+                        </span>
+                      </div>
+                    </template>
+                    <span class="dialog-footer">
+                          <el-button @click="delete_pro_doc = false">取消</el-button>
+                          <el-button type="primary" @click="deleteProDoc(file)">确认</el-button>
+                      </span>
+                  </el-dialog>
+<!--                  项目文档重命名dialog-->
+                  <el-dialog
+                      v-model="rename_pro_doc"
+                      width="35%">
+                    <template #header>
+                      <div class="card-header">
+                        <span class="title" style="margin-left: 10px; color: black">
+                            <el-icon ><Edit /></el-icon>
+                            重命名项目
+                        </span>
+                      </div>
+                    </template>
+                    <el-form :model="newname" label-width="100px">
+                      <el-form-item label="新名称">
+                        <el-input v-model="newname"></el-input>
+                      </el-form-item>
+                    </el-form>
+                    <template #footer>
+                      <span class="dialog-footer">
+                        <span>
+                          <el-button @click="rename_pro_doc = false">取消</el-button>
+                          <span class="button2" style="margin-left:20px;">
+                            <el-button @click="renameProDoc(file)" color="#859dda">确定</el-button>
+                          </span>
+                        </span>
+                        <div class="clear"></div>
+                      </span>
+                    </template>
+                  </el-dialog>
                 </el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
+
             <el-sub-menu
                 v-for="folder in allFolder"
                 :key="folder.file_id"
                 :index="folder.index"
             >
               <template #title>
+
                 <el-icon><Folder /></el-icon>
                 <span>{{folder.folder_name}}</span>
               </template>
@@ -126,6 +188,23 @@
             >
               <el-icon><Document /></el-icon>
               <span>{{file.name}}</span>
+              <el-dropdown
+                  trigger="click"
+                  @command="handleCommand"
+              >
+                <span class="el-dropdown-link">
+                  <el-icon class="el-icon--right">
+                    <EditPen />
+                  </el-icon>
+                </span>
+                <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="a">删除</el-dropdown-item>
+                  <el-dropdown-item command="b">重命名</el-dropdown-item>
+                </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -173,8 +252,15 @@ export default {
       team_id: '',
       root_id: '',
       activeIndex: '',
+
       dialogVisible: false,
       dialogVisible1: false,
+
+      delete_pro_doc: false,
+      rename_pro_doc: false,
+
+      newname: '',
+
       allFile: [],
       allFolder: [],
       folderNum: 1,
@@ -231,7 +317,16 @@ export default {
           .then(res =>{
             switch (res.data.code) {
               case 200:
+
                 this.allFile = res.data.data;
+                this.allFolder = [];
+                this.folderNum = 1;
+                this.projectNum = 0;
+                this.allProject = [];
+                this.allProjectFile = [];
+                this.allCommonFile = [];
+                this.rootFile = [];
+
                 for (var i in this.allFile){
                   console.log('hi there');
                   if (this.allFile[i].type == 13) {
@@ -309,6 +404,7 @@ export default {
                   var op = new Op(folder.folder_name, folder.folder_name);
                   this.options.push(op);
                   this.newfolder.name = "";
+                  this.dialogVisible = false;
                   // console.log(this.folder);
                   break;
                 case 500:
@@ -398,6 +494,7 @@ export default {
                   this.newfile.project_id = "";
                   this.newfile.route = "";
                   this.newfile.type = 1;
+                  this.dialogVisible1 = false;
                   // console.log("hi");
                   // console.log(this.allFolder);
                   break;
@@ -409,6 +506,42 @@ export default {
             })
       }
     },
+
+    renameProDoc() {
+      console.log("rename");
+      console.log(this.newname);
+      this.rename_pro_doc = false;
+    },
+    deleteProDoc(file) {
+      console.log("delete");
+      console.log(file);
+      var id = this.$store.state.user.id;
+      if(id == undefined || id == null || id == ''){
+        ElMessage.warning('请先登录');
+      }else {
+        this.$http({
+          method:'post',
+          url:'/file/json/delete',
+          params: {
+            file_id: file.file_id,
+          },
+        })
+        .then(res => {
+          switch (res.data.code) {
+            case 200:
+              ElMessage.success('删除成功！');
+              this.getAllFile();
+              break;
+            case 500:
+              ElMessage.error(res.data.message);
+              console.log(res.data.message);
+              break;
+          }
+        })
+      }
+      this.delete_pro_doc = false;
+    },
+
   },
 }
 
@@ -431,7 +564,7 @@ export default {
   height: 100vh;
 
 }
-.newOne :hover{
+.icon :hover{
   color: #999999;
 }
 
