@@ -314,8 +314,42 @@ export default {
             if(this.newone.name == '' || this.newone.name == null || this.newone.name == undefined){
                 ElMessage.warning("请输入文件名");
             }
-            //设计原型、文档
-            else if(this.fileType == 1 || this.fileType == 0){
+            //设计原型
+            else if(this.fileType == 1 ){
+                this.$http
+                .post('/file/json/new', {
+                    project_id: this.project_id,
+                    file_name: this.newone.name,
+                    type: this.fileType,
+                    height: this.newone.h,
+                    width: this.newone.w
+                })
+                .then(res =>{
+                    console.log(res.data.code);
+                    console.log(res.data.data);
+                    switch (res.data.code){
+                        case 200:
+                            console.log(res.data.data);
+                            this.getFile();
+                            ElMessage.success("创建成功！")
+                            this.newone.name = '';
+                            this.newFileid = res.data.data;
+                            this.dialogVisible = false;
+                            this.dialogVisible2 = false;
+                            //是否跳转到编辑页？
+                            // this.$router.push('/prototypeDesign');
+                            break;
+                        case 500:
+                            ElMessage.error(res.data.message);
+                            break;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+            //文档
+            else if(this.fileType == 0){
                 this.$http
                 .post('/file/json/new', {
                     project_id: this.project_id,

@@ -279,12 +279,6 @@ export default {
             sign:'0'
         }
     },
-    watch: {
-    '$route'() {
-          // 路由发生变化页面刷新
-          this.$router.go(0);
-      }
-    },
     methods: {
         getTeam(){
             this.$http({
