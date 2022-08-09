@@ -229,8 +229,6 @@ export function level_getCollaboratePrototype(application, file_id){
                 let componentJSON = newMap.get(key)
                 let componentServerSide = JSON.parse(componentJSON)
                 componentServerSide = componentServerSide[0]
-                console.log("Map updates")
-
                 // 只针对其他用户的更改实时更改本地渲染
                 if(!(componentServerSide.usedBy === '__none__' ||
                     componentServerSide.usedBy === application.$store.state.user.id)) {
@@ -300,7 +298,23 @@ export function level_deleteCollaborateComponent(application, file_id, component
 }
 
 
-// eslint-disable-next-line no-unused-vars
-export function level_switchPage(application, newPageIndex){
+
+export function level_switchPage(application, newPageFileId){
+    // 断开与之前页面的连接
+    let collaborateConfig = sharedDocMap.get(application.currentPage.page_file_id)
+    let collaborateDoc = collaborateConfig.doc
+    sharedDocMap.delete(application.currentPage.page_file_id)
+    collaborateDoc.destroy()
+    // 清除本地画布及所有的选择状态
+    application.setControls([])
+    application.clearCurrentComponent()
+    // 将新页面标记为newPageFileId所在的页面
+    application.pages.map((page) => {
+        if(page.page_file_id === newPageFileId){
+            application.currentPage = page
+        }
+    })
+    // 新建与新页面的连接
+    level_getCollaboratePrototype(application, newPageFileId)
 
 }

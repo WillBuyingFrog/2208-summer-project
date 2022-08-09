@@ -246,6 +246,9 @@ export default {
       if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
         console.log("Detected transform type", type)
         this.updateControlValue('transform', transform, false)
+        // 需要将usedBy传入组件中
+        // 为了显示美观，这里传入用户名
+        this.updateControlValue('usedBy', this.$store.state.user.name, true)
 
         let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
         console.log("The currently controlled element is", realComponent)
@@ -312,7 +315,7 @@ export default {
     },
     // 属性编辑器变化后同步到组件中
     handleChange({ keyName, value, extra }) {
-      console.log("hello!")
+      console.log("hello!", keyName, value, extra)
       if (!this.currentId) {
         return
       }
@@ -323,6 +326,7 @@ export default {
       }
       // 注意节流优化提升性能
       this.updateControlValue(keyName, value, extra)
+      level_updateCollaborateComponent(this, this.currentPage.page_file_id, this.controlled)
     },
     getActiveComponent(ctls) {
       return findComponent(ctls, (item) => item.active)
@@ -512,6 +516,8 @@ export default {
         page_file_id: "testtest",
         page_name: "lalala"
       }
+      this.$store.state.user.id = prompt("输入测试用户名")
+      this.$store.state.user.name = this.$store.state.user.id + "---"
       level_getCollaboratePrototype(this, this.currentPage.page_file_id)
       console.log("You shouldn't see this")
     }

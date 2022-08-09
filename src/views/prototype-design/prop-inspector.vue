@@ -51,8 +51,16 @@ export default {
       })
     },
     extraChange(e, item) {
+      console.log({
+        ...item,
+        keyName: item.name,
+        value: e.target.value,
+        checked: e.target.checked,
+        extra: true,
+      })
       this.$emit('propChange', {
         ...item,
+        keyName: item.name,
         value: e.target.value,
         checked: e.target.checked,
         extra: true,
