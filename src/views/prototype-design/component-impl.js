@@ -33,13 +33,16 @@ const Img = {
         },
     },
     render() {
-        console.log("Extra params in render function:", this.params)
+        console.log("Extra param usedBy in render function:", this.params.usedBy)
         return(
-            <div draggable="false" class="match-parent"
-                 style={{display: this.params.usedBy === '__none__' ? "none" : "block"}}>
-                <span style={{display: "none"}}>test</span>
-                <img draggable="false" className="match-parent" src={this.params.url}/>
+            <div draggable="false" class="match-parent">
+                <span draggable="false" class="notice-bar"
+                      style={{display: this.params.usedBy === '__none__' ? "none" : "block"}}>
+                    {this.params.usedBy}
+                </span>
+                <img draggable="false" class="match-parent" src={this.params.url}/>
             </div>
+
 
             )
 

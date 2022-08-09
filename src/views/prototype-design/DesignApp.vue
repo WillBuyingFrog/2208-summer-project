@@ -425,12 +425,15 @@ export default {
       this.setCurrentControl(this.getActiveComponent(this.controls))
     },
     handleUnselect() {
+      console.log("HandleUnselect")
       if (!this.currentId) return
       let realComponent = findComponent(this.controls, (item) => {return this.currentId === item.id})
       realComponent.usedBy = '__none__'
       realComponent.active = true
       realComponent.resizable = true
       realComponent.draggable = true
+      // 还要在extra属性内更改usedBy
+      realComponent.extra.usedBy = '__none__'
       level_updateCollaborateComponent(this, this.currentPage.page_file_id, realComponent)
       this.updateControlStatus(false)
       this.clearCurrentComponent()
@@ -551,6 +554,11 @@ export default {
     height: 100%;
     min-width: 50px;
     display: block;
+  }
+  .notice-bar{
+    z-index: 99999;
+    height: 5px;
+    font-size: 8px;
   }
   .header {
     padding: 0;

@@ -1,9 +1,6 @@
 import * as Y from "yjs";
 import {WebsocketProvider} from "y-websocket";
 import {findComponent, findComponentPathById, updateTreeIn} from "@/views/prototype-design/utils/index";
-import {
-    monitorTransforms
-} from "@/views/prototype-design/utils/collaborate";
 
 
 /**
@@ -111,6 +108,14 @@ export function deleteCollaborateComponent(application, componentJSON){
     })
 }
 
+export const monitorExtraTransforms = [
+    'value', 'checked', 'usedBy'
+]
+export const monitorTransforms = [
+    'x', 'y', 'transform', 'resizable', 'draggable', 'acceptRatio', 'active',
+]
+
+
 /**
  * 同步实时协作时对组件的更改。
  * @param application DesignApp
@@ -141,7 +146,12 @@ export function level_syncComponentTransforms(application, componentJSON, isLock
                 }
             })
 
-            // TODO 监听extra的更改
+            // 监听extra的更改
+            monitorExtraTransforms.map((key) => {
+                if(newValue[key])
+                    item.extra[key] = newValue[key]
+            })
+
 
             return item
         })

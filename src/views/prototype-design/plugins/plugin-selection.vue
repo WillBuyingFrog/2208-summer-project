@@ -76,7 +76,6 @@ export default {
       this.getContains()
     },
     handleSelectionEnd() {
-      console.log("selectionEnd")
       if (this.selectedComponents.length == 1) {
         this.application.handleSelect({
             control: this.application.controls.find((item) => item.id === this.selectedComponents[0].id),
