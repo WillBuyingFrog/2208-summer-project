@@ -141,6 +141,15 @@ export default {
           title: 'Redo',
           action: () => this.editor.chain().focus().redo().run(),
         },
+        {
+          type: 'divider',
+        },
+        {
+          icon: 'download-2-line',
+          title: 'Download',
+          // action not written
+          // action: () => this.editor.chain().focus().redo().run(),
+        },
       ],
     }
   },

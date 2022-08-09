@@ -8,7 +8,7 @@
       </ul>
       <button @click="setorderType(0)">年龄升序</button>
       <button @click="setorderType(1)">年龄降序</button>
-      <button @click="setorderType(2)">原先排序</button>
+      <button @click="setorderType(2)">名字排序</button>
    </section>
  
 </template>
@@ -23,8 +23,7 @@
                    {name:'Rose',age:17},
                ] ,
                search:'',
-               orderType:0,//0原版本 ，1升序，2降序
- 
+               orderType:0,//0升序 ，1降序，2名字
            }
         },
         computed:{
@@ -32,28 +31,16 @@
                 const {search,persons ,orderType}=this
                 let fPersons;
                 fPersons=persons.filter(p => p.name.toLowerCase().indexOf(search.toLowerCase())!==-1)
-                let reg = /[a-zA-Z0-9]/
-                if(orderType!==0){
                     fPersons.sort(function(x,y){
-                        //1升序，2降序
-                        if(orderType===2){
+                        //1降序
+                        if(orderType===1){
                             return y.age-x.age;
-                        }else{
-                            if(reg.test(x)|| reg.test(y)){
-                                if(x>y){
-                                    return 1
-                                }else if(x<y){
-                                    return -1
-                                }else{
-                                    return 0
-                                }
-                            }else{
-                                return x.localeCompare(y)
-                            }
+                        }else if(orderType == 0){//0升序
+                                return x.age-y.age
+                        }else if(orderType == 2){//2名字排序
+                                return x.name.localeCompare(y.name)
                         }
- 
                     })
-                }
                 return fPersons;
             }
         },

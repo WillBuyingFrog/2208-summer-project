@@ -26,13 +26,13 @@
     </div>
     <el-divider class="divider"></el-divider>
     <el-popconfirm
-        confirm-button-text="Yes"
-        cancel-button-text="No, Thanks"
-        icon-color="#626AEF"
+        confirm-button-text="确定"
+        cancel-button-text="取消"
+        icon-color="#7fa9cc"
         title="确认退出登录?"
         @confirm="logout()">
       <template #reference>
-        <el-button class="log-out" >退出登录</el-button>
+        <el-button class="log-out"  color="#a4c2db" style="color:white">退出登录</el-button>
       </template>
     </el-popconfirm>
   </div>
@@ -90,5 +90,24 @@ export default {
   font-size: 18px;
   padding: 15px 0;
   height: 20px;
+}
+</style>
+
+<style lang="scss">
+.el-popconfirm__action {
+  // 交换 确定 和 取消 按钮的位置
+
+  .el-button:nth-child(2) {
+    background: #7fa9cc;
+    border-radius: 4px;
+    border: 1px solid #aeb5c2;
+    color: #ffffff;
+  }
+  .el-button:nth-child(2):hover {
+    background: #a4c2db;
+    border-radius: 4px;
+    border: 1px solid #aeb5c2;
+    color: #ffffff;
+  }
 }
 </style>

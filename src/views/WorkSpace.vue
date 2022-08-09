@@ -24,12 +24,14 @@
                   <el-header style="height:50px;">
                     <el-row>
                       <el-col :span="9">
+                      <div class="topTab">
                         <el-tabs v-model="status" style="height: 50px;">
                               <el-tab-pane label="邀请" name="0">
                               </el-tab-pane>
                             <el-tab-pane label="通知" name="1">
                               </el-tab-pane>
                         </el-tabs>
+                      </div>
                       </el-col> 
                       <el-col :span="3" :offset="9">
                         <el-select v-model="value"  placeholder="Select" style="height:30px;width:100px;margin-top:5px;">
@@ -48,7 +50,7 @@
                      <el-scrollbar >
                     <el-table :data="invite_filter()" style="width: 100%" v-if="status=='0'" :show-header="false">
                       <el-table-column
-                        width="45">
+                        width="49">
                         <template #default="scope">
                           <el-checkbox v-if="scope.row._read == false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
                           <el-tag v-else  type="info" size="small">已读</el-tag>
@@ -67,13 +69,14 @@
                       </el-table-column>
                       <el-table-column>
                         <template #default="scope">
-                           <el-button type="primary" size="small" @click="accept(scope.row.message_id)">接受</el-button>
+                           <el-button type="primary" size="small" @click="accept(scope.row.message_id)"
+                           color="#7fa9cc" style="color:white">接受</el-button>
                         </template>
                       </el-table-column>
                     </el-table>
                     <el-table :data="notice_filter()" style="width: 100%" v-else :show-header="false">
                       <el-table-column
-                        width="45">
+                        width="49">
                         <template #default="scope">
                           <el-checkbox v-if="scope.row._read==false" v-model="scope.row._read" @click="readed(scope.row.message_id)"></el-checkbox>
                           <el-tag v-else  type="info" size="small">已读</el-tag>
@@ -93,12 +96,15 @@
 
                   </el-main>
                   <el-footer >
-                    <el-button @click="readedAll()">标记全部为已读</el-button>
+                    <el-button @click="readedAll()" color="#a4c2db" style="color:white">标记全部为已读</el-button>
                   </el-footer>
                 </el-container>
                 <template #reference>
-                  <el-badge :value="unreadNumber" class="item" style="margin-top:15px;">
-                    <el-button icon="ChatDotRound" @click="visible = !visible">消息</el-button>
+                  <el-badge v-if="unreadNumber!= '0'" :value="unreadNumber" class="item" style="margin-top:15px;">
+                    <el-button icon="ChatDotRound" @click="visible = !visible" class="messageBtn">消息</el-button>
+                  </el-badge>
+                  <el-badge v-else class="item" style="margin-top:15px;">
+                    <el-button icon="ChatDotRound" @click="visible = !visible" class="messageBtn">消息</el-button>
                   </el-badge>
                 </template>
               </el-popover>
@@ -219,7 +225,7 @@
         <template #footer>
         <span class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newTeam">立即创建</el-button>
+            <span class="button2"><el-button color="#859dda" @click="newTeam">立即创建</el-button></span>
         </span>
         </template>
     </el-dialog>
@@ -481,17 +487,23 @@ export default {
         }
       },
       accept(message_id){
-          const self = this;
-          self.$http({
-            method:'post',
-            url:'/message/accept',
-            params: {
-            message_id: message_id
-          },
-          }).then(res=>{
-            console.log(res.data);
-            ElMessage.success("成功加入团队")
-          })
+        const self = this;
+        self.$http({
+          method:'post',
+          url:'/message/accept',
+          params: {
+          message_id: message_id
+        },
+        }).then(res=>{
+          console.log(res.data);
+          ElMessage.success("成功加入团队")
+          for(var i=0; i<this.invite.length; i++){
+            if(this.invite[i].message_id == message_id){
+              this.invite.splice(i,1)
+              break
+            }
+          }
+        })
       },
     },
     created(){
@@ -569,15 +581,19 @@ html,body{
 .dialog-footer {
     float: calc();
 }
+.button2 .el-button{
+  color: white;
+  margin-left: 20px;
+}
 .title{
-    width: 120px;
+    width: 110px;
     margin-left: 50px;
-    margin-top: 20px;
-    padding-bottom: 5px;
+    margin-top: 15px;
+    padding-bottom: 8px;
     font-size: 22px;
     color: rgb(210,228,245);
-    border-bottom:4px solid  rgb(210,228,245);
-    font-weight: 600;
+    border-bottom:3px solid  rgb(210,228,245);
+    font-weight: 550;
     float: left;
     }
 .head{
@@ -641,6 +657,49 @@ html,body{
 .textitem:hover .front{
     transform: rotateY(180deg);
 
+}
+  .messageBtn:hover{
+    background-color: #a4c2db;
+    color: #ffffff;
+  }
+  .messageBtn:focus{
+    background-color: #a4c2db;
+    color: #ffffff;
+  }
+
+</style>
+
+<style>
+.workspace .el-tabs__item:hover {
+  color: #859dda;
+  border-right: 2px solid #859dda;
+}
+.workspace .el-tabs__item.is-active {
+  border-right: 2px solid #859dda !important;
+    color: #859dda;
+}
+.workspace .el-tabs__active-bar{
+    background-color: #859dda;
+}
+
+.topTab .el-tabs__item:hover {
+  color: #6e97af;
+}
+.topTab .el-tabs__item.is-active {
+    color: #6e97af;
+}
+.topTab .el-tabs__active-bar{
+    background-color: #6e97af;
+}
+.el-select .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1px #d4d4d4 inset!important;
+}
+.el-select .el-input.is-focus .el-input__wrapper {
+    box-shadow: 0 0 0 1px #b6b6b6 inset!important;
+}
+.el-select-dropdown__item.selected {
+    color:#6e97af;
+    font-weight: 700;
 }
 </style>
 

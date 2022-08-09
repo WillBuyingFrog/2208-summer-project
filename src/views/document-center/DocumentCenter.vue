@@ -7,12 +7,13 @@
       <el-container>
         <el-aside
             width="300px"
-            style="background-color: rgba(250, 250, 250, 0.5);"
+            style="background-color: rgba(250, 250, 250, 0.6);"
         >
           <span></span>
           <el-icon
               style="padding: 20px 10px 0 0;font-size: 20px"
               @click="dialogVisible = true"
+              class="newOne"
           ><FolderAdd /></el-icon>
           <el-dialog
               v-model="dialogVisible"
@@ -39,6 +40,7 @@
           <el-icon
               style="padding: 20px 0 0 10px;font-size: 20px"
               @click="dialogVisible1 = true"
+              class="newOne"
           ><DocumentAdd /></el-icon>
           <el-dialog
               v-model="dialogVisible1"
@@ -73,24 +75,47 @@
             </template>
           </el-dialog>
           <el-menu
-              default-active="2"
+              default-active="activeIndex"
               class="docs"
-              @open="handleOpen"
-              @close="handleClose"
+              @select="handleSelect"
           >
             <el-sub-menu index="1">
               <template #title>
                 <el-icon><Folder /></el-icon>
-                <span>Navigator One</span>
+                <span>项目文档区</span>
               </template>
-              <el-menu-item-group title="Group One">
-                <el-menu-item index="1-1">item one</el-menu-item>
-                <el-menu-item index="1-2">item one</el-menu-item>
+              <el-menu-item-group
+                  v-for="project in allProject"
+                  :key="project.index"
+                  :index="`1-${project.index}`"
+                  :title="project.project_name"
+              >
+                <el-menu-item
+                    v-for="(file,index) in project.file"
+                    :key="file.file_id"
+                    :index="`1-${project.index}-${index}`"
+                >
+                  {{file.name}}
+                </el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group title="Group Two">
-                <el-menu-item index="1-3">item three</el-menu-item>
-              </el-menu-item-group>
-                <el-menu-item index="1-4">item four</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu
+                v-for="folder in allFolder"
+                :key="folder.file_id"
+                :index="folder.index"
+            >
+              <template #title>
+                <el-icon><Folder /></el-icon>
+                <span>{{folder.name}}</span>
+              </template>
+              <el-menu-item
+                  v-for="(file,index) in allCommonFile"
+                  :key="file.file_id"
+                  :index="`${folder.index}-${index}`"
+              >
+                {{file.name}}
+              </el-menu-item>
+
             </el-sub-menu>
             <el-menu-item index="2">
               <el-icon><Document /></el-icon>
@@ -107,7 +132,7 @@
           </el-menu>
         </el-aside>
         <el-main>
-
+<!--          <tip-tap-demo></tip-tap-demo>-->
         </el-main>
       </el-container>
     </el-container>
@@ -116,15 +141,35 @@
 
 <script>
 import 'element-plus/dist/index.css'
+// import TipTapDemo from "@/components/TipTapDemo";
 
 export default {
   name: "DocumentCenter",
+  // components: {TipTapDemo},
   data() {
     return {
       team_id: '',
+      activeIndex: '',
       dialogVisible: false,
       dialogVisible1: false,
       allFile: [],
+      allFolder: [],
+      allProject: [],
+      allProjectFile: [],
+      allCommonFile: [],
+      project:{
+        index: 0,
+        project_id: "",
+        file_id: "",
+        project_name: "",
+        file: [],
+      },
+      folder: {
+        index: 1,
+        folder_id: "",
+        folder_name: "",
+        file: [],
+      },
       newfile:{
         name: "",
         router: "",
@@ -150,61 +195,85 @@ export default {
       }],
       value: '',
 
-      data: [{
-        label: '一级 1',
-        children: [{
-          label: '二级 1-1',
-          children: [{
-            label: '三级 1-1-1'
-          }]
-        }]
-      }, {
-        label: '一级 2',
-        children: [{
-          label: '二级 2-1',
-          children: [{
-            label: '三级 2-1-1'
-          }]
-        }, {
-          label: '二级 2-2',
-          children: [{
-            label: '三级 2-2-1'
-          }]
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          label: '二级 3-1',
-          children: [{
-            label: '三级 3-1-1'
-          }]
-        }, {
-          label: '二级 3-2',
-          children: [{
-            label: '三级 3-2-1'
-          }]
-        }]
-      }],
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      }
     };
   },
   created(){
-    this.team_id = this.$store.state.teamid;
+    this.team_id = this.$store.state.team_id;
     console.log("team_id: "+this.team_id);
+    this.getAllFile();
   },
   methods: {
     handleNodeClick(data) {
       console.log(data);
     },
+    getAllFile() {
+      this.$http
+          .post('/file/fileList', {
+            team_id: this.team_id
+          })
+          .then(res =>{
+            console.log(res.data);
+            console.log(res.data.data.length);
+            switch (res.data.code) {
+              case 200:
+                this.allFile = res.data.data;
+                for (var i in this.allFile){
+                  console.log('hi there');
+                  console.log(this.allFile[i].type);
+                  console.log(this.allFile);
+                  console.log(this.allFile[0]);
+                  if (this.allFile[i].type == 11) {
+                    this.folder.index++;
+                    this.folder.folder_id = this.allFile[i].file_id;
+                    this.folder.folder_name = this.allFile[i].name;
+                    console.log(this.folder);
+                    this.allFolder.push(this.folder);
+                  }else if (this.allFile[i].type == 12) {
+                    console.log(12);
+                    this.project.index++;
+                    this.project.project_id = this.allFile[i].id;
+                    this.project.project_name = this.allFile[i].name;
+                    this.project.file_id = this.allFile[i].file_id;
+                    console.log('project');
+                    console.log(this.project);
+                    this.allProject.push(this.project);
+                  }else if (this.allFile[i].type == 0) {
+                    for (var j in this.allProject) {
+                      if (this.allProject[j].file_id == this.allFile[i].id) {
+                        this.allProject[j].file.push(this.allFile[i]);
+                        break;
+                      }
+                    }
+                    this.allProjectFile.push(this.allFile[i]);
+                  }else if (this.allFile[i].type == 2){
+                    for (var k in this.allFolder) {
+                      if (this.allFolder[k].folder_id == this.allFile[i].id) {
+                        this.allFolder[k].file.push(this.allFile[i]);
+                        break;
+                      }
+                    }
+                    this.allCommonFile.push(this.allFile[i]);
+                  }
+                }
+                console.log(this.allFile);
+                console.log(this.allFolder);
+                console.log(this.allProject);
+                console.log(this.allProjectFile);
+                console.log(this.allCommonFile);
+            }
+          })
+          .catch(err =>{
+            console.log(err);
+          })
+    },
+
     newFolder() {
 
     },
     newFile() {
 
     }
+
 
   },
 }
@@ -228,5 +297,14 @@ export default {
   height: 100vh;
 
 }
+.newOne :hover{
+  color: #999999;
+}
 
+</style>
+
+<style>
+.bg .el-menu-item.is-active{
+  color: #859dda;
+}
 </style>
