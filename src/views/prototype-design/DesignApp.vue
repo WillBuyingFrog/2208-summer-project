@@ -15,8 +15,6 @@
                   <div
                       :style="{width: this.initWidth + 'px',
                        height: this.initHeight + 'px',
-                       marginLeft: 'calc((100% - ' + this.initWidth + 'px) / 2)',
-                       marginRight: 'calc((100% - ' + this.initWidth + 'px) / 2)'
                        }"
                   >
                     <DesignEditorView ref="editor" :value="this.controls">
@@ -521,9 +519,6 @@ export default {
       this.$store.state.user.name = localStorage.getItem('user_name')
       this.$store.state.user.id = localStorage.getItem('user_id')
 
-      const MAX_HEIGHT = 600
-      const MAX_WIDTH = 1000
-
       // eslint-disable-next-line no-unused-vars
       let temp = await this.$http
           .post('/file/page/get', {
@@ -535,16 +530,6 @@ export default {
         this.initHeight = allPages[0].height
       })
 
-      let heightScale = MAX_HEIGHT / this.initHeight
-      let widthScale = MAX_WIDTH / this.initWidth
-      let minScale = heightScale < widthScale ? heightScale : widthScale
-      if(minScale > 1.0) minScale = 1.0
-      this.initHeight = parseInt(this.initHeight * minScale)
-      this.initWidth = parseInt(this.initWidth * minScale)
-      console.log("Final computed height and width:", this.initHeight, this.initWidth)
-      this.file_id = this.$store.state.file_id // 原型设计的id
-      this.file_name = this.$store.state.file_name  // 原型设计名称
-      this.userId = this.$store.state.user.id
       // 只需要一个函数进行初始化
       _level_loadCanvasInit(this)
     } else {
