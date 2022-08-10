@@ -393,6 +393,11 @@ export default {
     },
   },
   async mounted(){
+
+    // eslint-disable-next-line no-unused-vars
+    this.initWidth = 1600
+    this.initHeight = 1200
+
     // 预览模式，禁用所有更改
     level_getPreviewCollaboratePrototype(this, this.previewPageId)
   }

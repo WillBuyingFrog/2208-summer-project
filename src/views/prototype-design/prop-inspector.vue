@@ -28,16 +28,25 @@ export default {
         { type: 'number', name: '高度' , keyName: 'height'},
         { type: 'number', name: '最低宽度', keyName: 'minWidth' },
         { type: 'number', name: '最低高度', keyName: 'minHeight' },
-        { type: 'grid', name: '网格化', keyName: 'grid' },
         {
           type: 'radio',
           name: '可移动方向',
           keyName: 'axis',
-          options: [{ label: 'y', value: 'y' }, { label: 'x', value: 'x' }, { label: 'xy', value: 'xy' }],
+          options: [{ label: '竖', value: 'y' }, { label: '横', value: 'x' }, { label: '横竖', value: 'xy' }],
         },
         { type: 'checkbox', name: '等比例缩放', keyName: 'acceptRatio' },
       ],
-      extraInputs: [{ type: 'text', name: 'value' }, { type: 'text', name: 'label' }]
+      extraInputs: [
+        { type: 'text', name: 'value', displayName: '内容值' },
+        { type: 'text', name: 'label', displayName: '标签' },
+        { type: 'text', name: 'menuSectionOne', displayName: '第一项目录名'},
+        { type: 'text', name: 'menuSectionTwo', displayName: '第二项目录名'},
+        { type: 'text', name: 'menuSectionThree', displayName: '第三项目录名'},
+        { type: 'text', name: 'menuSectionFour', displayName: '第四项目录名'},
+        { type: 'textarea', name: 'cardInfo', displayName: '卡片说明' },
+        {type: 'text', name: 'searchPrompt', displayName: '提示语'},
+        { type: 'text', name: 'imageInfo', displayName: '图片区说明'},
+      ]
     }
   },
   methods: {
@@ -92,7 +101,7 @@ export default {
               .map((item) => {
                 return (
                     <div class="input-item" key={item.name}>
-                      <label class="input-label">{item.name}</label>
+                      <label class="input-label">{item.displayName}</label>
                       <input
                           onInput={(e) => this.extraChange(e, item)}
                           class="input-value"
@@ -128,7 +137,7 @@ export default {
   .input-label {
     display: inline-block;
     width: 100px;
-
+    word-wrap: break-word;
     color: #555;
   }
   .input-value:not([type='checkbox']) {

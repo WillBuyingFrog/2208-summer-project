@@ -363,7 +363,7 @@ export default {
     },
     setControls(controls, needRecordHistory = true) {
       this.controls = controls
-      console.log("[->setControls]", this.controls[0].transform.x, this.controls[0].transform.y)
+      // console.log("[->setControls]", this.controls[0].transform.x, this.controls[0].transform.y)
       if (needRecordHistory) {
         historys = historys.slice(0, historyPointer + 1)
         historys.push(this.controls)

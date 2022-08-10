@@ -299,7 +299,7 @@ export function level_getCollaboratePrototype(application, file_id){
         }
     })
 
-    // console.log("Create new room with file_id:", file_id)
+    console.log("Create new room with file_id:", file_id)
 
     const newMap = newDoc.getMap(file_id)  // 在doc内创建一个map
     collaboratePrototypeConfig.map = newMap
@@ -367,7 +367,7 @@ export function level_getCollaboratePrototype(application, file_id){
 
     sharedDocMap.set(file_id, collaboratePrototypeConfig)
 
-    // console.log("End collaboratePrototypeConfig")
+    console.log("End collaboratePrototypeConfig")
 
     return collaboratePrototypeConfig
 }
@@ -529,10 +529,13 @@ export function level_switchPage(application, newPageFileId, isPreview=0){
     if(isPreview){
         collaborateConfig = sharedPreviewDocMap.get(application.lastPageId)
     }else{
+        console.log("Indexing", application.currentPage.page_id)
         collaborateConfig = sharedDocMap.get(application.currentPage.page_id)
+        console.log("Get:", collaborateConfig)
     }
     let collaborateDoc = collaborateConfig.doc
     let collaborateProvider = collaborateConfig.provider
+    console.log("ok")
     if(isPreview){
         sharedPreviewDocMap.delete(application.lastPageId)
     }else{

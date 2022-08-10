@@ -83,7 +83,7 @@ export function _exportTemplateToBackend(application){
     application.$http
         .post('/template/ProtoNew', {
             template_name: "测试模板",
-            template_id: "1",
+            template_id: "2",
             template_page_count: pages.length,
             template_height: application.currentPage.height.toString(),
             template_width: application.currentPage.width.toString(),

@@ -1,6 +1,6 @@
 <template>
   <div class="ds-components">
-    <span>无样式组件</span>
+    <span>基础组件</span>
     <div
         v-for="(item, index) in elements"
         @dragstart="(e) => {this.handleDrag(e, item)}"
@@ -20,34 +20,115 @@
     >
       <span>{{item.displayName}}</span>
     </div>
+    <el-divider />
+    <div
+        v-for="(item, index) in purePicture"
+        @dragstart="(e) => {this.handleDrag(e, item)}"
+        draggable="true"
+        :key="index"
+        class="components-item"
+    >
+      <span>{{item.displayName}}</span>
+    </div>
   </div>
 </template>
 
 
 <script>
+import Logo from '@/assets/images/logo.png'
 
-import Logo from '@/assets/logo.png'
+// 328 252
+import Pic1 from '@/assets/template_school/tip.png'
+
+import iPhone from '@/assets/template_school/iPhone.png'
 
 export default {
   name: "DesignAppComponents",
   data(){
     return {
-      styledElements: [
+      purePicture: [
         {
           type: 'img',
-          displayName: '墨刀Logo',
+          displayName: '墨书Logo',
           name: 'Image',
           url: Logo,
           width: 100,
           height: 100,
         },
         {
+          type: 'Avatar',
+          displayName: '用户头像',
+          name: 'Avatar1',
+          width: 100,
+          height: 100,
+        },
+        {
+          type: 'img',
+          displayName: '手机外壳',
+          name: 'Image2',
+          url: iPhone,
+          width: 300,
+          height: 605,
+        },
+      ],
+      styledElements: [
+
+        {
           type: 'BouncyButton',
           displayName: '仿FontAwesome按钮',
-          name: 'Button',
+          name: 'Button1',
           value: '测试文字',
           width: 100,
           height: 30,
+        },
+        {
+          type: 'El_Menu',
+          displayName: '侧边栏',
+          name: 'Menu1',
+          menuSectionOne: 'No.1', menuSectionTwo: 'No.2', menuSectionThree: 'No.3', menuSectionFour: 'No.4',
+          width: 100,
+          height: 300,
+        },
+        {
+          type: 'Card',
+          displayName: '圆角卡片(3:3)',
+          name: 'Shape1',
+          cardInfo: '这里是卡片占位说明',
+          width: 300,
+          height: 300,
+        },
+        {
+          type: 'RoundTransparent',
+          displayName: '圆角无背景(4:3)',
+          name: 'Shape1',
+          cardInfo: '这里是占位说明',
+          width: 400,
+          height: 300,
+        },
+        {
+          type: 'RoundTransparent',
+          displayName: '圆角无背景(6:3)',
+          name: 'Shape2',
+          cardInfo: '这里是占位说明',
+          width: 600,
+          height: 300,
+        },
+        {
+          type: 'SearchBar',
+          displayName: '搜索栏',
+          name: 'Shape3',
+          searchPrompt: 'Type to explore academic world...',
+          width: 600,
+          height: 80,
+        },
+        {
+          type: 'PictureCard',
+          displayName: '图片展示栏',
+          name: 'Shape3',
+          imageInfo: '这里展示轮播图片',
+          width: 490,
+          height: 330,
+          url: Pic1
         },
       ],
       elements: [
@@ -81,7 +162,7 @@ export default {
           displayName: '多选框',
           inputType: 'checkbox',
           name: 'Checkbox',
-          label: '多选',
+          label: '提示文字',
           width: 100,
           height: 30,
         },
@@ -90,7 +171,7 @@ export default {
           displayName: '单选框',
           inputType: 'radio',
           name: 'Radio',
-          label: '单选',
+          label: '提示文字',
           width: 100,
           height: 30,
         },

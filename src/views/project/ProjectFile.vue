@@ -479,7 +479,8 @@ export default {
                 this.$http
                 .post('/template/newProto', {
                   template_id: this.currentDemo1.toString(),
-                  project_id: this.project_id.toString()
+                  project_id: this.project_id.toString(),
+                  file_name: this.newone.name
                 })
                 .then(res => {
                   switch(res.data.code){

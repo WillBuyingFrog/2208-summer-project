@@ -8,7 +8,65 @@
     height: 100%;
     min-width: 60px;
 }
-.custom-bouncy-button:active{
+.custom-bouncy-button:hover{
     box-shadow: rgb(24, 49, 83) 0 1px 0 0;
     margin: 5px 0 0 0;
+}
+
+.el-menu-base{
+    height: 100%;
+    width: 100%;
+    border: 1px solid gray;
+}
+
+.el-menu-section{
+    text-align: right;
+    padding: 25px 15px 25px 15px;
+
+    cursor: pointer;
+}
+
+.el-menu-section:hover{
+    color: #409eff;
+    border-right: 3px solid #409eff;
+    transition-duration: 0.2s;
+}
+
+.round-card{
+    border: 2px solid white;
+    background: white;
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+}
+
+.round-transparent{
+    border: 3px solid black;
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+}
+
+.round-card-inner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.search-bar{
+    border: 3px solid black;
+    border-radius: 15px;
+    color: gray;
+    width: 100%;
+    height: 100%;
+}
+
+.search-bar-inner{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
 }

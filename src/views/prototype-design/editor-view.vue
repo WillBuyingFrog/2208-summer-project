@@ -28,11 +28,8 @@ export default {
   data(){
     return {
       canvasStyle: {
-        width: '98%',
-        height: '95%',
-        border: '1px solid black',
-        marginLeft: '1%',
-        marginRight: '1%'
+        width: '100%',
+        height: '100%',
       },
       childCanvasStyle: {
         // 这些style不应该被更改
@@ -82,7 +79,7 @@ export default {
 
 <style scoped>
 
-.ds-editor-canvas {
+.root-editor {
   width: 100%;
   height: 100%;
 }
