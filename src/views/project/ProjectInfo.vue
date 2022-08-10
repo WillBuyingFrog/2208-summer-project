@@ -106,6 +106,7 @@ name: "projectFile",
     },
     created(){
         this.team_id = this.$store.state.team_id;
+        console.log(this.$store.state.project_name);
         this.project_name = this.$store.state.project_name;
         this.getProject();
     },
@@ -113,10 +114,12 @@ name: "projectFile",
         getProject(){
             this.$http
                 .post('/project/viewProject', {
+                    team_id: this.team_id,
                     project_name: this.project_name,
-                    team_id: this.team_id
                 })
                 .then(res =>{
+                    console.log(this.project_name);
+                    console.log(this.team_id);
                     console.log(res.data.code);
                     console.log(res.data.data);
                     switch (res.data.code){

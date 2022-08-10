@@ -11,7 +11,7 @@
             </el-col>
             <el-col :span="22">
               <p class="name">
-                {{this.page_name}}
+                {{this.doc_name}}
                 <el-icon class="edit-icon" @click="dialogVisible=true"><Edit></Edit></el-icon>
               </p>
               <el-dialog
@@ -21,7 +21,7 @@
                   <div class="card-header">
                     <span class="title" style="margin-left: 10px; color: black">
                         <DocumentCopy style="width: 0.8em; height: 0.8em;"/>
-                        重命名页面
+                        重命名文档
                     </span>
                   </div>
                 </template>
@@ -114,9 +114,11 @@ export default {
     this.project_id = this.$store.state.project_id;
     this.file_id = this.$store.state.file_id;
     this.index = this.$store.state.file_index;
-    console.log(this.file_id);
-    this.getAllDocs(this.index);
-    console.log('hi');
+    // console.log(this.project_id);
+    // console.log(this.file_id);
+    // console.log(this.index);
+    this.getAllDocs(this.file_id);
+    // console.log('hi');
   },
   methods: {
     rename(){
@@ -151,24 +153,36 @@ export default {
         })
       }
     },
-    getAllDocs(index){
+    getAllDocs(file_id){
           this.$http
               .post('/file/viewType', {
                 project_id: this.project_id,
-                type: 0,
+                type: "0",
               })
               .then(res =>{
-                console.log(res.data);
-                console.log(res.data.data.length);
-                console.log(res.data.data[0].file_name);
+                // console.log(res.data);
+                // console.log(res.data.data.length);
+                // console.log(res.data.data[0].file_name);
                 switch (res.data.code) {
                   case 200:
                     this.allDocs = res.data.data;
+                    this.allDocs.sort(function (a,b) {
+                      return(a.index-b.index);
+                    });
+                    console.log(this.allDocs);
                     this.docNum = this.allDocs.length;
                     this.newOneIndex = this.docNum + 1;
+                    var index;
+                    for (var i in this.allDocs) {
+                      if (this.allDocs[i].file_id == file_id) {
+                        index = this.allDocs[i].index;
+                        break;
+                      }
+                    }
                     this.activeIndex = index;
-                    this.doc_name = res.data.data[index-1].file_name;
-                    this.file_id = res.data.data[index-1].file_id;
+                    console.log(index);
+                    this.doc_name = this.allDocs[index-1].file_name;
+                    this.file_id = this.allDocs[index-1].file_id;
                     break;
                 }
               })
@@ -194,7 +208,7 @@ export default {
               console.log(res.data.code);
               switch (res.data.code) {
                 case 200:
-                  this.getAllDocs(this.newOneIndex);
+                  this.getAllDocs(res.data.data);
                   ElMessage.success('创建成功！');
                   // this.newone.name = '';
                   // this.newone.x = '';
@@ -210,15 +224,13 @@ export default {
       }
     },
     toggle(doc){
-      this.doc_name = doc.doc_name;
+      this.doc_name = doc.file_name;
+      this.index = doc.index;
       this.activeIndex = doc.index;
+      this.file_id = doc.file_id;
       console.log("toggle");
       console.log(this.activeIndex);
       // 标题和内容更改
-    },
-    handleSelect(key) {
-      console.log(this.activeIndex)
-      console.log(key);
     },
   }
 }

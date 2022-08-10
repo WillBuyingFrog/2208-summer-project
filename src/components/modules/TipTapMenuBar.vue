@@ -25,6 +25,8 @@
 import MenuItem from './TipTapMenuItem.vue'
 import FileSaver from 'file-saver'
 import htmlDocx from "html-docx-js/dist/html-docx"
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 export default {
   components: {
     MenuItem,
@@ -40,8 +42,7 @@ export default {
       rows: 3,
       cols: 4,
       cssHTML: 
-`
-<style>
+` 
   ul,
   ol {
     padding: 0 1rem;
@@ -129,7 +130,7 @@ export default {
       outline: 3px solid #68CEF8;
     }
   }
-  </style>`,
+  `,
       items: [
         {
           icon: 'bold',
@@ -182,18 +183,18 @@ export default {
         },{
           icon: 'h-4',
           title: '四级标题',
-          action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
-          isActive: () => this.editor.isActive('heading', { level: 3 }),
+          action: () => this.editor.chain().focus().toggleHeading({ level: 4 }).run(),
+          isActive: () => this.editor.isActive('heading', { level: 4 }),
         },{
           icon: 'h-5',
           title: '五级标题',
-          action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
-          isActive: () => this.editor.isActive('heading', { level: 3 }),
+          action: () => this.editor.chain().focus().toggleHeading({ level: 5 }).run(),
+          isActive: () => this.editor.isActive('heading', { level: 5 }),
         },{
           icon: 'h-6',
           title: '六级标题',
-          action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
-          isActive: () => this.editor.isActive('heading', { level: 3 }),
+          action: () => this.editor.chain().focus().toggleHeading({ level: 6 }).run(),
+          isActive: () => this.editor.isActive('heading', { level: 6 }),
         },
         {
           icon: 'paragraph',
@@ -272,14 +273,7 @@ export default {
         {
           type: 'divider',
         },
-        {
-          icon: 'download-2-line',
-          title: '保存',
-           action: () => this.output(),
-        },
-        {
-          type: 'divider',
-        },
+        
         {
           icon: 'align-left',
           title: '左对齐',
@@ -353,16 +347,89 @@ export default {
           title: '插入图片',
           action: () => this.addImage()
         },
+        {
+          type: 'divider',
+        },{
+          icon: 'download-2-line',
+          title: '保存为word',
+           action: () => this.HTMLtoWord(),
+        },{
+          icon: 'download-2-line',
+          title: '保存为pdf',
+           action: () => this.HTMLtoPdf(),
+        },{
+          icon: 'download-2-line',
+          title: '保存为md',
+           action: () => this.HTMLtoMd(),
+        },
       ]
     }
   },
   methods: {
-    output(){
+    HTMLtoWord(){
       let html = this.editor.getHTML();
-      html = html + this.cssHTML;
-      console.log(html);
-      let converted = htmlDocx.asBlob(html);
-      FileSaver.saveAs(converted, '模块汇总表.docx');
+      let content = `<!DOCTYPE html><html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <style>
+                    ${this.cssHTML}
+                </style>
+            </head>
+            <body>
+                ${html}
+            </body>
+            </html>`;
+      let converted = htmlDocx.asBlob(content);
+      FileSaver.saveAs(converted, '文档');
+    },
+    HTMLtoPdf(){
+      // let html = this.editor.getHTML();
+      // let content = `<!DOCTYPE html><html>
+      //       <head>
+      //           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      //           <style>
+      //               ${this.cssHTML}
+      //           </style>
+      //       </head>
+      //       <body>
+      //         <div class='main'>
+      //           ${html}
+      //           </div>
+      //       </body>
+      //       </html>`;
+      let element = document.querySelector('.ProseMirror');
+      console.log(element);
+      html2canvas(element, {
+        logging: false
+      }).then(function(canvas) {
+        var pdf = new jsPDF('p', 'mm', 'a4') // A4纸，纵向
+        var ctx = canvas.getContext('2d')
+        var a4w = 170
+        var a4h = 280 // A4大小，210mm x 297mm，四边各保留20mm的边距，显示区域170x257
+        var imgHeight = Math.floor(a4h * canvas.width / a4w) // 按A4显示比例换算一页图像的像素高度
+        var renderedHeight = 0
+
+        while (renderedHeight < canvas.height) {
+          var page = document.createElement('canvas')
+          page.width = canvas.width
+          page.height = Math.min(imgHeight, canvas.height - renderedHeight)// 可能内容不足一页
+
+          // 用getImageData剪裁指定区域，并画到前面创建的canvas对象中
+          page.getContext('2d').putImageData(ctx.getImageData(0, renderedHeight, canvas.width, Math.min(imgHeight, canvas.height - renderedHeight)), 0, 0)
+          pdf.addImage(page.toDataURL('image/jpeg', 1.0), 'JPEG', 10, 10, a4w, Math.min(a4h, a4w * page.height / page.width)) // 添加图像到页面，保留10mm边距
+
+          renderedHeight += imgHeight
+          if (renderedHeight < canvas.height) {
+            pdf.addPage()
+          }// 如果后面还有内容，添加一个空页
+          // delete page;
+        }
+        pdf.save("文档");
+      })
+      
+    },
+    HTMLtoMd(){
+
     },
     addImage() {
       const url = window.prompt('请输入要插入图片的url')

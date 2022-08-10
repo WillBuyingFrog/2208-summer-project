@@ -42,8 +42,7 @@
                         <el-icon><Coordinate/></el-icon>
                         <span style="font-size: 16px;">团队管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/documentCenter" style="margin-left:70px"
-                        @click="link">
+                    <el-menu-item index="/documentCenter" style="margin-left:70px">
                         <el-icon><DocumentCopy/></el-icon>
                         <span style="font-size: 16px;">文档中心</span>
                     </el-menu-item>
