@@ -249,7 +249,7 @@ export function getCollaboratePrototype(application, file_id){
     const newDoc = new Y.Doc()
     collaboratePrototypeConfig.doc = newDoc
     const provider = new WebsocketProvider(
-        "ws://localhost:1234",
+        "ws://192.168.50.241:1234",
         file_id,  // 房间号即为当前的页面id（页面隶属于某个原型设计，但我们不关心）
         newDoc
     )

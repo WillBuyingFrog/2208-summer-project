@@ -119,8 +119,6 @@ export default {
         let newItem = {
           ...item,
           childrenJSON: "",
-          // 重置元件实时协作信息
-          usedBy: "__none__"
         }
         return newItem
       })
@@ -164,7 +162,7 @@ export default {
       let controls = []
       let newComponents = null
       if(isReload){
-        // console.log("This function is in reload mode.")
+        console.log("This function is in reload mode.")
         newComponents = this.reloadComponents(components, parentId)
         // console.log("newComponents:", newComponents)
       }else{
@@ -190,8 +188,8 @@ export default {
       // isReload=2代表协作模式，协作模式下跳过选中环节
       // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
       if(isReload === 2 || isReload === 1){
-        console.log("This function is in special mode.")
-        level_updateCollaborateComponent(this, this.currentPage.page_file_id, component)
+        // console.log("This function is in special mode.")
+        // level_updateCollaborateComponent(this, this.currentPage.page_file_id, component)
         return
       }
 
@@ -253,6 +251,7 @@ export default {
         this.updateControlValue('usedBy', this.$store.state.user.name, true)
 
         let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
+
         console.log("The currently controlled element is", realComponent)
         // 实时协作中，需要更新组件信息
         this.controlled.usedBy = this.$store.state.user.id
@@ -272,7 +271,7 @@ export default {
     },
     //  组件选中，右侧展示属性编辑器
     handleSelect({control, needUpdate=0}) {
-      console.log("handleSelect called")
+      console.log("handleSelect called", control.usedBy, this.$store.state.user.id)
       if(!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)){
         // 被别的用户控制
         // 直接return
@@ -507,7 +506,6 @@ export default {
     } else {
       this.file_id = this.$store.state.file_id // 原型设计的id
       this.file_name = this.$store.state.file_name  // 原型设计名称
-      this.userId = this.$store.state.user.id
 
       this.currentPage = {
         page_index: 1,

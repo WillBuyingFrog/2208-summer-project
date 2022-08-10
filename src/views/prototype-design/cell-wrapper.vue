@@ -30,6 +30,9 @@ export default {
     handler(e, transform) {
       e.stopPropagation() // 停止事件传播（？）
       e.preventDefault() // 取消事件默认行为
+      // 如果当前用户没法操作，就直接返回
+      console.log("Checking usedBy", this.item.usedBy)
+      if(!(this.item.usedBy === '__none__' || this.item.usedBy === this.$store.state.user.id)) return
       // 使用eventBus发起全局事件
       // console.log("Generated transform:", transform)
       eventBus.$emit(EVENT_COMPONENT_TRANSFORM, { type: this.handleType, transform })

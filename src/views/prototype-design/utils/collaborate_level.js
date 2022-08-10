@@ -138,7 +138,7 @@ export const monitorExtraTransforms = [
     'value', 'checked', 'usedBy'
 ]
 export const monitorTransforms = [
-    'x', 'y', 'transform', 'resizable', 'draggable', 'acceptRatio', 'active',
+    'x', 'y', 'transform', 'acceptRatio', 'usedBy'
 ]
 
 
@@ -173,9 +173,10 @@ export function level_syncComponentTransforms(application, componentJSON, isLock
             })
             // 监听extra的更改
             monitorExtraTransforms.map((key) => {
-                if(newValue[key])
-                    item.extra[key] = newValue[key]
+                if(newValue.extra[key])
+                    item.extra[key] = newValue.extra[key]
             })
+            console.log("Altered control:", item)
             return item
         })
         application.controls = newControls
@@ -273,7 +274,7 @@ export function level_getCollaboratePrototype(application, file_id){
     const newDoc = new Y.Doc()
     collaboratePrototypeConfig.doc = newDoc
     const provider = new WebsocketProvider(
-        "ws://localhost:1234",
+        "ws://192.168.50.241:1234",
         file_id,  // 房间号即为当前的页面id（页面隶属于某个原型设计，但我们不关心）
         newDoc
     )
@@ -333,6 +334,7 @@ export function level_getCollaboratePrototype(application, file_id){
                 let componentJSON = newMap.get(key)
                 let componentServerSide = JSON.parse(componentJSON)
                 componentServerSide = componentServerSide[0]
+                console.log("Received update event.", componentServerSide)
                 let rootComponent = findRootComponent(application,
                     findComponent(application.controls, (item) => {return item.id === componentServerSide.id}))
                 // 只针对其他用户的更改实时更改本地渲染
@@ -344,7 +346,6 @@ export function level_getCollaboratePrototype(application, file_id){
                     // 再同步变化
                     level_syncComponentTransforms(application, componentJSON)
                 }else {
-                    console.log("Unlock components")
                     unlockComponents(application, rootComponent.id)
                     // 再同步变化
                     // 这个函数默认上锁！！！
