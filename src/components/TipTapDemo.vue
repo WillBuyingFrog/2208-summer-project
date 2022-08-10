@@ -5,7 +5,7 @@
     <div class="editor__footer">
       <div :class="`editor__status editor__status--${status}`">
         <template v-if="status === 'connected'">
-          {{ editor.storage.collaborationCursor.users.length }} 位用户正在协同编辑 {{ this.$store.state.file_name }}
+          {{ editor.storage.collaborationCursor.users.length }} 位用户正在协同编辑 {{ this.fileName }}
         </template>
         <template v-else>
           offline
@@ -47,10 +47,28 @@ import Image from '@tiptap/extension-image'
 const getRandomElement = list => {
   return list[Math.floor(Math.random() * list.length)]
 }
+
+const sharedRoomMap = new Map()
+const sharedProviderMap = new Map()
+
 export default {
   components: {
     EditorContent,
     MenuBar,
+  },
+  props: ['fileId', 'fileName'],
+  watch:{
+    fileId(oldFileId, newFileId){
+      sharedRoomMap.delete(oldFileId)
+      sharedProviderMap.delete(oldFileId)
+      this.editor.destroy()
+      this.provider.destroy()
+      console.log("Switch to new file:", newFileId)
+      this.createEditorRoom()
+    },
+      'editor':function(){
+      this.$emit('getContent',this.editor.getHTML());
+    }
   },
   data() {
     return {
@@ -66,83 +84,73 @@ export default {
   },
   mounted() {
     // 从localStorage拿数据
-    this.$store.state.file_id = localStorage.getItem('file_id')
     this.$store.state.file_name = localStorage.getItem('file_name')
     this.$store.state.file_index = localStorage.getItem('file_index')
     this.$store.state.user.name = localStorage.getItem('user_name')
     this.$store.state.user.id = localStorage.getItem('user_id')
+    this.$store.state.project_id = localStorage.getItem('project_id')
     this.currentUser.name = this.$store.state.user.name
-
-    // 房间号就是文件id
-    this.room = this.$store.state.file_id
-
-    const ydoc = new Y.Doc()
-    this.provider = new HocuspocusProvider({
-      url: 'ws://49.232.135.90:7370',
-      name: this.$store.state.file_id,
-      document: ydoc,
-    })
-    this.provider.on('status', event => {
-      this.status = event.status
-    })
-    this.editor = new Editor({
-      extensions: [
-        StarterKit.configure({
-          history: false,
-        }),
-        Highlight,
-        TaskList,
-        TaskItem,
-        Collaboration.configure({
-          document: ydoc,
-        }),
-        CollaborationCursor.configure({
-          provider: this.provider,
-          user: this.currentUser,
-        }),
-        CharacterCount.configure({
-          limit: 10000,
-        }),
-        Text,
-        TextAlign.configure({
-          types: ['heading', 'paragraph'],
-          alignments: ['left', 'center', 'right', 'justify'],
-          defaultAlignment: 'left',
-        }),
-        TextStyle,
-        Color,
-        Gapcursor,
-        Table.configure({
-          resizable: true,
-          HTMLAttributes: {
-          class: 'my-custom-class',
-        },
-        }),
-        TableRow,
-        TableHeader,
-        TableCell,
-        Image,
-        Dropcursor,
-      ],
-    })
-    localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
+    // 先新建一个房间
+    this.createEditorRoom()
   },
   methods: {
-    setName() {
-      const name = (window.prompt('Name') || '')
-          .trim()
-          .substring(0, 32)
-      if (name) {
-        return this.updateCurrentUser({
-          name,
-        })
-      }
-    },
-    updateCurrentUser(attributes) {
-
-      this.currentUser = { ...this.currentUser, ...attributes }
-      this.editor.chain().focus().updateUser(this.currentUser).run()
+    createEditorRoom(){
+      // 房间号就是文件id
+      this.room = this.$store.state.file_id
+      const ydoc = new Y.Doc()
+      const yProvider = new HocuspocusProvider({
+        url: 'ws://49.232.135.90:7370',
+        name: this.fileId,
+        document: ydoc,
+      })
+      yProvider.on('status', event => {
+        this.status = event.status
+      })
+      this.provider = yProvider
+      let newEditor = new Editor({
+        extensions: [
+          StarterKit.configure({
+            history: false,
+          }),
+          Highlight,
+          TaskList,
+          TaskItem,
+          Collaboration.configure({
+            document: ydoc,
+          }),
+          CollaborationCursor.configure({
+            provider: this.provider,
+            user: this.currentUser,
+          }),
+          CharacterCount.configure({
+            limit: 10000,
+          }),
+          Text,
+          TextAlign.configure({
+            types: ['heading', 'paragraph'],
+            alignments: ['left', 'center', 'right', 'justify'],
+            defaultAlignment: 'left',
+          }),
+          TextStyle,
+          Color,
+          Gapcursor,
+          Table.configure({
+            resizable: true,
+            HTMLAttributes: {
+              class: 'my-custom-class',
+            },
+          }),
+          TableRow,
+          TableHeader,
+          TableCell,
+          Image,
+          Dropcursor,
+        ],
+      })
+      this.editor = newEditor
       localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
+      sharedRoomMap.set(this.fileId, newEditor)
+      sharedProviderMap.set(this.fileId, yProvider)
     },
     getRandomColor() {
       return getRandomElement([
@@ -160,11 +168,7 @@ export default {
     this.editor.destroy()
     this.provider.destroy()
   },
-  watch:{
-    'editor':function(){
-      this.$emit('getContent',this.editor.getHTML());
-    }
-  }
+
 }
 </script>
 
