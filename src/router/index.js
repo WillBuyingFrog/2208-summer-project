@@ -113,6 +113,11 @@ const routes = [
         path: '/prtest',
         name: 'PreviewTest',
         component: () => import('../views/prototype-design/PreviewDesignApp')
+    },
+    {
+        path: '/preview',
+        name: 'Preview',
+        component: () => import('../views/prototype-design/PrototypePreview')
     }
 ]
 
