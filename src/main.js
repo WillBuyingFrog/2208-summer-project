@@ -6,6 +6,7 @@ import axios from 'axios'
 import * as ELIcons from '@element-plus/icons-vue'
 import GlobalInfo from './GlobalInfo.js'
 
+import VueClipboard from 'vue-clipboard2'
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -23,6 +24,7 @@ library.add(faBold)
 const app = createApp(App)
 app.use(router)
 app.use(store)
+app.use(VueClipboard)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.mount('#app')
 

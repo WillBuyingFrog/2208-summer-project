@@ -58,11 +58,29 @@
                 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command="a">生成预览</el-dropdown-item>
-                    <el-dropdown-item command="b" :disabled="existView">销毁预览</el-dropdown-item>
+                    <el-popover
+                      placement="bottom"
+                      title="Title"
+                      :width="200"
+                      trigger="click"
+                      content="this is content, this is content, this is content"
+                    >
+                      <template #reference>
+                        <el-dropdown-item command="a" @click="linkNew()">生成预览</el-dropdown-item>
+                      </template>
+                    </el-popover>
+                    <el-dropdown-item command="b" :disabled="existView" @click="linkCancel()">销毁预览</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
+                  <el-dialog
+                    v-model="linkVisible"
+                    title="预览链接"
+                    width="35%"
+                    :before-close="handleClose">
+                    <div style="border:0.5mm solid #f2f2f2; border-radius:15px;line-height:40px;"> {{link}}</div>
+                    <el-button  @click="handelCopyLink" color="rgb(133,157,218)" style="margin-top:10px;color:white;border-radius:10px;">复制链接</el-button>
+                  </el-dialog>
 <!--              <el-button-->
 <!--                  class="drawer-btn"-->
 <!--                  color="#859dda"-->
@@ -183,6 +201,8 @@ export default {
       activeIndex: '1',
       activeFileId: '',
       existView: false,
+      linkVisible: false,
+      link:''
     }
   },
   created(){
@@ -325,6 +345,37 @@ export default {
       console.log(this.activeIndex)
       console.log(key);
     },
+    linkNew(){
+      const self = this;
+      self.$http.post('/link/new', {
+            prototype_id: this.$store.state.file_id,
+      }).then(res=>{
+        console.log(res.data.data)
+        if(res.data.code == 200){
+          self.linkVisible = true
+          self.link = 'http://localhost:8080/#/preview?link=' + res.data.data
+          console.log(self.link)
+        }
+      })
+    },
+    linkCancel(){
+      const self = this;
+      self.$http.post('/link/cancel', {
+            prototype_id: this.$store.state.file_id,
+      }).then(res=>{
+        console.log(res.data)
+        if(res.data.code == 200){
+          ElMessage.success('取消链接成功')
+        }
+      })
+    },
+    handelCopyLink() {
+      this.$copyText(this.link).then(
+           ElMessage.success('复制成功！')
+      );
+      this.linkVisible = false
+    },
+
   },
 }
 </script>
