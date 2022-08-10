@@ -4,7 +4,7 @@ const routes = [
     {
         path: '/',
         name: 'Homepage',
-        component: () => import('../views/homepage/HomePage')
+        component: () => import('../views/homepage/HomeVue')
     },
     {
         path: '/documentCenter',
@@ -92,6 +92,10 @@ const routes = [
             path:'/projectinfo',
             name:'projectinfo',
             component: () => import('../views/project/ProjectInfo'),
+          },{
+            path:'/draw',
+            name:'drawioFile',
+            component: () => import('../views/drawio/drawInside'),
           }
         ]
     },

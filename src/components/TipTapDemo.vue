@@ -32,6 +32,17 @@ import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import * as Y from 'yjs'
 import MenuBar from './modules/TipTapMenuBar.vue'
+import TextAlign from '@tiptap/extension-text-align'
+import Text from '@tiptap/extension-text'
+import TextStyle from '@tiptap/extension-text-style'
+import { Color } from '@tiptap/extension-color'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Gapcursor from '@tiptap/extension-gapcursor'
+import Dropcursor from '@tiptap/extension-dropcursor'
+import Image from '@tiptap/extension-image'
 const getRandomElement = list => {
   return list[Math.floor(Math.random() * list.length)]
 }
@@ -87,6 +98,26 @@ export default {
         CharacterCount.configure({
           limit: 10000,
         }),
+        Text,
+        TextAlign.configure({
+          types: ['heading', 'paragraph'],
+          alignments: ['left', 'center', 'right', 'justify'],
+          defaultAlignment: 'left',
+        }),
+        TextStyle,
+        Color,
+        Gapcursor,
+        Table.configure({
+          resizable: true,
+          HTMLAttributes: {
+          class: 'my-custom-class',
+        },
+        }),
+        TableRow,
+        TableHeader,
+        TableCell,
+        Image,
+        Dropcursor,
       ],
     })
     localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
@@ -150,6 +181,7 @@ export default {
     border-bottom: 1px solid #0D0D0D;
   }
   &__content {
+    text-align: left;
     padding: 1.25rem 1rem;
     flex: 1 1 auto;
     overflow-x: hidden;
@@ -239,6 +271,10 @@ export default {
 }
 /* Basic editor styles */
 .ProseMirror {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 80px;
+  padding-right: 80px;
   > * + * {
     margin-top: 0.75em;
   }
@@ -304,6 +340,29 @@ export default {
       > div {
         flex: 1 1 auto;
       }
+    }
+  }
+  table {
+        border-right: 2px solid #aeacac;
+        border-bottom: 2px solid #aeacac;
+        text-align: center;
+    }
+    
+    table th {
+        border-left: 2px solid #aeacac;
+        border-top: 2px solid #aeacac;
+    }
+    
+    table td {
+        border-left: 2px solid #aeacac;
+        border-top: 2px solid #aeacac;
+    }
+  img {
+    max-width: 100%;
+    height: auto;
+
+    &.ProseMirror-selectednode {
+      outline: 3px solid #68CEF8;
     }
   }
 }

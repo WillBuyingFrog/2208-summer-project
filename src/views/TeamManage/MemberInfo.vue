@@ -63,7 +63,7 @@
                               :before-close="handleClose">
                               <el-select v-model="newLeader" filterable placeholder="请选择">
                                 <el-option
-                                  style="width: 400px;"
+                                  style="width: 440px;"
                                   v-for="item in tableData "
                                   :key="item.username"
                                   :label="item.username"

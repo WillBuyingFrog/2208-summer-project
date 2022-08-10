@@ -113,7 +113,7 @@
                 <!-- <span class="headleft"><div class="head">{{firstChar}}</div></span> -->
                 <el-popover
                     placement="bottom"
-                    :width="200"
+                    :width="240"
                     trigger="click">
                   <template #reference>
                     <el-avatar :style="{background:avatarColor}" :size="36"
@@ -271,19 +271,13 @@ export default {
             label: '未读'
             }],
             value: '0',
-            status:'0',
+            status:'1',
             checked:'',
             notice: [],
             invite:[],
             unreadNumber:'0',
             sign:'0'
         }
-    },
-    watch: {
-    '$route'() {
-          // 路由发生变化页面刷新
-          this.$router.go(0);
-      }
     },
     methods: {
         getTeam(){
@@ -497,6 +491,7 @@ export default {
         }).then(res=>{
           console.log(res.data);
           ElMessage.success("成功加入团队")
+          this.unreadNumber--;
           for(var i=0; i<this.invite.length; i++){
             if(this.invite[i].message_id == message_id){
               this.invite.splice(i,1)

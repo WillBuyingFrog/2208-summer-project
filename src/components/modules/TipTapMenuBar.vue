@@ -1,6 +1,20 @@
 <template>
   <div>
+    <input
+      type="color"
+      @input="editor.chain().focus().setColor($event.target.value).run()"
+      :value="editor.getAttributes('textStyle').color"
+      title="字体颜色"
+      style="width:27px;margin-right:10px"
+    >
     <template v-for="(item, index) in items">
+      <div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`" />
+      <menu-item v-else :key="index" v-bind="item" />
+    </template>
+    <input v-model.trim="rows" type="number" style="width:30px;margin-right:4px;" placeholder="行">
+    <span>x</span>
+    <input v-model.trim="cols" type="number" style="width:30px;margin-left:4px;" placeholder="列">
+    <template v-for="(item, index) in tables">
       <div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`" />
       <menu-item v-else :key="index" v-bind="item" />
     </template>
@@ -9,6 +23,8 @@
 
 <script>
 import MenuItem from './TipTapMenuItem.vue'
+import FileSaver from 'file-saver'
+import htmlDocx from "html-docx-js/dist/html-docx"
 export default {
   components: {
     MenuItem,
@@ -21,34 +37,127 @@ export default {
   },
   data() {
     return {
+      rows: 3,
+      cols: 4,
+      cssHTML: 
+`
+<style>
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6 {
+    line-height: 1.1;
+  }
+  code {
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+  }
+  pre {
+    background: #0D0D0D;
+    color: #FFF;
+    font-family: 'JetBrainsMono', monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 0.8rem;
+    }
+  }
+  mark {
+    background-color: #FAF594;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  hr {
+    margin: 1rem 0;
+  }
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid rgba(#0D0D0D, 0.1);
+  }
+  hr {
+    border: none;
+    border-top: 2px solid rgba(#0D0D0D, 0.1);
+    margin: 2rem 0;
+  }
+  ul[data-type="taskList"] {
+    list-style: none;
+    padding: 0;
+    li {
+      display: flex;
+      align-items: center;
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+  }
+  table {
+        border-right: 2px solid #aeacac;
+        border-bottom: 2px solid #aeacac;
+        text-align: center;
+    }
+    
+    table th {
+        border-left: 2px solid #aeacac;
+        border-top: 2px solid #aeacac;
+    }
+    
+    table td {
+        border-left: 2px solid #aeacac;
+        border-top: 2px solid #aeacac;
+    }
+  img {
+    max-width: 100%;
+    height: auto;
+
+    &.ProseMirror-selectednode {
+      outline: 3px solid #68CEF8;
+    }
+  }
+  </style>`,
       items: [
         {
           icon: 'bold',
-          title: 'Bold',
+          title: '加粗',
           action: () => this.editor.chain().focus().toggleBold().run(),
           isActive: () => this.editor.isActive('bold'),
         },
         {
           icon: 'italic',
-          title: 'Italic',
+          title: '斜体',
           action: () => this.editor.chain().focus().toggleItalic().run(),
           isActive: () => this.editor.isActive('italic'),
         },
         {
           icon: 'strikethrough',
-          title: 'Strike',
+          title: '划掉',
           action: () => this.editor.chain().focus().toggleStrike().run(),
           isActive: () => this.editor.isActive('strike'),
         },
         {
           icon: 'code-view',
-          title: 'Code',
+          title: '行内代码',
           action: () => this.editor.chain().focus().toggleCode().run(),
           isActive: () => this.editor.isActive('code'),
         },
         {
           icon: 'mark-pen-line',
-          title: 'Highlight',
+          title: '高亮',
           action: () => this.editor.chain().focus().toggleHighlight().run(),
           isActive: () => this.editor.isActive('highlight'),
         },
@@ -57,43 +166,62 @@ export default {
         },
         {
           icon: 'h-1',
-          title: 'Heading 1',
+          title: '一级标题',
           action: () => this.editor.chain().focus().toggleHeading({ level: 1 }).run(),
           isActive: () => this.editor.isActive('heading', { level: 1 }),
-        },
-        {
+        },{
           icon: 'h-2',
-          title: 'Heading 2',
+          title: '二级标题',
           action: () => this.editor.chain().focus().toggleHeading({ level: 2 }).run(),
           isActive: () => this.editor.isActive('heading', { level: 2 }),
+        },{
+          icon: 'h-3',
+          title: '三级标题',
+          action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
+          isActive: () => this.editor.isActive('heading', { level: 3 }),
+        },{
+          icon: 'h-4',
+          title: '四级标题',
+          action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
+          isActive: () => this.editor.isActive('heading', { level: 3 }),
+        },{
+          icon: 'h-5',
+          title: '五级标题',
+          action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
+          isActive: () => this.editor.isActive('heading', { level: 3 }),
+        },{
+          icon: 'h-6',
+          title: '六级标题',
+          action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
+          isActive: () => this.editor.isActive('heading', { level: 3 }),
         },
         {
           icon: 'paragraph',
-          title: 'Paragraph',
+          title: '段落',
           action: () => this.editor.chain().focus().setParagraph().run(),
           isActive: () => this.editor.isActive('paragraph'),
         },
         {
           icon: 'list-unordered',
-          title: 'Bullet List',
+          title: '无序列表',
           action: () => this.editor.chain().focus().toggleBulletList().run(),
           isActive: () => this.editor.isActive('bulletList'),
         },
         {
           icon: 'list-ordered',
-          title: 'Ordered List',
+          title: '有序列表',
           action: () => this.editor.chain().focus().toggleOrderedList().run(),
           isActive: () => this.editor.isActive('orderedList'),
         },
         {
           icon: 'list-check-2',
-          title: 'Task List',
+          title: '任务列表',
           action: () => this.editor.chain().focus().toggleTaskList().run(),
           isActive: () => this.editor.isActive('taskList'),
         },
         {
           icon: 'code-box-line',
-          title: 'Code Block',
+          title: '代码块',
           action: () => this.editor.chain().focus().toggleCodeBlock().run(),
           isActive: () => this.editor.isActive('codeBlock'),
         },
@@ -102,13 +230,13 @@ export default {
         },
         {
           icon: 'double-quotes-l',
-          title: 'Blockquote',
+          title: '引用',
           action: () => this.editor.chain().focus().toggleBlockquote().run(),
           isActive: () => this.editor.isActive('blockquote'),
         },
         {
           icon: 'separator',
-          title: 'Horizontal Rule',
+          title: '水平分割线',
           action: () => this.editor.chain().focus().setHorizontalRule().run(),
         },
         {
@@ -116,12 +244,12 @@ export default {
         },
         {
           icon: 'text-wrap',
-          title: 'Hard Break',
+          title: '换行',
           action: () => this.editor.chain().focus().setHardBreak().run(),
         },
         {
           icon: 'format-clear',
-          title: 'Clear Format',
+          title: '格式清除',
           action: () => this.editor.chain()
               .focus()
               .clearNodes()
@@ -133,12 +261,12 @@ export default {
         },
         {
           icon: 'arrow-go-back-line',
-          title: 'Undo',
+          title: '撤销',
           action: () => this.editor.chain().focus().undo().run(),
         },
         {
           icon: 'arrow-go-forward-line',
-          title: 'Redo',
+          title: '重做',
           action: () => this.editor.chain().focus().redo().run(),
         },
         {
@@ -146,13 +274,108 @@ export default {
         },
         {
           icon: 'download-2-line',
-          title: 'Download',
-          // action not written
-          // action: () => this.editor.chain().focus().redo().run(),
+          title: '保存',
+           action: () => this.output(),
+        },
+        {
+          type: 'divider',
+        },
+        {
+          icon: 'align-left',
+          title: '左对齐',
+          action: () => this.editor.chain().focus().setTextAlign('left').run(),
+          isActive: () => this.editor.isActive({textAlign: 'left'})
+        },{
+          icon: 'align-center',
+          title: '居中对齐',
+          action: () => this.editor.chain().focus().setTextAlign('center').run(),
+          isActive: () => this.editor.isActive({textAlign: 'center'})
+        },{
+          icon: 'align-right',
+          title: '右对齐',
+          action: () => this.editor.chain().focus().setTextAlign('right').run(),
+          isActive: () => this.editor.isActive({textAlign: 'right'})
+        },{
+          icon: 'align-justify',
+          title: '对齐',
+          action: () => this.editor.chain().focus().setTextAlign('justify').run(),
+          isActive: () => this.editor.isActive({textAlign: 'justify'})
+        },{
+          type: 'divider',
+        },
+        {       
+          icon: 'table-2',
+          title: '插入表格',
+          action: () => this.addTable()
         },
       ],
+      tables: [
+        {
+          icon: 'insert-column-left',
+          title: '插入列左',
+          action: () => this.editor.chain().focus().addColumnBefore().run()
+        },
+        {
+          icon: 'insert-column-right',
+          title: '插入列右侧',
+          action: () => this.editor.chain().focus().addColumnAfter().run()
+        },
+        {
+          icon: 'insert-row-top',
+          title: '插入行顶部',
+          action: () => this.editor.chain().focus().addRowBefore().run()
+        },
+        {
+          icon: 'insert-row-bottom',
+          title: '插入行底部',
+          action: () => this.editor.chain().focus().addRowAfter().run()
+        },
+        {
+          icon: 'delete-column',
+          title: '删除列',
+          action: () => this.editor.chain().focus().deleteColumn().run()
+        },
+        {
+          icon: 'delete-row',
+          title: '删除行',
+          action: () => this.editor.chain().focus().deleteRow().run()
+        },
+        {
+          icon: 'delete-bin-6-line',
+          title: '删除表',
+          action: () => this.editor.chain().focus().deleteTable().run()
+        },
+        {
+          type: 'divider',
+        },
+        {
+          icon: 'image-line',
+          title: '插入图片',
+          action: () => this.addImage()
+        },
+      ]
     }
   },
+  methods: {
+    output(){
+      let html = this.editor.getHTML();
+      html = html + this.cssHTML;
+      console.log(html);
+      let converted = htmlDocx.asBlob(html);
+      FileSaver.saveAs(converted, '模块汇总表.docx');
+    },
+    addImage() {
+      const url = window.prompt('请输入要插入图片的url')
+
+      if (url) {
+        this.editor.chain().focus().setImage({ src: url }).run()
+      }
+    },
+    addTable(){
+      console.log(this.cols);
+      this.editor.chain().focus().insertTable({ rows: parseInt(this.rows), cols: parseInt(this.cols), withHeaderRow: true }).run();
+    }
+  }
 }
 </script>
 
@@ -164,4 +387,5 @@ export default {
   margin-left: 0.5rem;
   margin-right: 0.75rem;
 }
+
 </style>
