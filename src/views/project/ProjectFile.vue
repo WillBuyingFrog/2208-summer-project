@@ -678,6 +678,7 @@ export default {
             localStorage.setItem('file_index', this.$store.state.file_index)
             localStorage.setItem('user_name', this.$store.state.user.name)
             localStorage.setItem('user_id', this.$store.state.user.id)
+            localStorage.setItem('project_id', this.$store.state.project_id)
             console.log(file.index);
             console.log(this.$store.state.file_index);
             if(this.fileType == 1){
