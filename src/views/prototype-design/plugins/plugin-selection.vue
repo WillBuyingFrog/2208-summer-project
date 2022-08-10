@@ -87,7 +87,7 @@ export default {
         // 更新状态
         console.log("Updating multiple elements...")
         this.selectedComponents.map((item) => {
-          level_updateCollaborateComponent(this.application, this.application.currentPage.page_file_id,
+          level_updateCollaborateComponent(this.application, this.application.currentPage.page_id,
           item)
         })
         this.application.handleUnselect()
@@ -173,7 +173,7 @@ export default {
       this.application.batchUpdateControlValue(changes)
       this.componentRefs.forEach((item) => {
         let realComponent = findComponent(this.application.controls, (obj) => {return obj.id === item.id})
-        level_updateCollaborateComponent(this.application, this.application.currentPage.page_file_id, realComponent)
+        level_updateCollaborateComponent(this.application, this.application.currentPage.page_id, realComponent)
       })
     },
 

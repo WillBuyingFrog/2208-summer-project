@@ -171,7 +171,7 @@
                                 </el-popconfirm>
                             </div>
                             <span class="button2" v-if="status!=2">
-                        <el-button class="button" color="#468ac8" @click="copyProject(project.project_name)">创建副本</el-button>   
+                        <el-button class="button" color="#468ac8" @click="copyProject(project.project_id)">创建副本</el-button>
                         <el-button class="button" color="#82b38c" v-if="status!=2" @click="toProject(project.project_name, project.project_id)">进入项目</el-button>
                         </span>
                         </el-form>
@@ -558,18 +558,17 @@ export default {
                     console.log(err);
                 })
         },
-        copyProject(project_name){
+        copyProject(project_id){
             this.$http
-                .post('/project/recover', {
-                    project_name: project_name,
-                    team_id: this.team_id
+                .post('/project/copy', {
+                    project_id: project_id,
                 })
                 .then(res =>{
                     console.log(res.data.code);
                     console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
-                            this.getTrashProject();
+                            this.getAllProject();
                             ElMessage.success(res.data.message);
                             break;
                         case 500:
