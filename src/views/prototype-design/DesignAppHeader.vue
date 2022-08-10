@@ -77,6 +77,7 @@ export default {
 .icon {
   width: 25px;
   height: 25px;
+  margin-top: 10px;
 }
 .icon-contain :hover {
   color: #999999;

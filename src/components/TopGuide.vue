@@ -103,7 +103,7 @@
                       </el-table-column>
                       <el-table-column>
                         <template #default="scope">
-                           <el-button type="primary" size="small" @click="accept(scope.row.message_id)"
+                           <el-button type="primary" size="small" @click="accept(scope.row.message_id,scope.row._read)"
                            color="#7fa9cc" style="color:white">接受</el-button>
                         </template>
                       </el-table-column>
@@ -409,7 +409,7 @@ export default {
         }
       }
     },
-    accept(message_id){
+    accept(message_id,is_read){
         const self = this;
         self.$http({
           method:'post',
@@ -420,6 +420,7 @@ export default {
         }).then(res=>{
           console.log(res.data);
           ElMessage.success("成功加入团队")
+          if(is_read == false)
           this.unreadNumber--;
           for(var i=0; i<this.invite.length; i++){
             if(this.invite[i].message_id == message_id){

@@ -34,7 +34,7 @@
             <template #footer>
               <span class="dialog-footer">
                   <el-button @click="dialogVisible = false">取消</el-button>
-                  <el-button type="primary" @click="newFolder">立即创建</el-button>
+                  <el-button type="primary" @click="newFolder" color="#859dda" class="button1">立即创建</el-button>
               </span>
             </template>
           </el-dialog>
@@ -72,8 +72,8 @@
             </el-form>
             <template #footer>
         <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newFile">立即创建</el-button>
+            <el-button @click="dialogVisible1 = false">取消</el-button>
+            <el-button type="primary" @click="newFile" class="button1" color="#859dda">立即创建</el-button>
         </span>
             </template>
           </el-dialog>
@@ -265,7 +265,7 @@
             </template>
             <span class="dialog-footer">
                           <el-button @click="deleteVisible = false">取消</el-button>
-                          <el-button type="primary" @click="deleteFile()">确认</el-button>
+                          <el-button type="primary" @click="deleteFile()" color="#859dda" class="button1">确认</el-button>
                       </span>
           </el-dialog>
           <!--                  项目文档重命名dialog-->
@@ -287,9 +287,9 @@
             <template #footer>
               <span class="dialog-footer">
                 <span>
-                  <el-button @click="renameVisible = false">取消</el-button>
-                  <span class="button2" style="margin-left:20px;">
-                    <el-button @click="renameFile" color="#859dda">确定</el-button>
+                  <el-button @click="renameVisible = false" class="button2">取消</el-button>
+                  <span style="margin-left:20px;">
+                    <el-button @click="renameFile" class="button1" color="#859dda">确定</el-button>
                   </span>
                 </span>
                 <div class="clear"></div>
@@ -298,7 +298,7 @@
           </el-dialog>
         </el-aside>
         <el-main>
-<!--          <tip-tap-demo></tip-tap-demo>-->
+          <tip-tap-demo></tip-tap-demo>
         </el-main>
       </el-container>
     </el-container>
@@ -365,10 +365,7 @@ export default {
         value: '',
         label: ''
       },
-      options: [{
-        value: 'root',
-        label: 'root'
-      }],
+      options: [],
       value: '',
       editOptions: [],
       editValue: '',
@@ -421,6 +418,9 @@ export default {
                 this.allProjectFile = [];
                 this.allCommonFile = [];
                 this.rootFile = [];
+                this.options = [];
+                var root = new Op('root','root');
+                this.options.push(root);
 
                 for (var i in this.allFile){
                   console.log('hi there');
@@ -496,12 +496,13 @@ export default {
                 case 200:
                   ElMessage.success('创建成功！');
                   this.folderNum++;
-                  var folder = new Folder(this.folderNum, res.data.data, this.newfolder.name);
-                  this.allFolder.push(folder);
-                  var op = new Op(folder.folder_name, folder.folder_name);
-                  this.options.push(op);
+                  // var folder = new Folder(this.folderNum, res.data.data, this.newfolder.name);
+                  // this.allFolder.push(folder);
+                  // var op = new Op(folder.folder_name, folder.folder_name);
+                  // this.options.push(op);
                   this.newfolder.name = "";
                   this.dialogVisible = false;
+                  this.getAllFile();
                   // console.log(this.folder);
                   break;
                 case 500:
@@ -707,5 +708,17 @@ export default {
 <style>
 .bg .el-menu-item.is-active{
   color: #859dda;
+}
+.button1{
+  color: white;
+}
+.button1:hover {
+  color: white;
+}
+.button2{
+
+}
+.button2 :hover{
+  color:#859dda;
 }
 </style>
