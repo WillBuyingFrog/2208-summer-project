@@ -12,9 +12,9 @@
         </template>
       </div>
       <div class="editor__name">
-<!--        <button @click="setTemplate()">-->
-<!--          点击我保存模板（模板名称等可以直接到数据库里调）-->
-<!--        </button>-->
+        <button @click="setTemplate()">
+          点击我保存模板（模板名称等可以直接到数据库里调）
+        </button>
         <button>
           {{ currentUser.name }}
         </button>

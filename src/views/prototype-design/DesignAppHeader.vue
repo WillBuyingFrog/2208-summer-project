@@ -3,7 +3,7 @@ import eventBus from "@/views/prototype-design/utils/eventBus";
 import {
   EVENT_COMPONENT_DELETE,
   EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE, EVENT_COMPONENT_DUPLICATE,
-  // COLLABORATE_EXPORT_JSON, DEV_CREATE_TEMPLATE
+  COLLABORATE_EXPORT_JSON, DEV_CREATE_TEMPLATE
 } from "@/views/prototype-design/event-enum";
 
 export default {
@@ -44,7 +44,12 @@ export default {
     return (
         <div class="ds-header">
           <el-space>
-
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
+            >
+              <Upload class="icon"/>
+            </el-icon>
           <el-icon
               className="icon-contain"
               onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
@@ -64,6 +69,9 @@ export default {
           >
             <Download class="icon"></Download>
           </el-icon>
+              <el-icon className="icon-contain" onClick={() => eventBus.$emit(DEV_CREATE_TEMPLATE)}>
+              <Delete class="icon"></Delete>
+            </el-icon>
           </el-space>
         </div>
     )
