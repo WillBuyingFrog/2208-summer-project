@@ -82,7 +82,7 @@
                   <el-menu-item
                       v-for="page in allPages"
                       :key="page.page_index"
-                      :index="page.page_index"
+                      :index="page.page_index.toString()"
                       @click="toggle(page)"
                   >{{page.page_name}}</el-menu-item>
                   <el-menu-item @click="newPage">
@@ -152,7 +152,7 @@ export default {
             .post('/file/page/rename', {
               prototype_id: this.file_id,
               page_name: this.newname,
-              page_index: this.page_index,
+              page_index: this.activeIndex
             })
             .then(res =>{
               console.log(res.data.code);
@@ -161,6 +161,7 @@ export default {
                 case 200:
                   this.getAllPages(this.page_index);
                   ElMessage.success("重命名成功!");
+                  this.page_name = this.newname;
                   this.newname = '';
                   this.dialogVisible = false;
                   break;
@@ -175,7 +176,7 @@ export default {
       }
     },
     getAllPages(index){
-      console.log(this.$store.state.file_id),
+      console.log(this.$store.state.file_id)
       this.$http
           .post('/file/page/get', {
             prototype_id: this.$store.state.file_id,
@@ -235,9 +236,8 @@ export default {
     toggle(page){
       this.page_name = page.page_name;
       this.activeIndex = page.page_index;
-      this.activeFileId = page.page_file_id;
+      this.activeFileId = page.page_id;
       console.log("toggle");
-      console.log(this.activeIndex);
       // 标题和内容更改
       eventBus.$emit(EVENT_DESIGNER_SWITCH, {
         newPageFileId: this.activeFileId

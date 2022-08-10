@@ -59,8 +59,8 @@ export async function _loadCanvasInit(application){
                 application.currentPage = cur
                 // 新建一个当前页面对应的协作服务器
                 // getCollaboratePrototype函数会无条件用远端更新的版本覆盖现在加载的版本
-                // getCollaboratePrototype(application, cur.page_file_id)
-                _loadCanvasByPageId(application, cur.page_file_id)
+                // getCollaboratePrototype(application, cur.page_id)
+                _loadCanvasByPageId(application, cur.page_id)
             })
     }else{
         console.log("You shouldn't see this.")
@@ -119,6 +119,6 @@ export function _level_loadCanvasInit(application){
         .then(() => {
             application.currentPage = cur
             // 新建一个当前页面对应的协作文档（yDoc）实例
-            level_getCollaboratePrototype(application, cur.page_file_id)
+            level_getCollaboratePrototype(application, cur.page_id)
         })
 }

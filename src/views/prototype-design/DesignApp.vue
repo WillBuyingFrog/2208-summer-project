@@ -189,7 +189,7 @@ export default {
       // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
       if(isReload === 2 || isReload === 1){
         // console.log("This function is in special mode.")
-        // level_updateCollaborateComponent(this, this.currentPage.page_file_id, component)
+        // level_updateCollaborateComponent(this, this.currentPage.page_id, component)
         return
       }
 
@@ -255,7 +255,7 @@ export default {
         console.log("The currently controlled element is", realComponent)
         // 实时协作中，需要更新组件信息
         this.controlled.usedBy = this.$store.state.user.id
-        level_updateCollaborateComponent(this, this.currentPage.page_file_id, realComponent)
+        level_updateCollaborateComponent(this, this.currentPage.page_id, realComponent)
       }
     },
     /**
@@ -288,7 +288,7 @@ export default {
         // 拿到深拷贝的当前控件
         let deepCopyCurrentComponent = findComponent(this.controls, (item) => {return item.id === control.id})
         console.log("Need update when handleSelect ends.", deepCopyCurrentComponent)
-        level_updateCollaborateComponent(this, this.currentPage.page_file_id, deepCopyCurrentComponent)
+        level_updateCollaborateComponent(this, this.currentPage.page_id, deepCopyCurrentComponent)
       }
 
 
@@ -332,7 +332,7 @@ export default {
       }
       // 注意节流优化提升性能
       this.updateControlValue(keyName, value, extra)
-      level_updateCollaborateComponent(this, this.currentPage.page_file_id, this.controlled)
+      level_updateCollaborateComponent(this, this.currentPage.page_id, this.controlled)
     },
     getActiveComponent(ctls) {
       return findComponent(ctls, (item) => item.active)
@@ -378,7 +378,7 @@ export default {
       this.setControls(controls)
       this.clearCurrentComponent()
       // 本地删除后，要和远程同步
-      level_deleteCollaborateComponent(this, this.currentPage.page_file_id, idToDelete)
+      level_deleteCollaborateComponent(this, this.currentPage.page_id, idToDelete)
     },
     duplicateComponent() {
       if (!this.currentId) {
@@ -431,7 +431,6 @@ export default {
       this.setCurrentControl(this.getActiveComponent(this.controls))
     },
     handleUnselect() {
-      console.log("HandleUnselect")
       if (!this.currentId) return
       let realComponent = findComponent(this.controls, (item) => {return this.currentId === item.id})
       realComponent.usedBy = '__none__'
@@ -439,7 +438,7 @@ export default {
       realComponent.draggable = true
       // 还要在extra属性内更改usedBy
       realComponent.extra.usedBy = '__none__'
-      level_updateCollaborateComponent(this, this.currentPage.page_file_id, realComponent)
+      level_updateCollaborateComponent(this, this.currentPage.page_id, realComponent)
       this.updateControlStatus(false)
       this.clearCurrentComponent()
     },
@@ -472,6 +471,7 @@ export default {
       })
     },
     handleSwitchPage({newPageFileId}){
+      console.log("Ready to switch new page:", newPageFileId)
       level_switchPage(this, newPageFileId)
     },
     handleSaveImage(){
@@ -495,9 +495,10 @@ export default {
   async mounted(){
 
 
-    const IS_LEVELDB = false
+    const IS_LEVELDB = true
 
     if(IS_LEVELDB){
+      console.log(this.$store.state.file_id, this.$store.state.file_name)
       this.file_id = this.$store.state.file_id // 原型设计的id
       this.file_name = this.$store.state.file_name  // 原型设计名称
       this.userId = this.$store.state.user.id
@@ -509,14 +510,15 @@ export default {
 
       this.currentPage = {
         page_index: 1,
-        page_file_id: "testtest",
+        page_id: "demoPage",
+        page_file_id: "demoPrototype",
         page_name: "lalala",
         width: 800,
         height: 800
       }
       this.$store.state.user.id = prompt("输入测试用户名")
       this.$store.state.user.name = this.$store.state.user.id + "---"
-      level_getCollaboratePrototype(this, this.currentPage.page_file_id)
+      level_getCollaboratePrototype(this, this.currentPage.page_id)
       console.log("[OFFLINE MULTIPAGE]You shouldn't see this in an official release.")
     }
 
