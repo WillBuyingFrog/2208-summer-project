@@ -111,9 +111,16 @@ export default {
     }
   },
   created(){
-    this.project_id = this.$store.state.project_id;
-    this.file_id = this.$store.state.file_id;
-    this.index = this.$store.state.file_index;
+    this.$store.state.file_id = localStorage.getItem('file_id');
+    this.$store.state.file_name = localStorage.getItem('file_name');
+    this.$store.state.file_index = localStorage.getItem('file_index');
+    this.$store.state.user.name = localStorage.getItem('user_name');
+    this.$store.state.user.id = localStorage.getItem('user_name');
+    this.$store.state.project_id = localStorage.getItem('project_id');
+
+    this.project_id = localStorage.getItem('project_id');
+    this.file_id = localStorage.getItem('file_id');
+    this.index = localStorage.getItem('file_index');
     // console.log(this.project_id);
     // console.log(this.file_id);
     // console.log(this.index);
