@@ -8,9 +8,9 @@ import {Interaction} from "@/views/prototype-design/utils/dom";
 import {getComponentRef, getComponentRefsById} from "@/views/prototype-design/utils/ref";
 import {getBoundingRect} from "@/views/prototype-design/libs/ddr/helper";
 import {registerSelectionActions} from "@/views/prototype-design/plugins/plugin-selection-actions";
-import {markLocalComponentOccupation, updateCollaborateRootComponent} from "@/views/prototype-design/utils/collaborate";
+import {level_updateCollaborateComponent} from "@/views/prototype-design/utils/collaborate_level";
+import {findComponent} from "@/views/prototype-design/utils";
 
-const {findRootComponent} = require("@/views/prototype-design/utils/collaborate");
 
 export default {
   name: "plugin-selection",
@@ -77,11 +77,19 @@ export default {
     },
     handleSelectionEnd() {
       if (this.selectedComponents.length == 1) {
-        this.application.handleSelect(
-            this.application.controls.find((item) => item.id === this.selectedComponents[0].id)
+        this.application.handleSelect({
+            control: this.application.controls.find((item) => item.id === this.selectedComponents[0].id),
+            needUpdate: 1
+          }
         )
         this.selectedComponents = []
       } else if (this.selectedComponents.length > 1) {
+        // 更新状态
+        console.log("Updating multiple elements...")
+        this.selectedComponents.map((item) => {
+          level_updateCollaborateComponent(this.application, this.application.currentPage.page_file_id,
+          item)
+        })
         this.application.handleUnselect()
         this.createSelectionTransform()
       }
@@ -95,13 +103,8 @@ export default {
       let ids = []
       // 先给所有被选中的元素添加标记
       this.selectedComponents.forEach((item) => {
-        // 都分三步走：
-        // 1. 找到根元素
-        let rootComponent = findRootComponent(this.application, item)
-        // 2. 根元素向下标记usedBy
-        markLocalComponentOccupation(this.application, rootComponent, this.application.$store.state.user.id)
-        // 3. 实时文档中编辑
-        updateCollaborateRootComponent(this.application, this.application.currentPage.page_file_id, rootComponent)
+        // TODO 分别标记本地更改
+        console.log(item)
       })
       this.selectedComponents.forEach((item) => {
         ids.push(item.id)
@@ -111,8 +114,6 @@ export default {
         x1.push(item.right)
         y1.push(item.bottom)
       })
-      console.log("Get ids:")
-      console.log(ids)
       let left = Math.min(...x)
       let top = Math.min(...y)
       let right = Math.max(...x1)
@@ -170,6 +171,10 @@ export default {
       })
       this.selectionTransform = transform
       this.application.batchUpdateControlValue(changes)
+      this.componentRefs.forEach((item) => {
+        let realComponent = findComponent(this.application.controls, (obj) => {return obj.id === item.id})
+        level_updateCollaborateComponent(this.application, this.application.currentPage.page_file_id, realComponent)
+      })
     },
 
     handleSelectionResize(e) {

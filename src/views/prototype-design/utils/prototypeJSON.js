@@ -1,25 +1,26 @@
+// eslint-disable-next-line no-unused-vars
 import {getCollaboratePrototype, parseControls} from "@/views/prototype-design/utils/collaborate";
+import {level_getCollaboratePrototype} from "@/views/prototype-design/utils/collaborate_level";
 
+
+export const templateContents = []
+
+/**
+ * 仅在开发环境中使用。
+ * @param application
+ * @returns {Promise<void>}
+ * @private
+ */
 export async function _exportControlsJson(application){
+
     let result = parseControls(application.$data.controls)
     let fullData = {
         components: result,
-        // TODO 从application中保存页面
-        width: '1200px',
-        height: '900px',
+        width: application.currentPage.width,
+        height: application.currentPage.height,
     }
     result = JSON.stringify(fullData)
-    // console.log(result)
-    application.$http
-        // 与后端沟通过，不需要序列化
-        .post('/file/collaborate/update', {
-            file_id: application.file_id,
-            file_name: application.file_name,
-            content: result
-        })
-        .then(res => {
-            console.log(res)
-        })
+    console.log(result)
 }
 
 /**
@@ -37,17 +38,15 @@ export async function _loadCanvasInit(application){
     let cur = null
 
     if(IS_MULTIPAGE_DEMO){
-        console.log("hello1")
         application.$http
             .post('/file/page/get', {
                 prototype_id: application.file_id
             })
             .then(res => {
-                console.log("hello2")
                 let allPages = res.data.data
                 let minIndex = 100000
                 allPages.map((item) => {
-                    console.log("Iterating through ", item.page_index)
+                    // console.log("Iterating through ", item.page_index)
                     if(minIndex > item.page_index){
                         minIndex = item.page_index
                         cur = item
@@ -59,7 +58,8 @@ export async function _loadCanvasInit(application){
             .then(() => {
                 application.currentPage = cur
                 // 新建一个当前页面对应的协作服务器
-                getCollaboratePrototype(application, cur.page_file_id)
+                // getCollaboratePrototype函数会无条件用远端更新的版本覆盖现在加载的版本
+                // getCollaboratePrototype(application, cur.page_file_id)
                 _loadCanvasByPageId(application, cur.page_file_id)
             })
     }else{
@@ -88,4 +88,37 @@ export async function _loadCanvasByPageId(application, pageId){
             }
         })
 
+}
+
+/**
+ * 只在Design App启动时调用！！
+ * levelDB版本。获取所有页面，并自动获取index最小的页面的yDoc实例。
+ * yDoc实例中的yMap会自动从服务器获取所有被保存的组件。
+ * @param application
+ * @private
+ */
+export function _level_loadCanvasInit(application){
+    let cur = null
+    application.$http
+        .post('/file/page/get', {
+            prototype_id: application.file_id
+        })
+        .then(res => {
+            let allPages = res.data.data
+            let minIndex = 100000
+            allPages.map((item) => {
+                // console.log("Iterating through ", item.page_index)
+                if(minIndex > item.page_index){
+                    minIndex = item.page_index
+                    cur = item
+                    console.log(cur)
+                }
+                application.pages.push(item)
+            })
+        })
+        .then(() => {
+            application.currentPage = cur
+            // 新建一个当前页面对应的协作文档（yDoc）实例
+            level_getCollaboratePrototype(application, cur.page_file_id)
+        })
 }

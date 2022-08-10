@@ -107,7 +107,12 @@ const routes = [
     {
         path: '/test',
         component: () => import('../views/TeamManage/TestVue.vue')
-        
+
+    },
+    {
+        path: '/prtest',
+        name: 'PreviewTest',
+        component: () => import('../views/prototype-design/PreviewDesignApp')
     }
 ]
 

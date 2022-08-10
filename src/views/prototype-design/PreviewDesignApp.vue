@@ -1,83 +1,36 @@
 <template>
-    <div class="ds-app" id="frog-design-application">
-      <div class="content">
-        <el-container>
-          <el-aside width="200px" class="leftpane">
-            <DesignAppComponents />
-          </el-aside>
-          <el-main class="mainPane">
-            <el-container>
-              <el-container>
-                <el-header class="header">
-                  <DesignAppHeader />
-                </el-header>
-                <el-main class="workpane">
-                  <div
-                      :style="{width: this.initWidth + 'px', height: this.initHeight + 'px'}"
-                  >
-                    <DesignEditorView ref="editor" :value="this.controls">
-                      <template #default>
-                        <PluginSelection :application="this" />
-                      </template>
-                    </DesignEditorView>
-                  </div>
-
-                </el-main>
-              </el-container>
-              <el-aside width="240px" class="rightpane">
-                <PropInspector
-                    @propChange="this.handleChange"
-                    :controlled="this.controlled" />
-              </el-aside>
-            </el-container>
-          </el-main>
-        </el-container>
-      </div>
+  <div class="ds-app-pr" id="frog-design-application">
+    <div
+        :style="{width: this.initWidth + 'px', height: this.initHeight + 'px'}"
+    >
+      <DesignEditorView ref="editor" :value="this.controls">
+        <template #default>
+          <PluginSelection :application="this" />
+        </template>
+      </DesignEditorView>
     </div>
+  </div>
 </template>
 
 <script>
-import DesignAppHeader from "@/views/prototype-design/DesignAppHeader";
-
-import DesignAppComponents from "@/views/prototype-design/DesignAppComponents";
 import DesignEditorView from "@/views/prototype-design/editor-view"
-import PropInspector from "@/views/prototype-design/prop-inspector"
 
 import PluginSelection from "@/views/prototype-design/plugins/plugin-selection"
 
-
-import eventBus from "@/views/prototype-design/utils/eventBus"
-
-import {
-  // 一些有关全局操作的常量
-  EVENT_DESIGNER_CLEAR,
-  EVENT_DESIGNER_REDO,
-  EVENT_DESIGNER_UNDO,
-  EVENT_COMPONENT_ADD,
-  EVENT_COMPONENT_DELETE,
-  EVENT_COMPONENT_DUPLICATE,
-  EVENT_COMPONENT_SELECT,
-  EVENT_COMPONENT_TRANSFORM,
-  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON, EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_SWITCH
-} from "@/views/prototype-design/event-enum"
-
 import {
   batchUpdateIn,
-  deepCopyComponent,
   findComponent,
   findComponentPathById,
   generateId,
   updateTreeIn,
 } from "@/views/prototype-design/utils"
 
-import {getSnapShot} from "@/views/prototype-design/utils/image";
 import {
   _exportControlsJson,
-  _level_loadCanvasInit,
 } from "@/views/prototype-design/utils/prototypeJSON";
 import {computed} from "vue";
 import {
-  level_deleteCollaborateComponent, level_getCollaboratePrototype, level_switchPage,
+  level_deleteCollaborateComponent, level_getPreviewCollaboratePrototype,
   level_updateCollaborateComponent
 } from "@/views/prototype-design/utils/collaborate_level";
 
@@ -100,13 +53,12 @@ export default {
       currentPage: null,  // 当前Page的完整json
       initWidth: 900,   // 测试数据
       initHeight: 900,  // 测试数据
-      isPreviewMode: 1
+      isPreviewMode: 1,
+      previewPageId: 'testtest'
     }
   },
   components:{
-    DesignAppHeader, DesignAppComponents,
-    DesignEditorView, PropInspector,
-    PluginSelection
+    DesignEditorView, PluginSelection
   },
   provide() {
     return {
@@ -119,6 +71,8 @@ export default {
         let newItem = {
           ...item,
           childrenJSON: "",
+          // 重置元件实时协作信息
+          usedBy: "__none__"
         }
         return newItem
       })
@@ -162,7 +116,7 @@ export default {
       let controls = []
       let newComponents = null
       if(isReload){
-        console.log("This function is in reload mode.")
+        // console.log("This function is in reload mode.")
         newComponents = this.reloadComponents(components, parentId)
         // console.log("newComponents:", newComponents)
       }else{
@@ -188,8 +142,8 @@ export default {
       // isReload=2代表协作模式，协作模式下跳过选中环节
       // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
       if(isReload === 2 || isReload === 1){
-        // console.log("This function is in special mode.")
-        // level_updateCollaborateComponent(this, this.currentPage.page_file_id, component)
+        console.log("This function is in special mode.")
+        level_updateCollaborateComponent(this, this.previewPageId, component, 1)
         return
       }
 
@@ -251,11 +205,10 @@ export default {
         this.updateControlValue('usedBy', this.$store.state.user.name, true)
 
         let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
-
         console.log("The currently controlled element is", realComponent)
         // 实时协作中，需要更新组件信息
         this.controlled.usedBy = this.$store.state.user.id
-        level_updateCollaborateComponent(this, this.currentPage.page_file_id, realComponent)
+        level_updateCollaborateComponent(this, this.previewPageId, realComponent, 1)
       }
     },
     /**
@@ -271,7 +224,7 @@ export default {
     },
     //  组件选中，右侧展示属性编辑器
     handleSelect({control, needUpdate=0}) {
-      console.log("handleSelect called", control.usedBy, this.$store.state.user.id)
+      console.log("handleSelect called")
       if(!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)){
         // 被别的用户控制
         // 直接return
@@ -280,18 +233,13 @@ export default {
       // 标记usedBy标签
       control.usedBy = this.$store.state.user.id
 
-      // 这个函数里把control深拷贝了，不能再用原来的
+      // 在实时协作文档中同步内容
+      // console.log("okokok")
+      if(needUpdate)
+        level_updateCollaborateComponent(this, this.previewPageId, control, 1)
+
       this.setCurrentControl(control)
       this.updateControlStatus(true)
-      // 在实时协作文档中同步内容
-      if(needUpdate){
-        // 拿到深拷贝的当前控件
-        let deepCopyCurrentComponent = findComponent(this.controls, (item) => {return item.id === control.id})
-        console.log("Need update when handleSelect ends.", deepCopyCurrentComponent)
-        level_updateCollaborateComponent(this, this.currentPage.page_file_id, deepCopyCurrentComponent)
-      }
-
-
     },
     setCurrentControl(control) {
       // 无组件选中时，直接清除属性编辑器
@@ -332,7 +280,7 @@ export default {
       }
       // 注意节流优化提升性能
       this.updateControlValue(keyName, value, extra)
-      level_updateCollaborateComponent(this, this.currentPage.page_file_id, this.controlled)
+      level_updateCollaborateComponent(this, this.previewPageId, this.controlled, 1)
     },
     getActiveComponent(ctls) {
       return findComponent(ctls, (item) => item.active)
@@ -378,52 +326,13 @@ export default {
       this.setControls(controls)
       this.clearCurrentComponent()
       // 本地删除后，要和远程同步
-      level_deleteCollaborateComponent(this, this.currentPage.page_file_id, idToDelete)
-    },
-    duplicateComponent() {
-      if (!this.currentId) {
-        return
-      }
-
-      let pathes = this.currentPath.slice()
-      let selectedIndex = pathes.pop()
-
-      let controls = []
-      let component = null
-      const newComponent = (item) => {
-        // 深度拷贝，粗暴！！
-        let copyOfSelected = deepCopyComponent(item)
-        let t = copyOfSelected.transform
-        copyOfSelected.transform = {
-          x: t.x,
-          y: t.y + t.height,
-          width: t.width,
-          height: t.height,
-          rotation: t.rotation,
-        }
-        component = copyOfSelected
-        return copyOfSelected
-      }
-      if (pathes.length > 0) {
-        controls = updateTreeIn(this.controls, pathes, (item) => {
-          let children = item.children.slice()
-          let copyOfSelected = newComponent(children[selectedIndex])
-          children.splice(selectedIndex + 1, 0, copyOfSelected)
-          item.children = children
-          return item
-        })
-      } else {
-        controls = this.controls.slice()
-        controls.splice(selectedIndex + 1, 0, newComponent(this.controls[selectedIndex]))
-      }
-      this.setControls(controls)
-      this.setCurrentControl(component)
+      // 在预览模式下
+      level_deleteCollaborateComponent(this, this.previewPageId, idToDelete, 1)
     },
     handleClear() {
       this.setControls([])
       this.clearCurrentComponent()
     },
-
     handleRedo() {
       if (historyPointer === historys.length - 1) return
       this.initFromHistory(1)
@@ -435,11 +344,12 @@ export default {
       if (!this.currentId) return
       let realComponent = findComponent(this.controls, (item) => {return this.currentId === item.id})
       realComponent.usedBy = '__none__'
+      realComponent.active = true
       realComponent.resizable = true
       realComponent.draggable = true
       // 还要在extra属性内更改usedBy
       realComponent.extra.usedBy = '__none__'
-      level_updateCollaborateComponent(this, this.currentPage.page_file_id, realComponent)
+      level_updateCollaborateComponent(this, this.previewPageId, realComponent, 1)
       this.updateControlStatus(false)
       this.clearCurrentComponent()
     },
@@ -471,56 +381,10 @@ export default {
         }
       })
     },
-    handleSwitchPage({newPageFileId}){
-      level_switchPage(this, newPageFileId)
-    },
-    handleSaveImage(){
-      getSnapShot("root-editor-view")
-    }
-  },
-  created() {
-    eventBus.$on(EVENT_COMPONENT_ADD, this.addControl)
-    eventBus.$on(EVENT_COMPONENT_SELECT, this.handleSelect)
-    eventBus.$on(EVENT_COMPONENT_TRANSFORM, this.handleTransform)
-    eventBus.$on(EVENT_COMPONENT_UNSELECT, this.handleUnselect)
-    eventBus.$on(EVENT_COMPONENT_DUPLICATE, this.duplicateComponent)
-    eventBus.$on(EVENT_COMPONENT_DELETE, this.deleteComponent)
-    eventBus.$on(EVENT_DESIGNER_REDO, this.handleRedo)
-    eventBus.$on(EVENT_DESIGNER_UNDO, this.handleUndo)
-    eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
-    eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
-    eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
-    eventBus.$on(EVENT_DESIGNER_SWITCH, this.handleSwitchPage)
   },
   async mounted(){
-
-
-    const IS_LEVELDB = false
-
-    if(IS_LEVELDB){
-      this.file_id = this.$store.state.file_id // 原型设计的id
-      this.file_name = this.$store.state.file_name  // 原型设计名称
-      this.userId = this.$store.state.user.id
-      // 只需要一个函数进行初始化
-      _level_loadCanvasInit(this)
-    } else {
-      this.file_id = this.$store.state.file_id // 原型设计的id
-      this.file_name = this.$store.state.file_name  // 原型设计名称
-
-      this.currentPage = {
-        page_index: 1,
-        page_file_id: "testtest",
-        page_name: "lalala",
-        width: 800,
-        height: 800
-      }
-      this.$store.state.user.id = prompt("输入测试用户名")
-      this.$store.state.user.name = this.$store.state.user.id + "---"
-      level_getCollaboratePrototype(this, this.currentPage.page_file_id)
-      console.log("[OFFLINE MULTIPAGE]You shouldn't see this in an official release.")
-    }
-
-
+    // 预览模式，禁用所有更改
+    level_getPreviewCollaboratePrototype(this, this.previewPageId)
   }
 
 }
@@ -528,12 +392,11 @@ export default {
 
 <style lang="less">
 @import "./libs/customComponents.css";
-.ds-app{
+.ds-app-pr{
   display: flex;
   flex-direction: column;
   min-height: 60vh;
 
-  .content {
     .ds-editor {
       flex: 1;
       position: relative;
@@ -541,7 +404,6 @@ export default {
       overflow: scroll;
       height: 100%;
     }
-  }
 
   .component-impl,
   .match-parent {
