@@ -166,7 +166,7 @@
         <el-container class="inner-container">
           <el-main class="mainPane">
             <div class="editor">
-<!--              <DesignApp class="editor" :initWidth="900" :initHeight="900"></DesignApp>-->
+              <DesignApp class="editor" :initWidth="900" :initHeight="900"></DesignApp>
             </div>
           </el-main>
         </el-container>
@@ -176,7 +176,7 @@
 </template>
 
 <script>
-// import DesignApp from "@/views/prototype-design/DesignApp";
+import DesignApp from "@/views/prototype-design/DesignApp";
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
 //
@@ -185,7 +185,7 @@ import { ElMessage } from 'element-plus'
 
 export default {
   name: "PrototypeDesign",
-  // components: {DesignApp},
+  components: {DesignApp},
   data() {
     return {
       project_id: '',
@@ -206,9 +206,13 @@ export default {
     }
   },
   created(){
-    this.$store.state.file_id = localStorage.getItem('file_id');
+    this.$store.state.file_id = localStorage.getItem('file_id')
+    this.$store.state.file_name = localStorage.getItem('file_name')
+    this.$store.state.file_index = localStorage.getItem('file_index')
+    this.$store.state.user.name = localStorage.getItem('user_name')
+    this.$store.state.user.id = localStorage.getItem('user_name')
+    console.log("Current username is", this.$store.state.user.id)
     this.file_id = localStorage.getItem('file_id');
-    console.log(this.file_id);
     this.getAllPages(1);
     console.log('hi');
   },
@@ -340,6 +344,7 @@ export default {
       // eventBus.$emit(EVENT_DESIGNER_SWITCH, {
       //   newPageFileId: this.activeFileId
       // })
+
 
     },
     handleSelect(key) {

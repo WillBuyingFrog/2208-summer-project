@@ -515,7 +515,7 @@ export default {
       this.$store.state.file_index = localStorage.getItem('file_index')
       this.$store.state.user.name = localStorage.getItem('user_name')
       this.$store.state.user.id = localStorage.getItem('user_id')
-
+      console.log("Setting up...")
       this.file_id = this.$store.state.file_id // 原型设计的id
       this.file_name = this.$store.state.file_name  // 原型设计名称
       this.userId = this.$store.state.user.id
