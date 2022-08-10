@@ -13,7 +13,9 @@
                 </el-header>
                 <el-main class="workpane">
                   <div
-                      :style="{width: this.initWidth + 'px', height: this.initHeight + 'px'}"
+                      :style="{width: this.initWidth + 'px',
+                       height: this.initHeight + 'px',
+                       }"
                   >
                     <DesignEditorView ref="editor" :value="this.controls">
                       <template #default>
@@ -488,6 +490,7 @@ export default {
     }
   },
   created() {
+
     eventBus.$on(EVENT_COMPONENT_ADD, this.addControl)
     eventBus.$on(EVENT_COMPONENT_SELECT, this.handleSelect)
     eventBus.$on(EVENT_COMPONENT_TRANSFORM, this.handleTransform)
@@ -515,10 +518,18 @@ export default {
       this.$store.state.file_index = localStorage.getItem('file_index')
       this.$store.state.user.name = localStorage.getItem('user_name')
       this.$store.state.user.id = localStorage.getItem('user_id')
-      console.log("Setting up...")
-      this.file_id = this.$store.state.file_id // 原型设计的id
-      this.file_name = this.$store.state.file_name  // 原型设计名称
-      this.userId = this.$store.state.user.id
+
+      // eslint-disable-next-line no-unused-vars
+      let temp = await this.$http
+          .post('/file/page/get', {
+            prototype_id: this.$store.state.file_id
+          })
+      .then(res => {
+        let allPages = res.data.data
+        this.initWidth = allPages[0].width
+        this.initHeight = allPages[0].height
+      })
+
       // 只需要一个函数进行初始化
       _level_loadCanvasInit(this)
     } else {
@@ -583,8 +594,8 @@ export default {
   }
   .workpane {
     margin-top: 2vh;
-    max-height: 70vh;
-    max-width: 70vw;
+    max-height: 80vh;
+    max-width: 100%;
     overflow-y: scroll;
     overflow-x: scroll;
     padding-left: 0;

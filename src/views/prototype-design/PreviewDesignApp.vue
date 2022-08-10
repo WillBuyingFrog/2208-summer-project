@@ -39,6 +39,7 @@ let historyPointer = 0
 
 export default {
   name: "DesignApp",
+  props: ['previewPageId'],
   data() {
     return {
       controls: [],
@@ -54,7 +55,7 @@ export default {
       initWidth: 900,   // 测试数据
       initHeight: 900,  // 测试数据
       isPreviewMode: 1,
-      previewPageId: 'testtest'
+      lastPageId: ''
     }
   },
   components:{
@@ -62,6 +63,7 @@ export default {
   },
   watch: {
     previewPageId(newPageId, oldPageId){
+      this.lastPageId = oldPageId
      console.log("Ready to switch new page:", newPageId, oldPageId)
       level_switchPage(this, newPageId, 1)
     }

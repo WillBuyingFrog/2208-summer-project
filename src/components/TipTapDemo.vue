@@ -5,14 +5,14 @@
     <div class="editor__footer">
       <div :class="`editor__status editor__status--${status}`">
         <template v-if="status === 'connected'">
-          {{ editor.storage.collaborationCursor.users.length }} user{{ editor.storage.collaborationCursor.users.length === 1 ? '' : 's' }} online in {{ room }}
+          {{ editor.storage.collaborationCursor.users.length }} 位用户正在协同编辑 {{ this.$store.state.file_name }}
         </template>
         <template v-else>
           offline
         </template>
       </div>
       <div class="editor__name">
-        <button @click="setName">
+        <button>
           {{ currentUser.name }}
         </button>
       </div>
@@ -47,13 +47,6 @@ import Image from '@tiptap/extension-image'
 const getRandomElement = list => {
   return list[Math.floor(Math.random() * list.length)]
 }
-const getRandomRoom = () => {
-  return getRandomElement([
-    'rooms.33',
-    'rooms.34',
-    'rooms.35',
-  ])
-}
 export default {
   components: {
     EditorContent,
@@ -61,21 +54,32 @@ export default {
   },
   data() {
     return {
-      currentUser: JSON.parse(localStorage.getItem('currentUser')) || {
-        name: this.getRandomName(),
+      currentUser: {
+        name: '加载中……',
         color: this.getRandomColor(),
       },
       provider: null,
       editor: null,
       status: 'connecting',
-      room: getRandomRoom(),
+      room: 'loading',
     }
   },
   mounted() {
+    // 从localStorage拿数据
+    this.$store.state.file_id = localStorage.getItem('file_id')
+    this.$store.state.file_name = localStorage.getItem('file_name')
+    this.$store.state.file_index = localStorage.getItem('file_index')
+    this.$store.state.user.name = localStorage.getItem('user_name')
+    this.$store.state.user.id = localStorage.getItem('user_id')
+    this.currentUser.name = this.$store.state.user.name
+
+    // 房间号就是文件id
+    this.room = this.$store.state.file_id
+
     const ydoc = new Y.Doc()
     this.provider = new HocuspocusProvider({
-      url: 'ws://127.0.0.1:7370',
-      name: this.room,
+      url: 'ws://49.232.135.90:7370',
+      name: this.$store.state.file_id,
       document: ydoc,
     })
     this.provider.on('status', event => {
@@ -148,11 +152,6 @@ export default {
         '#70CFF8',
         '#94FADB',
         '#B9F18D',
-      ])
-    },
-    getRandomName() {
-      return getRandomElement([
-        'Lea Thompson', 'Cyndi Lauper', 'Tom Cruise', 'Madonna', 'Jerry Hall', 'Joan Collins', 'Winona Ryder', 'Christina Applegate', 'Alyssa Milano', 'Molly Ringwald', 'Ally Sheedy', 'Debbie Harry', 'Olivia Newton-John', 'Elton John', 'Michael J. Fox', 'Axl Rose', 'Emilio Estevez', 'Ralph Macchio', 'Rob Lowe', 'Jennifer Grey', 'Mickey Rourke', 'John Cusack', 'Matthew Broderick', 'Justine Bateman', 'Lisa Bonet',
       ])
     },
   },
@@ -348,12 +347,12 @@ export default {
         border-bottom: 2px solid #aeacac;
         text-align: center;
     }
-    
+
     table th {
         border-left: 2px solid #aeacac;
         border-top: 2px solid #aeacac;
     }
-    
+
     table td {
         border-left: 2px solid #aeacac;
         border-top: 2px solid #aeacac;
