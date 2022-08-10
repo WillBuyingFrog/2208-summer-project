@@ -37,7 +37,7 @@
             </el-table>
         </el-aside>
         <el-main style="background: #f6f6f6">
-            <PreviewApp :previewPageId = page_id  id="img" class="preview"></PreviewApp>
+            <PreviewApp :previewPageId=page_id  id="img" class="preview"></PreviewApp>
         </el-main>
       </el-container>
     </el-container>
@@ -82,6 +82,7 @@ export default{
                 this.list = res.data.data.pageList
                 this.name = res.data.data.prototype_name
                 this.isPreviewed = true
+                this.page_id = this.list[0].page_id
             }
             else{
                 ElMessage.error('链接已失效！')
