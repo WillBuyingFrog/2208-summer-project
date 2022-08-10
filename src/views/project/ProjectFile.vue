@@ -160,7 +160,7 @@
                         {{file.file_name}}
                     </span>
                     <span class="button1">
-                    <el-button size="small" color="#859dda" @click="editFile(file.file_id, file.file_name)">编辑</el-button>
+                    <el-button size="small" color="#859dda" @click="editFile(file)">编辑</el-button>
                     <el-button size="small" color="#daad81" @click="openRename(file.file_id)">重命名</el-button>
                     </span>
                     <el-popconfirm title="确定要删除此文件?"
@@ -638,11 +638,12 @@ export default {
                 })
             }
         },
-        editFile(id, name, index){
-            this.$store.state.file_name = name;
-            this.$store.state.file_id = id;
-            this.$store.state.file_index = index;
-            console.log(this.$store.state.file_id);
+        editFile(file){
+            this.$store.state.file_name = file.file_name;
+            this.$store.state.file_id = file.file_id;
+            this.$store.state.file_index = file.index;
+            console.log(file.index);
+            console.log(this.$store.state.file_index);
             if(this.fileType == 1){
                 let routeUrl = this.$router.resolve({
                     path: "/prototypeDesign",
