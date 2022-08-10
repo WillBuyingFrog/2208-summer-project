@@ -34,7 +34,7 @@
             <template #footer>
               <span class="dialog-footer">
                   <el-button @click="dialogVisible = false">取消</el-button>
-                  <el-button type="primary" @click="newFolder">立即创建</el-button>
+                  <el-button type="primary" @click="newFolder" color="#859dda" class="button1">立即创建</el-button>
               </span>
             </template>
           </el-dialog>
@@ -73,7 +73,7 @@
             <template #footer>
         <span class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="newFile">立即创建</el-button>
+            <el-button type="primary" @click="newFile" class="button1" color="#859dda">立即创建</el-button>
         </span>
             </template>
           </el-dialog>
@@ -265,7 +265,7 @@
             </template>
             <span class="dialog-footer">
                           <el-button @click="deleteVisible = false">取消</el-button>
-                          <el-button type="primary" @click="deleteFile()">确认</el-button>
+                          <el-button type="primary" @click="deleteFile()" color="#859dda" class="button1">确认</el-button>
                       </span>
           </el-dialog>
           <!--                  项目文档重命名dialog-->
@@ -289,7 +289,7 @@
                 <span>
                   <el-button @click="renameVisible = false">取消</el-button>
                   <span class="button2" style="margin-left:20px;">
-                    <el-button @click="renameFile" color="#859dda">确定</el-button>
+                    <el-button @click="renameFile" color="#859dda" class="button1">确定</el-button>
                   </span>
                 </span>
                 <div class="clear"></div>
@@ -298,7 +298,7 @@
           </el-dialog>
         </el-aside>
         <el-main>
-<!--          <tip-tap-demo></tip-tap-demo>-->
+          <tip-tap-demo></tip-tap-demo>
         </el-main>
       </el-container>
     </el-container>
@@ -707,5 +707,11 @@ export default {
 <style>
 .bg .el-menu-item.is-active{
   color: #859dda;
+}
+.button1{
+  color: white;
+}
+.button1:hover {
+  color: white;
 }
 </style>

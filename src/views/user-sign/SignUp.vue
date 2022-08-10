@@ -337,11 +337,6 @@ export default {
                 user_info: '',
                 verCode: self.ruleForm.verCode,
               })
-          // self.$http({
-          //   method: 'post',
-          //   url: '/user/register',
-          //   data: formData,
-          // })
               .then(res => {
                 console.log(res.data)
                 switch (res.data.code) {
@@ -351,24 +346,9 @@ export default {
                       this.$router.push('/login')
                     }, 1000);
                     break;
-                  // case -1:
-                  //   this.$message.warning('请检查填写的内容');
-                  //   break;
                   case 500:
                     ElMessage.error(res.data.message);
                   break;
-                  // case 3:
-                  //   this.$message.error('邮箱已注册或不可用');
-                  //   break;
-                  // case 4:
-                  //   this.$message.error('密码不符合规范');
-                  //   break;
-                  // case 4:
-                  //   this.$message.error('两次输入的密码不一致！');
-                  //   break;
-                  // case 6:
-                  //   this.$message.error('邮件验证码发送失败，请检查邮箱是否填写正确！');
-                  //   break;
                 }
               })
               .catch(err => {
@@ -397,8 +377,6 @@ export default {
           this.canClick = true; //这里重新开启
         }
       }, 1000);
-      // self.ruleform.email.validate((valid) => {
-      //   if (valid) {
       this.$http
           .post("/sendEmail", {
             to: this.ruleForm.email,
@@ -414,8 +392,6 @@ export default {
                 break;
             }
           })
-      //   }
-      // })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

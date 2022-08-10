@@ -171,14 +171,6 @@ export default {
       ElMessage.warning('请输入用户名')
       else if(self.form.password === '')
       ElMessage.warning('请输入密码')
-      // self.$http({
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   method: 'post',
-      //   url: '/user/login',
-      //   data: JSON.stringify(formData),
-      // })
       else{
         this.$http.post("/user/login", {
             username: self.form.username,
@@ -188,8 +180,6 @@ export default {
             console.log(res.data);
             switch (res.data.code) {
               case 200:
-                // location.reload();
-                // 前端保存用户信息
                 this.$store.state.user.id = res.data.data.user_id;
                 this.$store.state.user.name = res.data.data.username;
                 this.$store.state.user.real_name = res.data.data.real_name;
@@ -199,16 +189,6 @@ export default {
                 setTimeout(() => {
                     this.$router.push('/workspace');
                 }, 1000);
-                // this.$store.dispatch('saveUserInfo', {user: {
-                //     'username': this.form.username,
-                //     'confirmed': true,
-                //   }});
-                // var curr = localStorage.getItem('preRoute');
-                // if (curr == null) {
-                //   this.$router.push('/workspace');
-                // } else {
-                //   this.$router.push({ path: curr });
-                // }
                 break;
               case 500:
                 ElMessage.error(res.data.message);
@@ -220,25 +200,6 @@ export default {
                     this.$router.push('/workspace');
                 }, 1000);
                 break;
-              // case 202:
-              //   this.$message.error('用户名不存在！');
-              //   break;
-              // case 203:
-              //   this.$message.error('用户名或密码错误！');
-              //   break;
-              // case 5:
-              //   this.$message.warning('用户未通过邮件确认，请及时确认！');
-              //   this.$store.dispatch('saveUserInfo', {user: {
-              //       'username': this.form.username,
-              //       'confirmed': false,
-              //     }});
-              //   var cur = localStorage.getItem('preRoute');
-              //   if (cur == null) {
-              //     this.$router.push('/unverified_email');
-              //   } else {
-              //     this.$router.push({ path: cur });
-              //   }
-              //   break;
             }
           })
           .catch(err => {
