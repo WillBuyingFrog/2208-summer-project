@@ -179,6 +179,8 @@
 import DesignApp from "@/views/prototype-design/DesignApp";
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
+import {EVENT_DESIGNER_SWITCH} from "@/views/prototype-design/event-enum";
+import eventBus from "@/views/prototype-design/utils/eventBus";
 //
 // import eventBus from "@/views/prototype-design/utils/eventBus";
 // import {EVENT_DESIGNER_SWITCH} from "@/views/prototype-design/event-enum"
@@ -341,9 +343,9 @@ export default {
       this.activeFileId = page.page_id;
       console.log("toggle");
       // 标题和内容更改
-      // eventBus.$emit(EVENT_DESIGNER_SWITCH, {
-      //   newPageFileId: this.activeFileId
-      // })
+      eventBus.$emit(EVENT_DESIGNER_SWITCH, {
+        newPageFileId: this.activeFileId
+      })
 
 
     },
