@@ -139,6 +139,7 @@ export default {
       }
     },
     updateCurrentUser(attributes) {
+
       this.currentUser = { ...this.currentUser, ...attributes }
       this.editor.chain().focus().updateUser(this.currentUser).run()
       localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
@@ -159,6 +160,11 @@ export default {
     this.editor.destroy()
     this.provider.destroy()
   },
+  watch:{
+    'editor':function(){
+      this.$emit('getContent',this.editor.getHTML());
+    }
+  }
 }
 </script>
 

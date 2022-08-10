@@ -79,7 +79,8 @@
                     width="35%"
                     :before-close="handleClose">
                     <div style="border:0.5mm solid #f2f2f2; border-radius:15px;line-height:40px;"> {{link}}</div>
-                    <el-button  @click="handelCopyLink" color="rgb(133,157,218)" style="margin-top:10px;color:white;border-radius:10px;">复制链接</el-button>
+                    <el-button  @click="handelCopyLink" color="rgb(133,157,218)" 
+                    style="margin-top:10px;color:white;border-radius:10px;">复制链接</el-button>
                   </el-dialog>
 <!--              <el-button-->
 <!--                  class="drawer-btn"-->

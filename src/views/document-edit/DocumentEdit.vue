@@ -4,12 +4,12 @@
       <el-container class="outer-container">
         <el-header height="60px" class="header">
           <el-row>
-            <el-col :span="1">
+            <el-col :span="3">
               <div class="logo">
                 <img src="../../assets/images/logo-1.png" height="60">
               </div>
             </el-col>
-            <el-col :span="22">
+            <el-col :span="18">
               <p class="name">
                 {{this.doc_name}}
                 <el-icon class="edit-icon" @click="dialogVisible=true"><Edit></Edit></el-icon>
@@ -43,12 +43,45 @@
               </el-dialog>
             </el-col>
             <el-col :span="1">
+                <el-button
+                    class="drawer-btn"
+                    color="#859dda"
+                    :dark="isDark"
+                    plain
+                    @click="uploadVisible = true">
+                  <el-icon><Upload /></el-icon>
+                  上传模板
+                </el-button>
+                <el-dialog
+                  title="上传模板"
+                  v-model="uploadVisible"
+                  width="550px">
+                    <el-form :label-position="labelPosition"
+                      label-width="100px"
+                      :model="formLabelAlign"
+                      style="max-width: 460px">
+                      <el-form-item label="模板名称">
+                        <el-input v-model="template_name"  style="width: 400px;">
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item label="模板类型">
+                        <el-radio-group v-model="template_type">
+                          <el-radio label="1">私用</el-radio>
+                          <el-radio label="0">公用</el-radio>
+                        </el-radio-group>
+                      </el-form-item>
+                    </el-form>    
+                    <el-button  @click="upload()" color="rgb(133,157,218)" 
+                     style="margin-top:10px;color:white;border-radius:10px;">确定</el-button>
+                </el-dialog>
+            </el-col>
+            <el-col :span="2">
               <el-button
                   class="drawer-btn"
                   color="#859dda"
                   :dark="isDark"
                   plain
-                  text @click="drawer = true">
+                   @click="drawer = true">
                 <el-icon class="drawer-icon"><Fold /></el-icon>
                 文档列表
               </el-button>
@@ -79,7 +112,7 @@
         </el-header>
         <el-main class="mainPane">
           <div class="tiptap">
-            <TipTapDemo></TipTapDemo>
+            <TipTapDemo @getContent="getContent"></TipTapDemo>
           </div>
         </el-main>
       </el-container>
@@ -108,6 +141,9 @@ export default {
       newOneIndex: '',
       activeIndex: '1',
       newname: '',
+      uploadVisible: false,
+      template_name:'',
+      template_type:'1'
     }
   },
   created(){
@@ -232,6 +268,21 @@ export default {
       console.log(this.activeIndex);
       // 标题和内容更改
     },
+    getContent(content){
+      this.content = content;
+    },
+    upload(){
+        const self = this;
+        console.log(this.content)
+        self.$http.post('/template/DocNew', {
+            template_name: this.template_name,
+            content: this.content,
+            type: this.template_type
+        }).then(res=>{
+          console.log(res.data)
+
+        })
+    },
   }
 }
 </script>
@@ -301,5 +352,18 @@ export default {
 }
 .tiptap {
   height: 100%;
+}
+</style>
+<style>
+.el-radio__input.is-checked .el-radio__inner {
+    border-color:#859dda;
+    background:#859dda;
+}
+.el-radio__input.is-checked+.el-radio__label {
+    color:#859dda;
+}
+.el-input {
+    --el-input-focus-border: #859dda;
+    --el-input-focus-border-color: #859dda;
 }
 </style>
