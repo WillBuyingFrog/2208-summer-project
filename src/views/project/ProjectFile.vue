@@ -299,10 +299,11 @@ export default {
         }
     },
     created(){
+        this.fileType = this.$route.query.filetype;
         this.team_id = this.$store.state.team_id;
         this.project_name = this.$store.state.project_name;
         this.project_id = this.$store.state.project_id;
-        console.log(this.fileType);
+        console.log("test"+this.fileType);
         this.getFile();
         this.getAllDemo0();
         this.getAlllDemo1();
@@ -371,7 +372,8 @@ export default {
             })
         },
         getFile(){
-            this.$http
+            if(this.fileType == 0 || this.fileType == 1){
+                this.$http
                 .post('/file/viewType', {
                     project_id: this.project_id,
                     type: this.fileType
@@ -392,6 +394,7 @@ export default {
                 .catch(err => {
                     console.log(err);
                 })
+            }
         },
         //替换文件内容为模板，writeDoc表示写入文档，writeDesign表示写入原型; 
         //content、pages为从后端拉取的模板的内容，为string类型，详见yapi文档
@@ -494,7 +497,10 @@ export default {
                             this.currentDemo1 = 0;
                             this.newone.demo1_id = '';
                             this.newFileid = res.data.data;
-                            this.demoToFile(1, this.newone.demo1_id);
+                            //不是选中空白模板，需要把模板写入文件
+                            if(this.chooseDemo1 != 0){
+                                this.demoToFile(1, this.newone.demo1_id);
+                            }
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
@@ -526,7 +532,9 @@ export default {
                             this.dialogVisible2 = false;
                             this.currentDemo0 = 0;
                             this.newone.demo0_id = '';
-                            this.demoToFile(0, this.newone.demo0_id);
+                            if(this.chooseDemo0 == 0){
+                                this.demoToFile(0, this.newone.demo0_id);
+                            }
                             break;
                         case 500:
                             ElMessage.error(res.data.message);
