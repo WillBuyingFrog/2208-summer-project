@@ -70,8 +70,7 @@
                 </div>
                 <div class="paneChoose" v-for="(item, index) in demoList1" :class="{'active':currentDemo1==(index + 1)}" @click="chooseDemo1(index + 1)" :key="index">
                     <div class="demoimage">
-                    <img>
-                    <!--  src="imgsrcDemo1[index - 1]" -->
+                    <img class="demoimg" :src="imgsrcDemo1[index]">
                     </div>
                     <div class="modename">{{item.template_name}}</div>
                 </div>
@@ -287,9 +286,9 @@ export default {
                 demo1_id: '',
             },
             imgsrcDemo0: [],//文档模板图片路径
-            imgsrcDemo1: [],//原型模板图片路径
+            imgsrcDemo1: [require('../../assets/images/demo1.png'),require('../../assets/images/demo2.jpg')],//原型模板图片路径
             demoList0: [],//文档模板
-            demoList1: [],//原型模板
+            demoList1: [require('../../assets/images/demo1.png'),require('../../assets/images/demo1.png')],//原型模板
         }
     },
     watch:{
@@ -798,6 +797,10 @@ export default {
     height: 115px;
     border-radius: 1ch 1ch 0 0;
     border-bottom: 1px solid #D3D3D3;
+}
+.demoimg {
+  height: 90px;
+  margin-top:10px
 }
 .modename {
     width: 160px;
