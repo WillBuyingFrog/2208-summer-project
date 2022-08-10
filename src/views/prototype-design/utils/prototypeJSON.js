@@ -1,26 +1,96 @@
 // eslint-disable-next-line no-unused-vars
-import {getCollaboratePrototype, parseControls} from "@/views/prototype-design/utils/collaborate";
-import {level_getCollaboratePrototype} from "@/views/prototype-design/utils/collaborate_level";
+import {level_getCollaboratePrototype, level_switchPage} from "@/views/prototype-design/utils/collaborate_level";
 
 
-export const templateContents = []
+export function parseControls(controls, isRoot=1){
+    let retJSON = []
+
+    controls.map((item) => {
+        // console.log("Checking component" + item.id)
+        if(!item.parentId){
+            // console.log("   This component is on root-editor!")
+        }
+        let componentHasChild = false
+        let childJSON = []
+        if(item.type === 'container'){
+            // 或许可以直接用type是不是container判定？
+            // console.log("   This component has children!")
+            componentHasChild = true
+            childJSON = parseControls(item.children, 0)
+        }
+        let itemJSON = {
+            // hasChild指示当前元素是否有子元素
+            ...item,
+            children: [],
+            hasChild: componentHasChild,
+            childrenJSON: childJSON
+        }
+        retJSON.push(itemJSON)
+        return itemJSON
+    })
+    if(isRoot) return retJSON
+    else{
+        return JSON.stringify({
+            components: retJSON
+        })
+    }
+}
+
+
+export const templateContents = new Map()
+export const templatePageIndexToName = new Map()
 
 /**
  * 仅在开发环境中使用。
+ * 将单页内容导出到templateContents中。
  * @param application
  * @returns {Promise<void>}
  * @private
  */
-export async function _exportControlsJson(application){
+export function _exportControlsJson(application){
+    let currentComponents = parseControls(application.controls)
+    currentComponents = JSON.parse(currentComponents)
+    currentComponents = currentComponents['components']
+    templateContents.set(application.currentPage.page_index, currentComponents)
+    templatePageIndexToName.set(application.currentPage.page_index, application.currentPage.page_name)
+    alert("已经保存好页面index为 " + application.currentPage.page_index + " 的数据，请记得导出到服务器")
+}
 
-    let result = parseControls(application.$data.controls)
-    let fullData = {
-        components: result,
-        width: application.currentPage.width,
-        height: application.currentPage.height,
+
+export function _exportTemplateToBackend(application){
+
+    const pages = []
+
+    function processPages(value, key) {
+        let page_name = templatePageIndexToName.get(key)
+        let page_index = key
+        let components = JSON.stringify(value)
+        let width = application.currentPage.width
+        let height = application.currentPage.height
+        pages.push({
+            page_index: page_index,
+            page_name: page_name,
+            components: components,
+            width: width,
+            height: height
+        })
     }
-    result = JSON.stringify(fullData)
-    console.log(result)
+    templateContents.forEach(processPages)
+    const parsedPages = JSON.stringify(pages)
+    application.$http
+        .post('/template/ProtoNew', {
+            template_name: "测试模板",
+            template_id: "1",
+            template_height: application.currentPage.height.toString(),
+            template_width: application.currentPage.width.toString(),
+            pages: parsedPages
+        })
+        .then(res => {
+            switch (res.data.code){
+                case 200:
+                    alert('成功创建模板。')
+            }
+        })
 }
 
 /**

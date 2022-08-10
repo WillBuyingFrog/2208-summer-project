@@ -22,3 +22,5 @@ export const EVENT_FUNCTION_TEST = 'function:test'
 export const COLLABORATE_EXPORT_JSON = 'collaborate:export'
 export const COLLABORATE_USER_SELECT = 'collaborate:select'
 export const COLLABORATE_USER_UNSELECT = 'collaborate:unselect'
+
+export const DEV_CREATE_TEMPLATE = 'dev:template'

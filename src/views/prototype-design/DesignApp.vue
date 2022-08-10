@@ -58,7 +58,7 @@ import {
   EVENT_COMPONENT_DUPLICATE,
   EVENT_COMPONENT_SELECT,
   EVENT_COMPONENT_TRANSFORM,
-  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON, EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_SWITCH
+  EVENT_COMPONENT_UNSELECT, COLLABORATE_EXPORT_JSON, EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_SWITCH, DEV_CREATE_TEMPLATE
 } from "@/views/prototype-design/event-enum"
 
 import {
@@ -72,7 +72,7 @@ import {
 
 import {getSnapShot} from "@/views/prototype-design/utils/image";
 import {
-  _exportControlsJson,
+  _exportControlsJson, _exportTemplateToBackend,
   _level_loadCanvasInit,
 } from "@/views/prototype-design/utils/prototypeJSON";
 import {computed} from "vue";
@@ -103,7 +103,7 @@ export default {
       isPreviewMode: 1
     }
   },
-  components:{
+  components: {
     DesignAppHeader, DesignAppComponents,
     DesignEditorView, PropInspector,
     PluginSelection
@@ -157,19 +157,19 @@ export default {
      * @description 批量添加组件到编辑区域，如果指定了parentid则将添加到指定的组件中。目前parentid对应的组件只能为Container类型的组件
      * @params {{components:Array,parentId:string?}}
      */
-    addControl({ components, parentId, isReload=0 }) {
+    addControl({components, parentId, isReload = 0}) {
       console.log("Into addControl function.")
       let controls = []
       let newComponents = null
-      if(isReload){
+      if (isReload) {
         console.log("This function is in reload mode.")
         newComponents = this.reloadComponents(components, parentId)
         // console.log("newComponents:", newComponents)
-      }else{
+      } else {
         newComponents = this.getComponents(components, parentId)
       }
       if (parentId) {
-        const { path } = findComponentPathById(this.controls, parentId)
+        const {path} = findComponentPathById(this.controls, parentId)
         controls = updateTreeIn(this.controls, path, (item) => {
           item.children = item.children.concat(newComponents)
           return item
@@ -181,13 +181,13 @@ export default {
       console.log("New set of controls:", controls)
 
       // 默认选中最后一个
-      let { component } = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
+      let {component} = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
 
       console.log("Newly added component:", component)
 
       // isReload=2代表协作模式，协作模式下跳过选中环节
       // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
-      if(isReload === 2 || isReload === 1){
+      if (isReload === 2 || isReload === 1) {
         // console.log("This function is in special mode.")
         // level_updateCollaborateComponent(this, this.currentPage.page_id, component)
         return
@@ -225,12 +225,12 @@ export default {
     updateControlValue(key, value, isExtra) {
       let controls = updateTreeIn(this.controls, this.currentPath, (item) => {
         if (['x', 'y', 'width', 'height', 'rotation'].includes(key)) {
-          let transform = { ...item.transform }
+          let transform = {...item.transform}
           transform[key] = value
           item.transform = transform
           return item
         } else if (isExtra) {
-          let extra = { ...item.extra }
+          let extra = {...item.extra}
           extra[key] = value
           item.extra = extra
         } else {
@@ -241,8 +241,8 @@ export default {
       this.setControls(controls)
     },
     // 组件拖拽时将新的transform同步到属性编辑器中，并在end事件中进行一次数据同步
-    handleTransform({ transform, type }) {
-      this.controlled = { ...this.controlled, ...transform }
+    handleTransform({transform, type}) {
+      this.controlled = {...this.controlled, ...transform}
       if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
         console.log("Detected transform type", type)
         this.updateControlValue('transform', transform, false)
@@ -250,7 +250,9 @@ export default {
         // 为了显示美观，这里传入用户名
         this.updateControlValue('usedBy', this.$store.state.user.name, true)
 
-        let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
+        let realComponent = findComponent(this.controls, (item) => {
+          return this.controlled.id === item.id
+        })
 
         console.log("The currently controlled element is", realComponent)
         // 实时协作中，需要更新组件信息
@@ -270,9 +272,9 @@ export default {
       this.setControls(controls)
     },
     //  组件选中，右侧展示属性编辑器
-    handleSelect({control, needUpdate=0}) {
+    handleSelect({control, needUpdate = 0}) {
       console.log("handleSelect called", control.usedBy, this.$store.state.user.id)
-      if(!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)){
+      if (!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)) {
         // 被别的用户控制
         // 直接return
         return
@@ -284,9 +286,11 @@ export default {
       this.setCurrentControl(control)
       this.updateControlStatus(true)
       // 在实时协作文档中同步内容
-      if(needUpdate){
+      if (needUpdate) {
         // 拿到深拷贝的当前控件
-        let deepCopyCurrentComponent = findComponent(this.controls, (item) => {return item.id === control.id})
+        let deepCopyCurrentComponent = findComponent(this.controls, (item) => {
+          return item.id === control.id
+        })
         console.log("Need update when handleSelect ends.", deepCopyCurrentComponent)
         level_updateCollaborateComponent(this, this.currentPage.page_id, deepCopyCurrentComponent)
       }
@@ -312,15 +316,15 @@ export default {
 
       // 深度拷贝数据，避免数据引用污染
       control = JSON.parse(JSON.stringify(control))
-      Object.assign(control, control.transform, { active: true })
+      Object.assign(control, control.transform, {active: true})
       //  将选中组件设置到当前属性编辑器中
-      let { path } = findComponentPathById(this.controls, control.id)
+      let {path} = findComponentPathById(this.controls, control.id)
       this.currentPath = path
       this.controlled = control
       this.currentId = control.id
     },
     // 属性编辑器变化后同步到组件中
-    handleChange({ keyName, value, extra }) {
+    handleChange({keyName, value, extra}) {
       console.log("hello!", keyName, value, extra)
       if (!this.currentId) {
         return
@@ -432,7 +436,9 @@ export default {
     },
     handleUnselect() {
       if (!this.currentId) return
-      let realComponent = findComponent(this.controls, (item) => {return this.currentId === item.id})
+      let realComponent = findComponent(this.controls, (item) => {
+        return this.currentId === item.id
+      })
       realComponent.usedBy = '__none__'
       realComponent.resizable = true
       realComponent.draggable = true
@@ -445,16 +451,19 @@ export default {
     getEditorView() {
       return this.$refs.editor
     },
-    exportControlsJson(){
+    exportControlsJson() {
       _exportControlsJson(this)
     },
-    parseComponentJSON({componentJSON, parentId}){
+    createTemplate(){
+      _exportTemplateToBackend(this)
+    },
+    parseComponentJSON({componentJSON, parentId}) {
       // 第一次调用（在root editor上遍历）首先清除当前画布上所有的控件和所有的当前选中状态
-      if(parentId === -1){
+      if (parentId === -1) {
         this.setControls([])
         this.clearCurrentComponent()
       }
-      if(componentJSON === "") return
+      if (componentJSON === "") return
       componentJSON = JSON.parse(componentJSON)
       // console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
       componentJSON = componentJSON['components']
@@ -470,11 +479,11 @@ export default {
         }
       })
     },
-    handleSwitchPage({newPageFileId}){
+    handleSwitchPage({newPageFileId}) {
       console.log("Ready to switch new page:", newPageFileId)
       level_switchPage(this, newPageFileId)
     },
-    handleSaveImage(){
+    handleSaveImage() {
       getSnapShot("root-editor-view")
     }
   },
@@ -488,17 +497,20 @@ export default {
     eventBus.$on(EVENT_DESIGNER_REDO, this.handleRedo)
     eventBus.$on(EVENT_DESIGNER_UNDO, this.handleUndo)
     eventBus.$on(EVENT_DESIGNER_CLEAR, this.handleClear)
+
+    // 下面的功能，正式部署时要注释掉
     eventBus.$on(COLLABORATE_EXPORT_JSON, this.exportControlsJson)
+    eventBus.$on(DEV_CREATE_TEMPLATE, this.createTemplate)
+
+
     eventBus.$on(EVENT_DESIGNER_SAVEIMG, this.handleSaveImage)
     eventBus.$on(EVENT_DESIGNER_SWITCH, this.handleSwitchPage)
   },
-  async mounted(){
-
-
+  async mounted() {
     const IS_LEVELDB = true
-
-    if(IS_LEVELDB){
-      console.log(this.$store.state.file_id, this.$store.state.file_name)
+    if (IS_LEVELDB) {
+      console.log(this.$store.state.file_id)
+      console.log(this.$store.state.file_name)
       this.file_id = this.$store.state.file_id // 原型设计的id
       this.file_name = this.$store.state.file_name  // 原型设计名称
       this.userId = this.$store.state.user.id
@@ -521,10 +533,7 @@ export default {
       level_getCollaboratePrototype(this, this.currentPage.page_id)
       console.log("[OFFLINE MULTIPAGE]You shouldn't see this in an official release.")
     }
-
-
   }
-
 }
 </script>
 

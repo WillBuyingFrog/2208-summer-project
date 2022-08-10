@@ -2,9 +2,8 @@
 import eventBus from "@/views/prototype-design/utils/eventBus";
 import {
   EVENT_COMPONENT_DELETE,
-  EVENT_COMPONENT_DUPLICATE,
   COLLABORATE_EXPORT_JSON,
-  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE,
+  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE, DEV_CREATE_TEMPLATE
 } from "@/views/prototype-design/event-enum";
 
 export default {
@@ -46,15 +45,15 @@ export default {
             </el-icon>
             <el-icon
                 className="icon-contain"
-                onClick={() => eventBus.$emit(EVENT_COMPONENT_DUPLICATE)}
-            >
-              <CopyDocument class="icon"></CopyDocument>
-            </el-icon>
-            <el-icon
-                className="icon-contain"
                 onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
             >
               <Download class="icon"></Download>
+            </el-icon>
+            <el-icon
+                className="icon-contain"
+                onClick={() => eventBus.$emit(DEV_CREATE_TEMPLATE)}
+            >
+              <Delete class="icon"></Delete>
             </el-icon>
           </el-space>
         </div>

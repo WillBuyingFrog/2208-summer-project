@@ -373,6 +373,11 @@ export function level_getCollaboratePrototype(application, file_id){
     return collaboratePrototypeConfig
 }
 
+// eslint-disable-next-line no-unused-vars
+export function level_getCollaboratePrototypeFromTemplate(application, file_id, templateId){
+
+}
+
 /**
  * 给定当前用户选择的元素，更新实时文档中的信息。
  * 本函数应当在用户新建组件、选中组件、更改组件样式和取消选择组件时调用。
