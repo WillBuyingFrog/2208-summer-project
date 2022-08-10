@@ -27,6 +27,7 @@ import FileSaver from 'file-saver'
 import htmlDocx from "html-docx-js/dist/html-docx"
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { NodeHtmlMarkdown } from 'node-html-markdown'
 export default {
   components: {
     MenuItem,
@@ -350,16 +351,16 @@ export default {
         {
           type: 'divider',
         },{
-          icon: 'download-2-line',
-          title: '保存为word',
+          icon: 'file-word-2-line',
+          title: '导出为word',
            action: () => this.HTMLtoWord(),
         },{
-          icon: 'download-2-line',
-          title: '保存为pdf',
+          icon: 'file-pdf-line',
+          title: '导出为pdf',
            action: () => this.HTMLtoPdf(),
         },{
-          icon: 'download-2-line',
-          title: '保存为md',
+          icon: 'markdown-line',
+          title: '导出为markdownd',
            action: () => this.HTMLtoMd(),
         },
       ]
@@ -383,20 +384,7 @@ export default {
       FileSaver.saveAs(converted, '文档');
     },
     HTMLtoPdf(){
-      // let html = this.editor.getHTML();
-      // let content = `<!DOCTYPE html><html>
-      //       <head>
-      //           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      //           <style>
-      //               ${this.cssHTML}
-      //           </style>
-      //       </head>
-      //       <body>
-      //         <div class='main'>
-      //           ${html}
-      //           </div>
-      //       </body>
-      //       </html>`;
+      
       let element = document.getElementById('editor');
       console.log(element);
       html2canvas(element, {
@@ -435,7 +423,26 @@ export default {
       
     },
     HTMLtoMd(){
-
+      let html = this.editor.getHTML();
+      let content = `<!DOCTYPE html><html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <style>
+                    ${this.cssHTML}
+                </style>
+            </head>
+            <body>
+              <div class='main'>
+                ${html}
+                </div>
+            </body>
+            </html>`;
+            console.log(typeof(NodeHtmlMarkdown.translate(content)))
+            var FileSaver = require('file-saver');
+            var blob =  new Blob([NodeHtmlMarkdown.translate(content)], {type: "text/plain;charset=utf-8"})
+            FileSaver.saveAs(blob, '文档.md')
+      //FileSaver.saveAs(, '文档.md');
+      
     },
     addImage() {
       const url = window.prompt('请输入要插入图片的url')

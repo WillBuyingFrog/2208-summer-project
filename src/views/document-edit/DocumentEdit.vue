@@ -302,7 +302,4 @@ export default {
 .tiptap {
   height: 100%;
 }
-.online-users {
-
-}
 </style>
