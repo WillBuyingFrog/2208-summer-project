@@ -79,7 +79,7 @@
         </el-header>
         <el-main class="mainPane">
           <div class="tiptap">
-            <TipTapDemo></TipTapDemo>
+            <TipTapDemo :file-id="file_id" :file-name="doc_name"></TipTapDemo>
           </div>
         </el-main>
       </el-container>
