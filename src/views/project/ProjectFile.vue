@@ -285,10 +285,10 @@ export default {
                 demo0_id: '',
                 demo1_id: '',
             },
-            imgsrcDemo0: [],//文档模板图片路径
-            imgsrcDemo1: [require('../../assets/images/demo1.png'),require('../../assets/images/demo2.jpg')],//原型模板图片路径
+            imgsrcDemo0: [require('../../assets/images/d1.png'),],//文档模板图片路径
+            imgsrcDemo1: [require('../../assets/images/demo1.png'),require('../../assets/images/demo2.png')],//原型模板图片路径
             demoList0: [],//文档模板
-            demoList1: [require('../../assets/images/demo1.png'),require('../../assets/images/demo1.png')],//原型模板
+            demoList1: [],//原型模板
         }
     },
     watch:{
