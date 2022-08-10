@@ -527,14 +527,14 @@ export function level_switchPage(application, newPageFileId, isPreview=0){
     // 断开与之前页面的连接
     let collaborateConfig = null
     if(isPreview){
-        collaborateConfig = sharedPreviewDocMap.get(application.previewPageId)
+        collaborateConfig = sharedPreviewDocMap.get(application.lastPageId)
     }else{
         collaborateConfig = sharedDocMap.get(application.currentPage.page_id)
     }
     let collaborateDoc = collaborateConfig.doc
     let collaborateProvider = collaborateConfig.provider
     if(isPreview){
-        sharedPreviewDocMap.delete(application.previewPageId)
+        sharedPreviewDocMap.delete(application.lastPageId)
     }else{
         sharedDocMap.delete(application.currentPage.page_id)
     }

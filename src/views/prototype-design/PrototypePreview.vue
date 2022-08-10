@@ -4,9 +4,9 @@
       <el-header style="border-bottom:0.5mm solid #e6e6e6;">
         <el-row >
             <el-col :span="2">
-                    <span > 
+                    <span >
                         <img src="../../assets/images/logo.png" height="60"/>
-                    </span>    
+                    </span>
                     <el-divider style="float:right;height:40px;margin-top:10px;margin-right:20px;" direction="vertical" />
                 </el-col>
                 <el-col :span="1">
@@ -25,9 +25,9 @@
         <el-aside width="300px" style="height:120vh;">
             <h4>页面（{{list.length}}）</h4>
             <el-divider></el-divider>
-            <el-table :data="list" style="width: 100%;background-color:transparent;" 
+            <el-table :data="list" style="width: 100%;background-color:transparent;"
                 :show-header="false"  row-style="background:transparent; height:50px"
-                @row-click = change highlight-current-row="true">
+                @row-click=change highlight-current-row="true">
                 <el-table-column>
                     <template #default="scope">
                        <el-icon><CopyDocument /></el-icon>
@@ -57,12 +57,13 @@ export default{
         return{
             name:'',
             list:[],
-            page_id:'',
+            page_id:'testtest',
             isPreviewed: false,
         }
     },
     methods: {
         change(row){
+          console.log("Change page_id to", row.page_id)
            this.page_id = row.page_id;
         },
         toggleFullscreen() {
@@ -87,14 +88,14 @@ export default{
             else{
                 ElMessage.error('链接已失效！')
             }
-            
+
           })
         }
     },
     created() {
         this.get()
     },
-   
+
 }
 
 </script>

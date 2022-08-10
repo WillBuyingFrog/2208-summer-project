@@ -488,6 +488,13 @@ export default {
     }
   },
   created() {
+
+    // eslint-disable-next-line no-unused-vars
+    const MAX_HEIGHT = 750
+    // eslint-disable-next-line no-unused-vars
+    const MAX_WIDTH = 1000
+
+
     eventBus.$on(EVENT_COMPONENT_ADD, this.addControl)
     eventBus.$on(EVENT_COMPONENT_SELECT, this.handleSelect)
     eventBus.$on(EVENT_COMPONENT_TRANSFORM, this.handleTransform)
