@@ -38,6 +38,8 @@
     "core-js": "^3.8.3",
     "do_username": "0.0.2",
     "element-plus": "^2.2.11",
+    "element-tiptap": "^1.27.1",
+    "element-ui": "^2.15.9",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "html-docx-js": "^0.3.1",

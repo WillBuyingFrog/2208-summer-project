@@ -7,11 +7,11 @@ export const getSnapShot = async (elementId) => {
         allowTaint: false,
         useCORS: true
     })
+    console.log(elementId)
     canvas.toBlob(function(blob) {
             let binaryData = [];
             binaryData.push(blob);
             let url = window.URL.createObjectURL(new Blob(binaryData))
-            console.log(url)
             const a = document.createElement('a')
             a.href = url
             a.download = "事例.png"
