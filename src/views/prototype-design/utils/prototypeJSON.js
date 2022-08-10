@@ -49,14 +49,17 @@ export const templatePageIndexToName = new Map()
  */
 export function _exportControlsJson(application){
     let currentComponents = parseControls(application.controls)
-    currentComponents = JSON.parse(currentComponents)
-    currentComponents = currentComponents['components']
     templateContents.set(application.currentPage.page_index, currentComponents)
     templatePageIndexToName.set(application.currentPage.page_index, application.currentPage.page_name)
     alert("已经保存好页面index为 " + application.currentPage.page_index + " 的数据，请记得导出到服务器")
 }
 
-
+/**
+ * 仅在开发环境中使用。
+ * 将当前存储的模板内容传输到后端数据库中。
+ * @param application
+ * @private
+ */
 export function _exportTemplateToBackend(application){
 
     const pages = []
@@ -81,6 +84,7 @@ export function _exportTemplateToBackend(application){
         .post('/template/ProtoNew', {
             template_name: "测试模板",
             template_id: "1",
+            template_page_count: pages.length,
             template_height: application.currentPage.height.toString(),
             template_width: application.currentPage.width.toString(),
             pages: parsedPages

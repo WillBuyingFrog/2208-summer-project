@@ -374,7 +374,18 @@ export function level_getCollaboratePrototype(application, file_id){
 }
 
 // eslint-disable-next-line no-unused-vars
-export function level_getCollaboratePrototypeFromTemplate(application, file_id, templateId){
+export function level_initTemplateContents(application, prototype_id, template_id){
+    application.$http
+        .post('/template/getProtoTemplate', {
+            template_id: template_id
+        })
+        .then(res => {
+
+        })
+}
+
+// eslint-disable-next-line no-unused-vars
+export function level_initSinglePageContent(page_id, components){
 
 }
 
