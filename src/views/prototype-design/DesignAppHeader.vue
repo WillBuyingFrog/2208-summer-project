@@ -2,8 +2,8 @@
 import eventBus from "@/views/prototype-design/utils/eventBus";
 import {
   EVENT_COMPONENT_DELETE,
-  COLLABORATE_EXPORT_JSON,
-  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE, DEV_CREATE_TEMPLATE, EVENT_COMPONENT_DUPLICATE
+  EVENT_DESIGNER_SAVEIMG, EVENT_DESIGNER_RESIZE, EVENT_COMPONENT_DUPLICATE,
+  // COLLABORATE_EXPORT_JSON, DEV_CREATE_TEMPLATE
 } from "@/views/prototype-design/event-enum";
 
 export default {
@@ -27,41 +27,43 @@ export default {
       eventBus.$emit(EVENT_DESIGNER_RESIZE, {newWidth: newWidth, newHeight: newHeight, margins:newMarginText})
     }
   },
-  render(){
+  /**
+   * <el-icon
+   className="icon-contain"
+   onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
+   >
+   <Upload class="icon"/>
+   </el-icon>
+   * <el-icon className="icon-contain" onClick={() => eventBus.$emit(DEV_CREATE_TEMPLATE)}>
+   <Delete class="icon"></Delete>
+   </el-icon>
+
+   * @returns {JSX.Element}
+   */
+  render: function () {
     return (
         <div class="ds-header">
           <el-space>
-                <el-icon
-                    className="icon-contain"
-                    onClick={() => eventBus.$emit(COLLABORATE_EXPORT_JSON)}
-                >
-                  <Upload class="icon"/>
-                </el-icon>
-            <el-icon
-                className="icon-contain"
-                onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
-            >
-              <Delete class="icon"></Delete>
-            </el-icon>
-            <el-icon
-                className="icon-contain"
-                onClick={() => eventBus.$emit(EVENT_COMPONENT_DUPLICATE)}
-            >
-              <DocumentCopy class="icon"></DocumentCopy>
 
-            </el-icon>
-            <el-icon
-                className="icon-contain"
-                onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
-            >
-              <Download class="icon"></Download>
-            </el-icon>
-            <el-icon
-                className="icon-contain"
-                onClick={() => eventBus.$emit(DEV_CREATE_TEMPLATE)}
-            >
-              <Delete class="icon"></Delete>
-            </el-icon>
+          <el-icon
+              className="icon-contain"
+              onClick={() => eventBus.$emit(EVENT_COMPONENT_DELETE)}
+          >
+            <Delete class="icon"></Delete>
+          </el-icon>
+          <el-icon
+              className="icon-contain"
+              onClick={() => eventBus.$emit(EVENT_COMPONENT_DUPLICATE)}
+          >
+            <DocumentCopy class="icon"></DocumentCopy>
+
+          </el-icon>
+          <el-icon
+              className="icon-contain"
+              onClick={() => eventBus.$emit(EVENT_DESIGNER_SAVEIMG)}
+          >
+            <Download class="icon"></Download>
+          </el-icon>
           </el-space>
         </div>
     )
