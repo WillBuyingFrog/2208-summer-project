@@ -287,7 +287,11 @@ export default {
             type: this.template_type
         }).then(res=>{
           console.log(res.data)
-
+          if(res.data.code == 200){
+            ElMessage.success('创建模板成功！');
+            this.uploadVisible = false;
+            this.template_name = '';
+          }
         })
     },
   }

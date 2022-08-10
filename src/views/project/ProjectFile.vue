@@ -781,6 +781,7 @@ export default {
     height: 150px;
     border-radius: 1ch;
     border: 2px solid #D3D3D3;
+    margin-bottom: 10px;
 }
 .active {
     border-color: #859dda;
