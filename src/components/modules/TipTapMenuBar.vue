@@ -397,10 +397,16 @@ export default {
       //           </div>
       //       </body>
       //       </html>`;
-      let element = document.querySelector('.ProseMirror');
+      let element = document.getElementById('editor');
       console.log(element);
       html2canvas(element, {
-        logging: false
+        logging: false,
+        allowTaint: true,
+        taintTest: false,
+        useCORS: true,
+        async: true,
+        scale: 4, // 放大倍数
+        dpi: '192', // 精度，清晰度设置
       }).then(function(canvas) {
         var pdf = new jsPDF('p', 'mm', 'a4') // A4纸，纵向
         var ctx = canvas.getContext('2d')
