@@ -70,10 +70,10 @@
                   v-model="drawer"
                   title="全部页面"
                   direction="rtl"
-                  size="30%"
+                  size="20%"
               >
                 <el-menu
-                    :default-active="activeIndex"
+                    :defaultw-active="activeIndex"
                     class="all-prototypes"
                     @select="handleSelect"
                     text-color="#000000"
@@ -87,6 +87,9 @@
                   >{{page.page_name}}</el-menu-item>
                   <el-menu-item @click="newPage">
                     <el-icon><Plus /></el-icon>
+                  </el-menu-item>
+                  <el-menu-item @click="deletePage">
+                    <el-icon><Delete /></el-icon>
                   </el-menu-item>
                 </el-menu>
               </el-drawer>
@@ -138,6 +141,9 @@ export default {
   },
 
   methods: {
+    deletePage() {
+
+    },
     rename(){
       if(this.newname == '' || this.newname == null || this.newname == undefined){
         ElMessage.warning("新标题不能为空")
