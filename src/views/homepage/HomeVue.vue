@@ -286,7 +286,7 @@
       width: 100%;
     }
     .bg{
-        background-image: url("../../assets/images/2.jpg");
+        background-image: url("../../assets/images/2.jpeg");
         background-position:center;
         background-size: 100% auto;
         width: 100%;

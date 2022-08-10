@@ -95,13 +95,11 @@ export default {
 
     // 先新建一个房间
     this.createEditorRoom()
-
   },
   methods: {
     createEditorRoom(){
       // 房间号就是文件id
       this.room = this.$store.state.file_id
-
       const ydoc = new Y.Doc()
       const yProvider = new HocuspocusProvider({
         url: 'ws://49.232.135.90:7370',
@@ -112,7 +110,6 @@ export default {
         this.status = event.status
       })
       this.provider = yProvider
-
       let newEditor = new Editor({
         extensions: [
           StarterKit.configure({
@@ -189,6 +186,7 @@ export default {
     this.editor.destroy()
     this.provider.destroy()
   },
+
 }
 </script>
 
