@@ -1,5 +1,5 @@
 <template>
-    <div class="bg">
+    <div class="bg"  v-if="isPreviewed == true">
     <el-container >
       <el-header style="border-bottom:0.5mm solid #e6e6e6;">
         <el-row >
@@ -47,6 +47,8 @@
 <script>
 import PreviewApp from './PreviewDesignApp.vue'
 import screenfull from 'screenfull'
+import { ElMessage } from 'element-plus';
+import 'element-plus/dist/index.css'
 export default{
     components:{
         PreviewApp
@@ -56,6 +58,7 @@ export default{
             name:'',
             list:[],
             page_id:'',
+            isPreviewed: false,
         }
     },
     methods: {
@@ -75,8 +78,15 @@ export default{
           }).
           then(res=>{
             console.log(res.data)
-            this.list = res.data.data.pageList
-            this.name = res.data.data.prototype_name
+            if(res.data.code == '200'){
+                this.list = res.data.data.pageList
+                this.name = res.data.data.prototype_name
+                this.isPreviewed = true
+            }
+            else{
+                ElMessage.error('链接已失效！')
+            }
+            
           })
         }
     },
