@@ -30,7 +30,7 @@ import {
 } from "@/views/prototype-design/utils/prototypeJSON";
 import {computed} from "vue";
 import {
-  level_deleteCollaborateComponent, level_getPreviewCollaboratePrototype,
+  level_deleteCollaborateComponent, level_getPreviewCollaboratePrototype, level_switchPage,
   level_updateCollaborateComponent
 } from "@/views/prototype-design/utils/collaborate_level";
 
@@ -60,6 +60,12 @@ export default {
   components:{
     DesignEditorView, PluginSelection
   },
+  watch: {
+    previewPageId(newPageId, oldPageId){
+     console.log("Ready to switch new page:", newPageId, oldPageId)
+      level_switchPage(this, newPageId, 1)
+    }
+  },
   provide() {
     return {
       pages: computed(() => this.pages)
@@ -71,8 +77,6 @@ export default {
         let newItem = {
           ...item,
           childrenJSON: "",
-          // 重置元件实时协作信息
-          usedBy: "__none__"
         }
         return newItem
       })
@@ -94,7 +98,7 @@ export default {
         rotatable: true,
         resizable: true,
         draggable: true,
-        acceptRatio: false,
+        acceptRatio: true,
         zoom: 1,
         active: false,
         parent: true,
@@ -112,7 +116,7 @@ export default {
      * @params {{components:Array,parentId:string?}}
      */
     addControl({ components, parentId, isReload=0 }) {
-      console.log("Into addControl function.")
+      // console.log("Into addControl function.")
       let controls = []
       let newComponents = null
       if(isReload){
@@ -142,8 +146,8 @@ export default {
       // isReload=2代表协作模式，协作模式下跳过选中环节
       // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
       if(isReload === 2 || isReload === 1){
-        console.log("This function is in special mode.")
-        level_updateCollaborateComponent(this, this.previewPageId, component, 1)
+        // console.log("This function is in special mode.")
+        // level_updateCollaborateComponent(this, this.previewPageId, component, 1)
         return
       }
 
@@ -195,22 +199,22 @@ export default {
       this.setControls(controls)
     },
     // 组件拖拽时将新的transform同步到属性编辑器中，并在end事件中进行一次数据同步
-    handleTransform({ transform, type }) {
-      this.controlled = { ...this.controlled, ...transform }
-      if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
-        console.log("Detected transform type", type)
-        this.updateControlValue('transform', transform, false)
-        // 需要将usedBy传入组件中
-        // 为了显示美观，这里传入用户名
-        this.updateControlValue('usedBy', this.$store.state.user.name, true)
-
-        let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
-        console.log("The currently controlled element is", realComponent)
-        // 实时协作中，需要更新组件信息
-        this.controlled.usedBy = this.$store.state.user.id
-        level_updateCollaborateComponent(this, this.previewPageId, realComponent, 1)
-      }
-    },
+    // handleTransform({ transform, type }) {
+    //   this.controlled = { ...this.controlled, ...transform }
+    //   if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
+    //     console.log("Detected transform type", type)
+    //     this.updateControlValue('transform', transform, false)
+    //     // 需要将usedBy传入组件中
+    //     // 为了显示美观，这里传入用户名
+    //     this.updateControlValue('usedBy', this.$store.state.user.name, true)
+    //
+    //     let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
+    //     console.log("The currently controlled element is", realComponent)
+    //     // 实时协作中，需要更新组件信息
+    //     this.controlled.usedBy = this.$store.state.user.id
+    //     level_updateCollaborateComponent(this, this.previewPageId, realComponent, 1)
+    //   }
+    // },
     /**
      * @description 变更当前选中组件的状态
      * @param {Boolean} status
@@ -233,13 +237,17 @@ export default {
       // 标记usedBy标签
       control.usedBy = this.$store.state.user.id
 
-      // 在实时协作文档中同步内容
-      // console.log("okokok")
-      if(needUpdate)
-        level_updateCollaborateComponent(this, this.previewPageId, control, 1)
-
       this.setCurrentControl(control)
       this.updateControlStatus(true)
+
+      // 在实时协作文档中同步内容
+      // console.log("okokok")
+      if(needUpdate){
+        let deepCopyCurrentComponent = findComponent(this.controls, (item) => {
+          return item.id === control.id
+        })
+        level_updateCollaborateComponent(this, this.previewPageId, deepCopyCurrentComponent, 1)
+      }
     },
     setCurrentControl(control) {
       // 无组件选中时，直接清除属性编辑器
@@ -386,7 +394,6 @@ export default {
     // 预览模式，禁用所有更改
     level_getPreviewCollaboratePrototype(this, this.previewPageId)
   }
-
 }
 </script>
 

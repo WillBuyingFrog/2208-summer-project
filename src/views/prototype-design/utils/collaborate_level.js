@@ -553,7 +553,13 @@ export function level_switchPage(application, newPageFileId, isPreview=0){
         }
     })
     // 新建与新页面的连接
-    level_getCollaboratePrototype(application, newPageFileId)
+    if(isPreview){
+        level_getPreviewCollaboratePrototype(application, newPageFileId)
+    }else{
+        level_getCollaboratePrototype(application, newPageFileId)
+    }
+
+
 
 }
 

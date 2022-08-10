@@ -140,7 +140,7 @@ export default {
         rotatable: true,
         resizable: true,
         draggable: true,
-        acceptRatio: false,
+        acceptRatio: true,
         zoom: 1,
         active: false,
         parent: true,
