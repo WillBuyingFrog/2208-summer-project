@@ -175,7 +175,7 @@ export function _level_loadCanvasInit(application){
     let cur = null
     application.$http
         .post('/file/page/get', {
-            prototype_id: application.file_id
+            prototype_id: application.$store.state.file_id
         })
         .then(res => {
             let allPages = res.data.data

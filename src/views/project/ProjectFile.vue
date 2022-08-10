@@ -61,7 +61,7 @@
                         <span> x </span>
                         <el-input style="width:45px;margin-left:4px" size="small" v-model="newone.h" placeholder="高"></el-input>
                     </div>
-                </div> 
+                </div>
             </el-form-item>
             <el-form-item label="选择模板">
                 <div class="paneChoose" :class="{'active':currentDemo1==0}" @click="chooseDemo1(0)">
@@ -95,7 +95,7 @@
                         </span>
                     <div class="clear"></div>
                     </div>
-                </template>       
+                </template>
          <el-form :model="newone" label-width="80px" v-if="fileType == 0">
             <el-form-item label="文档名称">
                 <el-input v-model="newone.name" style="width: 400px;margin-left:15px"></el-input>
@@ -166,7 +166,7 @@
                     <el-popconfirm title="确定要删除此文件?"
                             confirm-button-text="确定"
                             cancel-button-text="取消"
-                            icon-color="#7fa9cc" 
+                            icon-color="#7fa9cc"
                             @confirm="deleteFile(file.file_id)">
                         <template #reference>
                         <el-button size="small" type="danger">删除</el-button>
@@ -223,6 +223,7 @@
 <script>
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
+import {level_initTemplateContents} from "@/views/prototype-design/utils/collaborate_level";
 export default {
     name: "projectFile",
     data() {
@@ -230,7 +231,7 @@ export default {
             paneList: [
                 {
                     name: 'phone',
-                    subName: ['iPhone 13 Pro Max', 'iPhone 13 Pro/13', 
+                    subName: ['iPhone 13 Pro Max', 'iPhone 13 Pro/13',
                     'iPhone 11 Pro/X', 'iPhone 11/11 Pro Max', 'HUAWEI P40/小米CC9',
                     'HUAWEI Mate 40'],
                     imgsrc: require('../../assets/images/phone.jpg'),
@@ -396,7 +397,7 @@ export default {
                 })
             }
         },
-        //替换文件内容为模板，writeDoc表示写入文档，writeDesign表示写入原型; 
+        //替换文件内容为模板，writeDoc表示写入文档，writeDesign表示写入原型;
         //content、pages为从后端拉取的模板的内容，为string类型，详见yapi文档
         //具体请求过程见demoToFile函数
         //新建的文件id:this.newFileid
@@ -463,7 +464,7 @@ export default {
                     console.log(err);
                 })
             }
-                
+
         },
         //新建文件
         newFile(){
@@ -472,6 +473,35 @@ export default {
             }
             //设计原型
             else if(this.fileType == 1 ){
+              let prototype_id = null
+              // 从模板创建原型设计，直接跳转到新的函数
+              if(this.currentDemo1){
+                this.$http
+                .post('/template/newProto', {
+                  template_id: this.currentDemo1.toString(),
+                  project_id: this.project_id.toString()
+                })
+                .then(res => {
+                  switch(res.data.code){
+                    case 200:
+                      prototype_id = res.data.data
+                      console.log("New prototype id:", prototype_id)
+                      console.log("Successfully created data from template No." + this.currentDemo1)
+                      // 调用初始化内容的函数
+                      level_initTemplateContents(this, prototype_id, this.currentDemo1)
+                      this.getFile()
+                      this.newone.name = '';
+                      this.newFileid = res.data.data;
+                      this.dialogVisible = false;
+                      this.newone.w = '1440';
+                      this.newone.h = '1204';
+                      this.currentPane = 1;
+                      this.currentDemo1 = 0;
+                      this.newone.demo1_id = '';
+                  }
+                })
+                return
+              }
                 this.$http
                 .post('/file/json/new', {
                     project_id: this.project_id,
@@ -642,6 +672,7 @@ export default {
             this.$store.state.file_name = file.file_name;
             this.$store.state.file_id = file.file_id;
             this.$store.state.file_index = file.index;
+            console.log("Ready to edit prototype", this.$store.state.file_id)
             console.log(file.index);
             console.log(this.$store.state.file_index);
             if(this.fileType == 1){

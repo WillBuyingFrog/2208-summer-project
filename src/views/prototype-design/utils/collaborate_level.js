@@ -373,20 +373,112 @@ export function level_getCollaboratePrototype(application, file_id){
     return collaboratePrototypeConfig
 }
 
-// eslint-disable-next-line no-unused-vars
-export function level_initTemplateContents(application, prototype_id, template_id){
-    application.$http
-        .post('/template/getProtoTemplate', {
-            template_id: template_id
+
+
+export async function template_getAllPages(application, prototype_id){
+    let allPages = null
+    // eslint-disable-next-line no-unused-vars
+    let temp = application.$http
+        .post('/file/page/get', {
+            prototype_id: prototype_id
         })
         .then(res => {
-
+            switch (res.data.code){
+                case 200:
+                    allPages = res.data.data
+                    console.log("SUccessfully get pages.")
+            }
         })
+    return allPages
 }
 
-// eslint-disable-next-line no-unused-vars
-export function level_initSinglePageContent(page_id, components){
 
+export async function level_initTemplateContents(application, prototype_id, template_id){
+
+    let templateContent = null
+    let allPages = null
+
+    // eslint-disable-next-line no-unused-vars
+    let temp1 = await application.$http
+        .post('/template/getProtoTemplate', {
+            template_id: template_id.toString()
+        })
+        .then(res => {
+            switch (res.data.code){
+                case 200:
+                    templateContent = res.data.data
+                    console.log("Successfully get template data. ")
+            }
+        })
+    // eslint-disable-next-line no-unused-vars
+    let temp2 = await application.$http
+        .post('/file/page/get', {
+            prototype_id: prototype_id
+        })
+        .then(res => {
+            switch (res.data.code){
+                case 200:
+                    allPages = res.data.data
+                    console.log("SUccessfully get pages.")
+            }
+        })
+
+    console.log("Template contents:", templateContent)
+    console.log("All pages:", allPages)
+
+    // 遍历模板中的所有页
+    let templatePages = JSON.parse(templateContent.pages)
+    templatePages.map((page) => {
+        let correspondingPageId = null
+        // 暴力法，从所有已经创建好的page中找到page_index为page.page_index的页面id
+        allPages.map((item) => {
+            if(item.page_index === page.page_index){
+                correspondingPageId = item.page_id
+            }
+        })
+        let initComponents = JSON.parse(page.components)
+        level_initSinglePageContent(correspondingPageId, initComponents)
+    })
+}
+
+
+export function level_initSinglePageContent(page_id, components){
+    console.log("Ready to initialize", page_id, "with following components:", components)
+
+    const newDoc = new Y.Doc()
+    // eslint-disable-next-line no-unused-vars
+    const provider = new WebsocketProvider(
+        "ws://49.232.135.90:1234",
+        page_id,  // 房间号即为当前需要初始化的页面id
+        newDoc
+    )
+    const newMap = newDoc.getMap(page_id)
+
+    console.log("Created temporary connection to room", page_id)
+
+    function generateId() {
+        return (
+            Date.now() +
+            Math.random()
+                .toString()
+                .slice(2)
+        )
+    }
+
+    components.map((component) => {
+        component.id = generateId()
+        component.usedBy = '__none__'
+        component.extra.usedBy = '__none__'
+        newMap.set(component.id, JSON.stringify(component))
+    })
+
+    setTimeout(() => {
+        provider.disconnect()
+        provider.destroy()
+        newDoc.destroy()
+    }, 10000)
+
+    console.log("Disconnected from room", page_id)
 }
 
 /**
