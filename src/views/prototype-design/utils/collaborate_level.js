@@ -373,26 +373,6 @@ export function level_getCollaboratePrototype(application, file_id){
     return collaboratePrototypeConfig
 }
 
-
-
-export async function template_getAllPages(application, prototype_id){
-    let allPages = null
-    // eslint-disable-next-line no-unused-vars
-    let temp = application.$http
-        .post('/file/page/get', {
-            prototype_id: prototype_id
-        })
-        .then(res => {
-            switch (res.data.code){
-                case 200:
-                    allPages = res.data.data
-                    console.log("SUccessfully get pages.")
-            }
-        })
-    return allPages
-}
-
-
 export async function level_initTemplateContents(application, prototype_id, template_id){
 
     let templateContent = null
@@ -469,7 +449,7 @@ export function level_initSinglePageContent(page_id, components){
         component.id = generateId()
         component.usedBy = '__none__'
         component.extra.usedBy = '__none__'
-        newMap.set(component.id, JSON.stringify(component))
+        newMap.set(component.id, "[" + JSON.stringify(component) + "]")
     })
 
     setTimeout(() => {

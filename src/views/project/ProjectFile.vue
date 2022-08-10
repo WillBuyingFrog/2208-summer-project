@@ -673,14 +673,19 @@ export default {
             this.$store.state.file_id = file.file_id;
             this.$store.state.file_index = file.index;
             console.log("Ready to edit prototype", this.$store.state.file_id)
+            localStorage.setItem('file_id', this.$store.state.file_id)
+            localStorage.setItem('file_name', this.$store.state.file_name)
+            localStorage.setItem('file_index', this.$store.state.file_index)
+            localStorage.setItem('user_nams', this.$store.state.user.name)
+            localStorage.setItem('user_id', this.$store.state.user.id)
             console.log(file.index);
             console.log(this.$store.state.file_index);
             if(this.fileType == 1){
-                let routeUrl = this.$router.resolve({
-                    path: "/prototypeDesign",
-                });
-                window.open(routeUrl.href, "_blank");
-                //this.$router.push('/prototypeDesign');
+               let routeUrl = this.$router.resolve({
+                 path: "/prototypeDesign",
+               });
+               window.open(routeUrl.href, "_blank");
+               // this.$router.push('/prototypeDesign');
             }
             else if(this.fileType == 0){
                 let routeUrl = this.$router.resolve({

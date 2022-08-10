@@ -131,7 +131,8 @@ export default {
     }
   },
   created(){
-    this.file_id = this.$store.state.file_id;
+    this.$store.state.file_id = localStorage.getItem('file_id');
+    this.file_id = localStorage.getItem('file_id');
     console.log(this.file_id);
     this.getAllPages(1);
     console.log('hi');
