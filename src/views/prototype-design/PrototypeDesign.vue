@@ -4,25 +4,12 @@
       <el-container class="outer-container">
         <el-header height="60px" class="header">
           <el-row>
-            <el-col :span="1">
+            <el-col :span="3">
                 <div class="logo">
                     <img src="../../assets/images/logo-1.png" height="60">
                 </div>
             </el-col>
-<!--            <el-col  :span="2">-->
-<!--              <el-popconfirm-->
-<!--                  confirm-button-text="Yes"-->
-<!--                  cancel-button-text="No, Thanks"-->
-<!--                  icon-color="#626AEF"-->
-<!--                  title="确认退出编辑?"-->
-<!--                  @confirm="quit()"-->
-<!--              >-->
-<!--                <template #reference>-->
-<!--                  <el-button link icon="Back" class="quit">退出</el-button>-->
-<!--                </template>-->
-<!--              </el-popconfirm>-->
-<!--            </el-col>-->
-            <el-col :span="22">
+            <el-col :span="18">
               <p class="name">
                 {{this.page_name}}
                 <el-icon class="edit-icon" @click="dialogVisible=true"><Edit></Edit></el-icon>
@@ -56,6 +43,38 @@
               </el-dialog>
             </el-col>
             <el-col :span="1">
+              <el-dropdown
+                  @command="handleCommand"
+                  trigger="click"
+              >
+                <el-button
+                    class="drawer-btn"
+                    color="#859dda"
+                    :dark="isDark"
+                    plain
+                >
+                  <el-icon class="drawer-icon"><VideoPlay /></el-icon>
+                  预览
+                </el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="a">生成预览</el-dropdown-item>
+                    <el-dropdown-item command="b" :disabled="existView">销毁预览</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+<!--              <el-button-->
+<!--                  class="drawer-btn"-->
+<!--                  color="#859dda"-->
+<!--                  :dark="isDark"-->
+<!--                  plain-->
+<!--                  text @click="drawer = true"-->
+<!--              >-->
+<!--                <el-icon class="drawer-icon"><VideoPlay /></el-icon>-->
+<!--                预览-->
+<!--              </el-button>-->
+            </el-col>
+            <el-col :span="2">
               <el-button
                   class="drawer-btn"
                   color="#859dda"
@@ -70,10 +89,10 @@
                   v-model="drawer"
                   title="全部页面"
                   direction="rtl"
-                  size="30%"
+                  size="20%"
               >
                 <el-menu
-                    :default-active="activeIndex"
+                    :defaultw-active="activeIndex"
                     class="all-prototypes"
                     @select="handleSelect"
                     text-color="#000000"
@@ -85,9 +104,42 @@
                       :index="page.page_index.toString()"
                       @click="toggle(page)"
                   >{{page.page_name}}</el-menu-item>
-                  <el-menu-item @click="newPage">
-                    <el-icon><Plus /></el-icon>
-                  </el-menu-item>
+                  <p @click="newPage">
+                    <el-icon class="edit-icon"><Plus /></el-icon>
+                  </p>
+                  <span @click="deleteVisible=true">
+                    <el-icon class="edit-icon"><Delete /></el-icon>
+                    <el-dialog
+                        v-model="deleteVisible"
+                        width="20%">
+                      <template #header>
+                        <div class="card-header">
+                          <span class="title" style="margin-left: 10px; color: black">
+                              <el-icon ><EditPen /></el-icon>删除页面
+                          </span>
+                        </div>
+                      </template>
+                      <el-form :model="toDelete" label-width="100px">
+                        <el-form-item label="待删除页面">
+                          <el-select v-model="toDelete" placeholder="请选择页面">
+                            <el-option
+                                v-for="page in allPages"
+                                :key="page.page_index"
+                                :label="page.page_name"
+                                :value="page.page_index"
+                            >
+                            </el-option>
+                          </el-select>
+                        </el-form-item>
+                      </el-form>
+                      <template #footer>
+                        <span class="dialog-footer">
+                            <el-button @click="deleteVisible = false">取消</el-button>
+                            <el-button type="primary" @click="deletePage">删除</el-button>
+                        </span>
+                      </template>
+                    </el-dialog>
+                  </span>
                 </el-menu>
               </el-drawer>
             </el-col>
@@ -96,7 +148,7 @@
         <el-container class="inner-container">
           <el-main class="mainPane">
             <div class="editor">
-              <DesignApp class="editor" :initWidth="900" :initHeight="900"></DesignApp>
+<!--              <DesignApp class="editor" :initWidth="900" :initHeight="900"></DesignApp>-->
             </div>
           </el-main>
         </el-container>
@@ -106,16 +158,16 @@
 </template>
 
 <script>
-import DesignApp from "@/views/prototype-design/DesignApp";
+// import DesignApp from "@/views/prototype-design/DesignApp";
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
-
-import eventBus from "@/views/prototype-design/utils/eventBus";
-import {EVENT_DESIGNER_SWITCH} from "@/views/prototype-design/event-enum"
+//
+// import eventBus from "@/views/prototype-design/utils/eventBus";
+// import {EVENT_DESIGNER_SWITCH} from "@/views/prototype-design/event-enum"
 
 export default {
   name: "PrototypeDesign",
-  components: {DesignApp},
+  // components: {DesignApp},
   data() {
     return {
       project_id: '',
@@ -123,11 +175,14 @@ export default {
       page_name: '',
       drawer: false,
       dialogVisible: false,
+      deleteVisible: false,
+      toDelete: '',
       allPages: [],
       pageNum: 1,
       newname: '',
       activeIndex: '1',
-      activeFileId: ''
+      activeFileId: '',
+      existView: false,
     }
   },
   created(){
@@ -139,6 +194,34 @@ export default {
   },
 
   methods: {
+    deletePage() {
+      console.log("delete");
+      console.log(this.toDelete);
+      var id = this.$store.state.user.id;
+      if(id == undefined || id == null || id == ''){
+        ElMessage.warning('请先登录');
+      }else {
+        this.$http
+            .post('/file/page/delete', {
+              prototype_id: this.file_id,
+              page_index: this.toDelete,
+            })
+            .then(res => {
+              switch (res.data.code) {
+                case 200:
+                  ElMessage.success('删除成功！');
+                  this.getAllPages(1);
+                  break;
+                case 500:
+                  ElMessage.error(res.data.message);
+                  console.log(res.data.message);
+                  break;
+              }
+            })
+      }
+      this.toDelete = '';
+      this.deleteVisible = false;
+    },
     rename(){
       if(this.newname == '' || this.newname == null || this.newname == undefined){
         ElMessage.warning("新标题不能为空")
@@ -234,9 +317,9 @@ export default {
       this.activeFileId = page.page_id;
       console.log("toggle");
       // 标题和内容更改
-      eventBus.$emit(EVENT_DESIGNER_SWITCH, {
-        newPageFileId: this.activeFileId
-      })
+      // eventBus.$emit(EVENT_DESIGNER_SWITCH, {
+      //   newPageFileId: this.activeFileId
+      // })
 
     },
     handleSelect(key) {

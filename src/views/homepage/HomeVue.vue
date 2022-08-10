@@ -16,7 +16,6 @@
                 </el-col>
                 <el-col :span="3">
                     <el-button
-                        id="sign-in-button"
                         color="rgb(133,157,218)"
                         @click="gotoLogin"
                         :dark="isDark"
@@ -26,7 +25,27 @@
                 </el-col>
             </el-row>
         </el-header>
-        <div class="bg">
+
+      <div class="bg">
+        <el-row>
+          <el-col :span="24">
+            <img src="../../assets/images/logo.png" style="height: 500px;margin-top: 50px;position: center"/>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-button
+                color="rgb(133,157,218)"
+                @click="gotoLogin"
+                :dark="isDark"
+                style="border-radius:24px;height:80px;width:150px;
+                font-size:25px;margin-top:50px;position: center;"
+                plain>
+              立即体验
+            </el-button>
+          </el-col>
+        </el-row>
+
         <div  class="shell">
             <el-row>
                 <el-col :span="6">
@@ -83,25 +102,7 @@
                 </el-col>
             </el-row>      
         </div>
-        <div class="moshu">
-            <span style="--i:1">墨 </span>
-            <span style="--i:2">书 </span>
-            <span style="--i:3">M </span>
-            <span style="--i:4">O </span>
-            <span style="--i:5">S </span>
-            <span style="--i:6">H </span>
-            <span style="--i:7">U </span>
-        </div>
-        <el-button
-                id="sign-in-button"
-                color="rgb(133,157,218)"
-                @click="gotoLogin"
-                :dark="isDark"
-                style="border-radius:24px;height:80px;width:150px;
-                font-size:25px;margin-top:50px;left:45% ;"
-                plain>
-                立即体验</el-button>   
-        
+
         <el-card  class="card3">
             <el-row style="height:100%">
                 <el-col :span="10" style="margin-top:20px">
@@ -117,7 +118,6 @@
                     </ul>
                     <div>
                     <el-button
-                        id="sign-in-button"
                         color="rgb(133,157,218)"
                         @click="gotoLogin"
                         :dark="isDark"
@@ -157,7 +157,6 @@
                         <li>可导出为图片，可在线预览</li>
                     </ul>
                     <el-button
-                        id="sign-in-button"
                         color="rgb(133,157,218)"
                         @click="gotoLogin"
                         :dark="isDark"
@@ -184,7 +183,6 @@
                         <li>文档中心统一管理项目文件</li>
                     </ul>
                     <el-button
-                        id="sign-in-button"
                         color="rgb(133,157,218)"
                         @click="gotoLogin"
                         :dark="isDark"
@@ -235,6 +233,19 @@
                 
             </el-row>
         </el-card>
+        <div style="height:50px">
+
+        </div>
+        <div class="moshu">
+          <span style="--i:1">墨 </span>
+          <span style="--i:2">书 </span>
+          <span style="--i:3">M </span>
+          <span style="--i:4">O </span>
+          <span style="--i:5">S </span>
+          <span style="--i:6">H </span>
+          <span style="--i:7">U </span>
+
+        </div>
         <div style="height:200px">
 
         </div>
@@ -264,8 +275,18 @@
     }
 </script>
 <style scoped>
+    .first {
+      background-image: url("../../assets/images/homepage_bg.jpg");
+      background-repeat: no-repeat;
+      min-height: 800px;
+      overflow: auto;
+      position: fixed;
+      background-position:center;
+      background-size: 100% auto;
+      width: 100%;
+    }
     .bg{
-         background-image: url("../../assets/images/Sky.jpg");
+        background-image: url("../../assets/images/2.jpg");
         background-position:center;
         background-size: 100% auto;
         width: 100%;
@@ -296,7 +317,7 @@
     .shell{
         height: 400px;
         width: 1350px;
-        margin-top:70px;
+        margin-top:50px;
         left:10%;
         justify-content: center;
         position: relative;
