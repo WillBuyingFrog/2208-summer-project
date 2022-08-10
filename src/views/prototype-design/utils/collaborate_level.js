@@ -205,7 +205,7 @@ export function level_getPreviewCollaboratePrototype(application, file_id){
     const newDoc = new Y.Doc()
     collaboratePrototypeConfig.doc = newDoc
     const provider = new WebsocketProvider(
-        "ws://localhost:1234",
+        "ws://49.232.135.90:1234",
         file_id,  // 房间号即为当前的页面id（页面隶属于某个原型设计，但我们不关心）
         newDoc
     )
@@ -274,7 +274,7 @@ export function level_getCollaboratePrototype(application, file_id){
     const newDoc = new Y.Doc()
     collaboratePrototypeConfig.doc = newDoc
     const provider = new WebsocketProvider(
-        "ws://192.168.50.241:1234",
+        "ws://49.232.135.90:1234",
         file_id,  // 房间号即为当前的页面id（页面隶属于某个原型设计，但我们不关心）
         newDoc
     )
@@ -441,22 +441,26 @@ export function level_switchPage(application, newPageFileId, isPreview=0){
     if(isPreview){
         collaborateConfig = sharedPreviewDocMap.get(application.previewPageId)
     }else{
-        collaborateConfig = sharedDocMap.get(application.currentPage.page_file_id)
+        collaborateConfig = sharedDocMap.get(application.currentPage.page_id)
     }
     let collaborateDoc = collaborateConfig.doc
+    let collaborateProvider = collaborateConfig.provider
     if(isPreview){
-        sharedPreviewDocMap.delete(application.currentPage.page_file_id)
+        sharedPreviewDocMap.delete(application.previewPageId)
     }else{
-        sharedDocMap.delete(application.currentPage.page_file_id)
+        sharedDocMap.delete(application.currentPage.page_id)
     }
-
+    // 清除连接和缓存
+    collaborateProvider.disconnect()
+    collaborateProvider.destroy()
     collaborateDoc.destroy()
+
     // 清除本地画布及所有的选择状态
     application.setControls([])
     application.clearCurrentComponent()
     // 将新页面标记为newPageFileId所在的页面
     application.pages.map((page) => {
-        if(page.page_file_id === newPageFileId){
+        if(page.page_id === newPageFileId){
             application.currentPage = page
         }
     })
@@ -496,5 +500,5 @@ export function level_multiPageDemo(application){
     application.currentPage = application.pages[0]
     application.$store.state.user.id = prompt("输入测试用户名")
     application.$store.state.user.name = application.$store.state.user.id + "---"
-    level_getCollaboratePrototype(application, application.currentPage.page_file_id)
+    level_getCollaboratePrototype(application, application.currentPage.page_id)
 }
