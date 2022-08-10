@@ -394,7 +394,7 @@ export default {
         if(res.data.code == '200'){
           this.dialogVisible=false;
           this.invite='';
-          ElMessage.success("邀请成功！")
+          ElMessage.success("成功发送邀请！")
         }
         else{
           ElMessage.warning('用户名不存在或该用户已在团队中！')
