@@ -28,15 +28,18 @@ export default {
      * @param transform 变换
      */
     handler(e, transform) {
-      console.log("detected transform: ", transform)
       e.stopPropagation() // 停止事件传播（？）
       e.preventDefault() // 取消事件默认行为
+      // 如果当前用户没法操作，就直接返回
+      console.log("Checking usedBy", this.item.usedBy)
+      if(!(this.item.usedBy === '__none__' || this.item.usedBy === this.$store.state.user.id)) return
       // 使用eventBus发起全局事件
+      // console.log("Generated transform:", transform)
       eventBus.$emit(EVENT_COMPONENT_TRANSFORM, { type: this.handleType, transform })
     },
     beforeActive1() {
       this.handleType = 'beforeactive'
-      eventBus.$emit(EVENT_COMPONENT_SELECT, this.item)
+      eventBus.$emit(EVENT_COMPONENT_SELECT, {control: this.item, needUpdate: 1})
       return true
     },
     // 以下是一系列拖拽、旋转、变大小等操作的
@@ -98,36 +101,36 @@ export default {
   render() {
     let item = this.item
     return (
-        <DragCell
-            ref="cell"
-            data-component={true}
-            grid={item.grid}
-            axis={item.axis}
-            key={item.id}
-            id={item.id}
-            draggable={item.draggable}
-            rotatable={false}
-            resizable={item.resizable}
-            parent={item.parent}
-            acceptRatio={item.acceptRatio}
-            resizeHandler={item.resizeHandler}
-            minWidth={item.minWidth}
-            minHeight={item.minHeight}
-            active={item.active}
-            value={item.transform}
-            zoom={item.zoom}
-            beforeActive={this.beforeActive1}
-            onDragstart={this.handleDragStart}
-            onDrag={this.handleDrag}
-            onDragend={this.handleDragEnd}
-            onResizestart={this.handleResizeStart}
-            onResize={this.handleResize}
-            onResizeend={this.handleResizeEnd}
-            onRotatestart={this.handleRotateStart}
-            onRotate={this.handleRotate}
-            onRotateend={this.handleRotateEnd}
-            renderContent={this.renderContent}
-        />
+          <DragCell
+              ref="cell"
+              data-component={true}
+              grid={item.grid}
+              axis={item.axis}
+              key={item.id}
+              id={item.id}
+              draggable={item.draggable}
+              rotatable={false}
+              resizable={item.resizable}
+              parent={item.parent}
+              acceptRatio={item.acceptRatio}
+              resizeHandler={item.resizeHandler}
+              minWidth={item.minWidth}
+              minHeight={item.minHeight}
+              active={item.active}
+              value={item.transform}
+              zoom={item.zoom}
+              beforeActive={this.beforeActive1}
+              onDragstart={this.handleDragStart}
+              onDrag={this.handleDrag}
+              onDragend={this.handleDragEnd}
+              onResizestart={this.handleResizeStart}
+              onResize={this.handleResize}
+              onResizeend={this.handleResizeEnd}
+              onRotatestart={this.handleRotateStart}
+              onRotate={this.handleRotate}
+              onRotateend={this.handleRotateEnd}
+              renderContent={this.renderContent}
+          />
     )
   },
 }

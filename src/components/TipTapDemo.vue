@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import 'element-tiptap/lib/index.css';
 import { HocuspocusProvider } from '@hocuspocus/provider'
 import CharacterCount from '@tiptap/extension-character-count'
 import Collaboration from '@tiptap/extension-collaboration'
@@ -43,6 +44,7 @@ import TableRow from '@tiptap/extension-table-row'
 import Gapcursor from '@tiptap/extension-gapcursor'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Image from '@tiptap/extension-image'
+//import {LineHeight} from '@tiptap/extension-line-height';
 const getRandomElement = list => {
   return list[Math.floor(Math.random() * list.length)]
 }

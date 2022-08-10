@@ -98,7 +98,7 @@
                 @click="gotoLogin"
                 :dark="isDark"
                 style="border-radius:24px;height:80px;width:150px;
-                font-size:25px;margin-top:70px;left:45% ;"
+                font-size:25px;margin-top:50px;left:45% ;"
                 plain>
                 立即体验</el-button>   
         
@@ -265,7 +265,7 @@
 </script>
 <style scoped>
     .bg{
-         background-image: url("../../assets/images/3.jpg");
+         background-image: url("../../assets/images/Sky.jpg");
         background-position:center;
         background-size: 100% auto;
         width: 100%;
@@ -349,7 +349,7 @@
     .card3{
         height: 450px;
         width: 1500px;
-        margin-top: 60px;
+        margin-top: 80px;
         margin-left: 100px;
         background:rgba(255, 255, 255, .9);
         border-radius: 5px;
