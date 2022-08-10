@@ -413,9 +413,16 @@ export default {
     display: block;
   }
   .notice-bar{
+    border: 1px solid black;
+    border-radius: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    position: absolute;
+    left: 5px;
+    top: -25px;
     z-index: 99999;
-    height: 5px;
-    font-size: 8px;
+    height: 20px;
+    font-size: 14px;
   }
   .header {
     padding: 0;

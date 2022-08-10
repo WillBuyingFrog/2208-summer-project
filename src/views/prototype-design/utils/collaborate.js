@@ -93,7 +93,7 @@ export function markLocalComponentOccupation(application, component, mark){
  * @param componentId 需要上锁的组件的id。第一次调用此函数时，应当传入一个根组件的id。
  * @param directComponent 在递归调用时，将item直接传入，可以节省时间
  */
-export function lockComponents(application, componentId, directComponent=null){
+export function __lockComponents(application, componentId, directComponent=null){
     let component = null
     if(directComponent){
         component = directComponent
@@ -108,7 +108,33 @@ export function lockComponents(application, componentId, directComponent=null){
     if(component.type === 'container'){
         // 可能有子元素
         component.children.map((item => {
-            lockComponents(application, item.id, item)
+            __lockComponents(application, item.id, item)
+        }))
+    }
+}
+
+/**
+ * 实时协作过程中，组件恢复到空闲状态时，恢复组件可选中状态。
+ * @param application
+ * @param componentId 需要上锁的组件的id。第一次调用此函数时，应当传入一个根组件的id。
+ * @param directComponent 在递归调用时，将item直接传入，可以节省时间
+ */
+export function __unlockComponents(application, componentId, directComponent=null){
+    let component = null
+    if(directComponent){
+        component = directComponent
+    }else{
+        component = findComponent(application.controls, (item) => {return item.id === componentId})
+    }
+    // 解锁
+    component.draggable = true
+    component.resizable = true
+    component.active = true
+
+    if(component.type === 'container'){
+        // 可能有子元素
+        component.children.map((item => {
+            __unlockComponents(application, item.id, item)
         }))
     }
 }
@@ -118,7 +144,7 @@ export const monitorTransforms = [
 ]
 
 export const monitorExtraTransforms = [
-    'label',
+    'label', 'usedBy'
 ]
 
 /**
@@ -150,8 +176,10 @@ export function syncComponentTransforms(application, componentJSON, isLock=true)
                 }
             })
 
-            // TODO 监听extra的更改
-
+            // 监听extra的更改
+            monitorExtraTransforms.map((key) => {
+                item.extra[key] = newValue[key]
+            })
             return item
         })
         application.controls = newControls
@@ -292,21 +320,22 @@ export function getCollaboratePrototype(application, file_id){
                 // 即：children被手动置空，信息保存在childrenJSON中
                 let componentServerSide = JSON.parse(componentJSON)
                 componentServerSide = componentServerSide[0]
+                // 上锁/解锁需要从根元素开始
+                let rootComponent = findRootComponent(application,
+                    findComponent(application.controls, (item) => {return item.id === componentServerSide.id}))
+
                 // 只针对其他用户的更改实时更改本地渲染
                 if(!(componentServerSide.usedBy === '__none__' ||
                     componentServerSide.usedBy === application.$store.state.user.id)){
                     // 其他用户选择了该component，本地先上锁
-                    // 上锁需要从根元素开始
-                    let rootComponent = findRootComponent(application,
-                        findComponent(application.controls, (item) => {return item.id === componentServerSide.id}))
-                    lockComponents(application, rootComponent.id)
-                    // 再同步变化
-                    syncComponentTransforms(application, componentJSON)
+                    __lockComponents(application, rootComponent.id)
+
                 }else{
                     // 该component可以被本地用户使用，本地解锁
-
+                    __unlockComponents(application, rootComponent.id)
                 }
-
+                // 再同步变化
+                syncComponentTransforms(application, componentJSON)
 
             }else if(change.action === 'delete'){
                 console.log(`Property "${key}" was deleted. New value: undefined. Previous value: "${change.oldValue}".`)

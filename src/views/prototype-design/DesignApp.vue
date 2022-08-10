@@ -281,13 +281,18 @@ export default {
       // 标记usedBy标签
       control.usedBy = this.$store.state.user.id
 
-      // 在实时协作文档中同步内容
-      // console.log("okokok")
-      if(needUpdate)
-        level_updateCollaborateComponent(this, this.currentPage.page_file_id, control)
-
+      // 这个函数里把control深拷贝了，不能再用原来的
       this.setCurrentControl(control)
       this.updateControlStatus(true)
+      // 在实时协作文档中同步内容
+      if(needUpdate){
+        // 拿到深拷贝的当前控件
+        let deepCopyCurrentComponent = findComponent(this.controls, (item) => {return item.id === control.id})
+        console.log("Need update when handleSelect ends.", deepCopyCurrentComponent)
+        level_updateCollaborateComponent(this, this.currentPage.page_file_id, deepCopyCurrentComponent)
+      }
+
+
     },
     setCurrentControl(control) {
       // 无组件选中时，直接清除属性编辑器
@@ -431,7 +436,6 @@ export default {
       if (!this.currentId) return
       let realComponent = findComponent(this.controls, (item) => {return this.currentId === item.id})
       realComponent.usedBy = '__none__'
-      realComponent.active = true
       realComponent.resizable = true
       realComponent.draggable = true
       // 还要在extra属性内更改usedBy
@@ -491,7 +495,6 @@ export default {
   },
   async mounted(){
 
-    // 预览模式，禁用所有
 
     const IS_LEVELDB = false
 

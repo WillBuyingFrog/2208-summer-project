@@ -21,7 +21,13 @@ const BouncyButton = {
     render(){
         // console.log("Extra params in render function:", this.params)
         return (
+            <div draggable="false" className="match-parent">
+                <span draggable="false" className="notice-bar"
+                      style={{display: this.params.usedBy === '__none__' ? "none" : "block"}}>
+                    {this.params.usedBy}
+                </span>
             <div draggable="false" class="custom-bouncy-button">{this.params.value}</div>
+            </div>
         )
     }
 }
@@ -33,7 +39,6 @@ const Img = {
         },
     },
     render() {
-        console.log("Extra param usedBy in render function:", this.params.usedBy)
         return(
             <div draggable="false" class="match-parent">
                 <span draggable="false" class="notice-bar"

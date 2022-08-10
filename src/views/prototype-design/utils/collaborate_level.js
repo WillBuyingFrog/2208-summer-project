@@ -45,6 +45,30 @@ export function lockComponents(application, componentId, directComponent=null){
 }
 
 /**
+ * 实时协作过程中，组件恢复到空闲状态时，恢复组件可选中状态。
+ * @param application
+ * @param componentId 需要上锁的组件的id。第一次调用此函数时，应当传入一个根组件的id。
+ * @param directComponent 在递归调用时，将item直接传入，可以节省时间
+ */
+export function unlockComponents(application, componentId, directComponent=null){
+    let component = null
+    if(directComponent){
+        component = directComponent
+    }else{
+        component = findComponent(application.controls, (item) => {return item.id === componentId})
+    }
+    // 解锁
+    component.draggable = true
+    component.resizable = true
+    if(component.type === 'container'){
+        // 可能有子元素
+        component.children.map((item => {
+            unlockComponents(application, item.id, item)
+        }))
+    }
+}
+
+/**
  * 给定一个组件数组，返回这组组件的位置及变换信息。
  * 所有children，childJSON都会被置空。
  * @param components 一个组件数组。
@@ -81,6 +105,8 @@ export function addCollaborateComponent(application, componentJSON, isLock=1){
             newValue.resizable = false
 
         }else{
+            newValue.draggable = true
+            newValue.resizable = true
             newValue.usedBy = '__none__'
         }
         console.log("Adding new component to canvas:", newValue)
@@ -145,20 +171,17 @@ export function level_syncComponentTransforms(application, componentJSON, isLock
                     }
                 }
             })
-
             // 监听extra的更改
             monitorExtraTransforms.map((key) => {
                 if(newValue[key])
                     item.extra[key] = newValue[key]
             })
-
-
             return item
         })
         application.controls = newControls
     })
+    console.log("New set of controls:", application.controls)
 }
-
 
 export const sharedDocMap = new Map()
 
@@ -310,20 +333,22 @@ export function level_getCollaboratePrototype(application, file_id){
                 let componentJSON = newMap.get(key)
                 let componentServerSide = JSON.parse(componentJSON)
                 componentServerSide = componentServerSide[0]
+                let rootComponent = findRootComponent(application,
+                    findComponent(application.controls, (item) => {return item.id === componentServerSide.id}))
                 // 只针对其他用户的更改实时更改本地渲染
                 if(!(componentServerSide.usedBy === '__none__' ||
                     componentServerSide.usedBy === application.$store.state.user.id)) {
-                    // 是其他用户的渲染，或是在预览模式
-                    // 本地对应的所有层次元素都需要上锁
-                    let localCurrentComponent = findComponent(application.controls,
-                        (item) => {return item.id === componentServerSide.id})
-                    console.log("Get local current component:", localCurrentComponent)
-                    let rootComponent = findRootComponent(application, localCurrentComponent)
-                    console.log("Root component:", rootComponent)
+                    // 是其他用户的更改，本地对应的所有层次元素都需要上锁
                     // 从根元素开始一路向下锁
                     lockComponents(application, rootComponent.id)
                     // 再同步变化
                     level_syncComponentTransforms(application, componentJSON)
+                }else {
+                    console.log("Unlock components")
+                    unlockComponents(application, rootComponent.id)
+                    // 再同步变化
+                    // 这个函数默认上锁！！！
+                    level_syncComponentTransforms(application, componentJSON, false)
                 }
             }else if(change.action === 'delete'){
                console.log(`Property "${key}" was deleted. New value: undefined. Previous value: "${change.oldValue}".`)

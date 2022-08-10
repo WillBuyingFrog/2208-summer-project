@@ -2,26 +2,25 @@
 import {getCollaboratePrototype, parseControls} from "@/views/prototype-design/utils/collaborate";
 import {level_getCollaboratePrototype} from "@/views/prototype-design/utils/collaborate_level";
 
+
+export const templateContents = []
+
+/**
+ * 仅在开发环境中使用。
+ * @param application
+ * @returns {Promise<void>}
+ * @private
+ */
 export async function _exportControlsJson(application){
+
     let result = parseControls(application.$data.controls)
     let fullData = {
         components: result,
-        // TODO 从application中保存页面
         width: application.currentPage.width,
         height: application.currentPage.height,
     }
     result = JSON.stringify(fullData)
-    // console.log(result)
-    application.$http
-        // 与后端沟通过，不需要序列化
-        .post('/file/collaborate/update', {
-            file_id: application.file_id,
-            file_name: application.file_name,
-            content: result
-        })
-        .then(res => {
-            console.log(res)
-        })
+    console.log(result)
 }
 
 /**
