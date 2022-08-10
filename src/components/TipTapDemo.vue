@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import 'element-tiptap/lib/index.css';
 import { HocuspocusProvider } from '@hocuspocus/provider'
 import CharacterCount from '@tiptap/extension-character-count'
 import Collaboration from '@tiptap/extension-collaboration'
