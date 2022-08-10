@@ -155,7 +155,7 @@ export default {
           this.$http
               .post('/file/viewType', {
                 project_id: this.project_id,
-                type: 0,
+                type: "0",
               })
               .then(res =>{
                 console.log(res.data);
