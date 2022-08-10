@@ -12,6 +12,9 @@
         </template>
       </div>
       <div class="editor__name">
+        <button @click="setTemplate()">
+          点击我保存模板（模板名称等可以直接到数据库里调）
+        </button>
         <button>
           {{ currentUser.name }}
         </button>
@@ -87,6 +90,8 @@ export default {
     this.$store.state.user.id = localStorage.getItem('user_id')
     this.$store.state.project_id = localStorage.getItem('project_id')
     this.currentUser.name = this.$store.state.user.name
+
+
 
     // 先新建一个房间
     this.createEditorRoom()
@@ -164,6 +169,21 @@ export default {
         '#B9F18D',
       ])
     },
+    setTemplate(){
+      let templateName = prompt("给定一个模板名称：")
+      this.$http
+      .post('/template/DocNew', {
+        template_name: templateName.toString(),
+        content: this.editor.getHTML(),
+        type: "0"
+      })
+      .then(res => {
+        switch (res.data.code){
+          case 200:
+            alert('成功创建文档模板。')
+        }
+      })
+    }
   },
   beforeUnmount() {
     this.editor.destroy()

@@ -224,6 +224,7 @@
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
 import {level_initTemplateContents} from "@/views/prototype-design/utils/collaborate_level";
+import {tiptap_createFromTemplate} from "@/components/scripts/collaborate_tiptap";
 export default {
     name: "projectFile",
     data() {
@@ -550,12 +551,21 @@ export default {
                     file_name: this.newone.name,
                     type: this.fileType
                 })
-                .then(res =>{
+                .then(async (res) =>{
                     console.log(res.data.code);
-                    console.log(res.data.data);
                     switch (res.data.code){
                         case 200:
                             console.log(res.data.data);
+                            // 如果是从模板创建的，那么此时还需要调用从模板创建文档的函数
+                            if(this.currentDemo0 > 0){
+                              // 先找到currentDemo0对应的template_id
+                              let actualTemplateId = this.demoList0[this.currentDemo0 - 1].template_id
+                              console.log(this.demoList0, this.demoList0[this.currentDemo0 - 1],
+                                  this.demoList0[this.currentDemo0 - 1].template_id)
+
+                              // eslint-disable-next-line no-unused-vars
+                              let temp = await tiptap_createFromTemplate(this, res.data.data, actualTemplateId)
+                            }
                             this.getFile();
                             ElMessage.success("创建成功！")
                             this.newone.name = '';
