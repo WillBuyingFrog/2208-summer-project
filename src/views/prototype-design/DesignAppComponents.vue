@@ -1,7 +1,18 @@
 <template>
   <div class="ds-components">
+    <span>无样式组件</span>
     <div
         v-for="(item, index) in elements"
+        @dragstart="(e) => {this.handleDrag(e, item)}"
+        draggable="true"
+        :key="index"
+        class="components-item"
+    >
+      <span>{{item.displayName}}</span>
+    </div>
+    <el-divider />
+    <div
+        v-for="(item, index) in styledElements"
         @dragstart="(e) => {this.handleDrag(e, item)}"
         draggable="true"
         :key="index"
@@ -21,7 +32,24 @@ export default {
   name: "DesignAppComponents",
   data(){
     return {
-      // 未来可以单独写一个加载components的功能
+      styledElements: [
+        {
+          type: 'img',
+          displayName: '墨刀Logo',
+          name: 'Image',
+          url: Logo,
+          width: 100,
+          height: 100,
+        },
+        {
+          type: 'BouncyButton',
+          displayName: '仿FontAwesome按钮',
+          name: 'Button',
+          value: '测试文字',
+          width: 100,
+          height: 30,
+        },
+      ],
       elements: [
         {
           type: 'label',
@@ -68,29 +96,14 @@ export default {
         },
         {
           type: 'input',
-          displayName: '按钮',
+          displayName: '普通按钮',
           inputType: 'button',
           name: 'Button',
           value: 'Button',
           width: 100,
           height: 30,
         },
-        {
-          type: 'img',
-          displayName: '图片',
-          name: 'Image',
-          url: Logo,
-          width: 100,
-          height: 100,
-        },
-        {
-          type: 'BouncyButton',
-          displayName: 'Q弹按钮',
-          name: 'Button',
-          value: '测试文字',
-          width: 100,
-          height: 30,
-        },
+
       ]
     }
   },
@@ -124,6 +137,7 @@ export default {
   width: 100%;
   font-weight: 300;
   margin: 10px 0 10px 0;
+  cursor: move;
 }
 .components-item :hover {
   color: #999999;

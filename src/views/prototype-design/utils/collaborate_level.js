@@ -176,12 +176,11 @@ export function level_syncComponentTransforms(application, componentJSON, isLock
                 if(newValue.extra[key])
                     item.extra[key] = newValue.extra[key]
             })
-            console.log("Altered control:", item)
             return item
         })
         application.controls = newControls
     })
-    console.log("New set of controls:", application.controls)
+    console.log("[Sync result]New set of controls:", application.controls)
 }
 
 export const sharedDocMap = new Map()
@@ -211,7 +210,7 @@ export function level_getPreviewCollaboratePrototype(application, file_id){
     )
     collaboratePrototypeConfig.provider = provider
 
-    console.log("Create new preview room with file_id:", file_id)
+    // console.log("Create new preview room with file_id:", file_id)
 
     const newMap = newDoc.getMap(file_id)  // 在doc内创建一个map
     collaboratePrototypeConfig.map = newMap
@@ -237,9 +236,9 @@ export function level_getPreviewCollaboratePrototype(application, file_id){
                 // 预览模式，无条件更新且上锁
                 let localCurrentComponent = findComponent(application.controls,
                     (item) => {return item.id === componentServerSide.id})
-                console.log("Get local current component:", localCurrentComponent)
+                // console.log("Get local current component:", localCurrentComponent)
                 let rootComponent = findRootComponent(application, localCurrentComponent)
-                console.log("Root component:", rootComponent)
+                // console.log("Root component:", rootComponent)
                 // 从根元素开始一路向下锁
                 lockComponents(application, rootComponent.id)
                 // 再同步变化
@@ -253,7 +252,7 @@ export function level_getPreviewCollaboratePrototype(application, file_id){
     })
 
     sharedPreviewDocMap.set(file_id, collaboratePrototypeConfig)
-    console.log("End collaboratePreviewPrototypeConfig")
+    // console.log("End collaboratePreviewPrototypeConfig")
     return collaboratePrototypeConfig
 }
 
@@ -300,7 +299,7 @@ export function level_getCollaboratePrototype(application, file_id){
         }
     })
 
-    console.log("Create new room with file_id:", file_id)
+    // console.log("Create new room with file_id:", file_id)
 
     const newMap = newDoc.getMap(file_id)  // 在doc内创建一个map
     collaboratePrototypeConfig.map = newMap
@@ -334,7 +333,7 @@ export function level_getCollaboratePrototype(application, file_id){
                 let componentJSON = newMap.get(key)
                 let componentServerSide = JSON.parse(componentJSON)
                 componentServerSide = componentServerSide[0]
-                console.log("Received update event.", componentServerSide)
+                // console.log("Received update event.", componentServerSide)
                 let rootComponent = findRootComponent(application,
                     findComponent(application.controls, (item) => {return item.id === componentServerSide.id}))
                 // 只针对其他用户的更改实时更改本地渲染
@@ -368,7 +367,7 @@ export function level_getCollaboratePrototype(application, file_id){
 
     sharedDocMap.set(file_id, collaboratePrototypeConfig)
 
-    console.log("End collaboratePrototypeConfig")
+    // console.log("End collaboratePrototypeConfig")
 
     return collaboratePrototypeConfig
 }
@@ -387,7 +386,7 @@ export async function level_initTemplateContents(application, prototype_id, temp
             switch (res.data.code){
                 case 200:
                     templateContent = res.data.data
-                    console.log("Successfully get template data. ")
+                    // console.log("Successfully get template data. ")
             }
         })
     // eslint-disable-next-line no-unused-vars
@@ -399,12 +398,12 @@ export async function level_initTemplateContents(application, prototype_id, temp
             switch (res.data.code){
                 case 200:
                     allPages = res.data.data
-                    console.log("SUccessfully get pages.")
+                    // console.log("SUccessfully get pages.")
             }
         })
 
-    console.log("Template contents:", templateContent)
-    console.log("All pages:", allPages)
+    // console.log("Template contents:", templateContent)
+    // console.log("All pages:", allPages)
 
     // 遍历模板中的所有页
     let templatePages = JSON.parse(templateContent.pages)
@@ -423,7 +422,7 @@ export async function level_initTemplateContents(application, prototype_id, temp
 
 
 export function level_initSinglePageContent(page_id, components){
-    console.log("Ready to initialize", page_id, "with following components:", components)
+    // console.log("Ready to initialize", page_id, "with following components:", components)
 
     const newDoc = new Y.Doc()
     // eslint-disable-next-line no-unused-vars
@@ -471,6 +470,7 @@ export function level_initSinglePageContent(page_id, components){
  */
 
 export function level_updateCollaborateComponent(application, file_id, component, isPreview=0){
+    // console.log("[->level_update] Component passed in:", component)
     if(isPreview){
         if(sharedPreviewDocMap.get(file_id)){
             let componentJSON = parseControlsCollaborate([component])
@@ -486,7 +486,7 @@ export function level_updateCollaborateComponent(application, file_id, component
             let componentJSON = parseControlsCollaborate([component])
             let collaborateConfig = sharedDocMap.get(file_id)
             let collaborateMap = collaborateConfig.map
-            console.log("Update:", componentJSON)
+            // console.log("[level_update] 最终得到的JSON:", componentJSON)
             collaborateMap.set(component.id, componentJSON)
         }else{
             return -1

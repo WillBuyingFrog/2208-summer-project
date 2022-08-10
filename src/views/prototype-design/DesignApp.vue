@@ -219,17 +219,21 @@ export default {
       this.setControls(controls)
     },
     /**
-     * @description 更新选中组件指定的key
+     * @description 更新选中组件指定的key，不涉及深拷贝
      * @param {String} key 组件中的字段
      * @param {any} value  新的值
      * @param {Boolean} isExtra 是否为附加参数，对应组件的extra字段。
      */
     updateControlValue(key, value, isExtra) {
       let controls = updateTreeIn(this.controls, this.currentPath, (item) => {
+        console.log("[->updateTreeIn callback]", key, value.x, value.y, isExtra)
         if (['x', 'y', 'width', 'height', 'rotation'].includes(key)) {
+          console.log("[updateTreeIn callback]update transform related value", key)
           let transform = {...item.transform}
           transform[key] = value
           item.transform = transform
+          item[key] = value
+          console.log("edited transform is", item.transform.x, item.transform.y)
           return item
         } else if (isExtra) {
           let extra = {...item.extra}
@@ -246,7 +250,6 @@ export default {
     handleTransform({transform, type}) {
       this.controlled = {...this.controlled, ...transform}
       if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
-        console.log("Detected transform type", type)
         this.updateControlValue('transform', transform, false)
         // 需要将usedBy传入组件中
         // 为了显示美观，这里传入用户名
@@ -255,10 +258,13 @@ export default {
         let realComponent = findComponent(this.controls, (item) => {
           return this.controlled.id === item.id
         })
-
-        console.log("The currently controlled element is", realComponent)
+        console.log("The currently controlled element is at", realComponent.transform.x, realComponent.transform.y)
+        realComponent.x = realComponent.transform.x
+        realComponent.y = realComponent.transform.y
+        realComponent.height = realComponent.transform.height
+        realComponent.width = realComponent.transform.width
+        this.controlled = realComponent
         // 实时协作中，需要更新组件信息
-        this.controlled.usedBy = this.$store.state.user.id
         level_updateCollaborateComponent(this, this.currentPage.page_id, realComponent)
       }
     },
@@ -327,7 +333,8 @@ export default {
     },
     // 属性编辑器变化后同步到组件中
     handleChange({keyName, value, extra}) {
-      console.log("hello!", keyName, value, extra)
+      console.log("[handleChange] Currently controlled:",
+          this.controlled.transform.x, this.controlled.transform.y, this.controlled.x)
       if (!this.currentId) {
         return
       }
@@ -338,6 +345,17 @@ export default {
       }
       // 注意节流优化提升性能
       this.updateControlValue(keyName, value, extra)
+      let realComponent = findComponent(this.controls, (item) => {
+        return this.controlled.id === item.id
+      })
+      console.log("The currently controlled element is at", realComponent.transform.x, realComponent.transform.y)
+      realComponent.x = realComponent.transform.x
+      realComponent.y = realComponent.transform.y
+      realComponent.height = realComponent.transform.height
+      realComponent.width = realComponent.transform.width
+      this.controlled = realComponent
+      console.log("[handleChange] Currently controlled after updateControlValue:",
+          this.controlled.transform.x, this.controlled.transform.y, this.controlled.x)
       level_updateCollaborateComponent(this, this.currentPage.page_id, this.controlled)
     },
     getActiveComponent(ctls) {
@@ -345,6 +363,7 @@ export default {
     },
     setControls(controls, needRecordHistory = true) {
       this.controls = controls
+      console.log("[->setControls]", this.controls[0].transform.x, this.controls[0].transform.y)
       if (needRecordHistory) {
         historys = historys.slice(0, historyPointer + 1)
         historys.push(this.controls)

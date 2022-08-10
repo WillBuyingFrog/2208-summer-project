@@ -36,8 +36,6 @@ export default {
           options: [{ label: 'y', value: 'y' }, { label: 'x', value: 'x' }, { label: 'xy', value: 'xy' }],
         },
         { type: 'checkbox', name: '等比例缩放', keyName: 'acceptRatio' },
-        { type: 'checkbox', name: '可拖拽', keyName: 'draggable'},
-        { type: 'checkbox', name: '可改变大小', keyName: 'resizable' },
       ],
       extraInputs: [{ type: 'text', name: 'value' }, { type: 'text', name: 'label' }]
     }

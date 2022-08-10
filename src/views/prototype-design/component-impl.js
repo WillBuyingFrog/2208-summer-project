@@ -1,5 +1,4 @@
 // 这里写出所有需要的component
-import EditorView from './editor-view'
 
 
 const El_Menu = {
@@ -61,30 +60,13 @@ const Label = {
     },
     render() {
         return (
-            <div draggable="false" class="match-parent">
+            <div draggable="false" class="match-parent" style={{zIndex: 99999}}>
                 {this.params.value}
             </div>
         )
     },
 }
 
-const Container = {
-    props: {
-        params: {
-            default: () => ({}),
-        },
-        meta: {
-            default: () => ({ children: [] }),
-        },
-    },
-    render() {
-        return (
-            <div style="border:1px solid #d4d4d4" draggable="false" class="match-parent">
-                <EditorView parentId={this.meta.id} value={this.meta.children} />
-            </div>
-        )
-    },
-}
 
 const Input = {
     props: {
@@ -146,7 +128,6 @@ export default {
     select: Select,
     rect: Rect,
     label: Label,
-    container: Container,
     El_Menu: El_Menu,
     BouncyButton: BouncyButton
 }
