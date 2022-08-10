@@ -76,14 +76,6 @@ export default {
           height: 30,
         },
         {
-          type: 'container',
-          displayName: '容器',
-          name: 'Container',
-          width: 200,
-          height: 200,
-          children: [],
-        },
-        {
           type: 'img',
           displayName: '图片',
           name: 'Image',

@@ -109,6 +109,10 @@
 import DesignApp from "@/views/prototype-design/DesignApp";
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
+
+import eventBus from "@/views/prototype-design/utils/eventBus";
+import {EVENT_DESIGNER_SWITCH} from "@/views/prototype-design/event-enum"
+
 export default {
   name: "PrototypeDesign",
   components: {DesignApp},
@@ -123,6 +127,7 @@ export default {
       pageNum: 1,
       newname: '',
       activeIndex: '1',
+      activeFileId: ''
     }
   },
   created(){
@@ -224,9 +229,14 @@ export default {
     toggle(page){
       this.page_name = page.page_name;
       this.activeIndex = page.page_index;
+      this.activeFileId = page.page_file_id;
       console.log("toggle");
       console.log(this.activeIndex);
       // 标题和内容更改
+      eventBus.$emit(EVENT_DESIGNER_SWITCH, {
+        newPageFileId: this.activeFileId
+      })
+
     },
     handleSelect(key) {
       console.log(this.activeIndex)

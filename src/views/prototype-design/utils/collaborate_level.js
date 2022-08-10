@@ -162,6 +162,77 @@ export function level_syncComponentTransforms(application, componentJSON, isLock
 
 export const sharedDocMap = new Map()
 
+export const sharedPreviewDocMap = new Map()
+
+export function level_getPreviewCollaboratePrototype(application, file_id){
+
+    if(sharedPreviewDocMap.get(file_id)){
+        // 已经创建了该file_id对应的房间
+        return sharedPreviewDocMap.get(file_id)
+    }
+
+    // 没有创建过房间，新建一个
+    let collaboratePrototypeConfig = {
+        doc: null,
+        provider: null,
+        awareness: null,
+        map: null,
+    }
+    const newDoc = new Y.Doc()
+    collaboratePrototypeConfig.doc = newDoc
+    const provider = new WebsocketProvider(
+        "ws://localhost:1234",
+        file_id,  // 房间号即为当前的页面id（页面隶属于某个原型设计，但我们不关心）
+        newDoc
+    )
+    collaboratePrototypeConfig.provider = provider
+
+    console.log("Create new preview room with file_id:", file_id)
+
+    const newMap = newDoc.getMap(file_id)  // 在doc内创建一个map
+    collaboratePrototypeConfig.map = newMap
+
+    newMap.observe(yMapEvent => {
+        yMapEvent.changes.keys.forEach((change, key) => {
+            if(change.action === 'add'){
+                // console.log(`Property "${key}" was added. Initial value: "${newMap.get(key)}".`)
+                let componentJSON = newMap.get(key)
+                let componentServerSide = JSON.parse(componentJSON)
+                componentServerSide = componentServerSide[0]
+                let localComponent = findComponent(application.controls,
+                    (item) => {return item.id === componentServerSide.id})
+                if(localComponent){
+                    console.log("We already have the component. Skipping.")
+                }else{
+                    addCollaborateComponent(application, componentJSON)
+                }
+            }else if(change.action === 'update'){
+                let componentJSON = newMap.get(key)
+                let componentServerSide = JSON.parse(componentJSON)
+                componentServerSide = componentServerSide[0]
+                // 预览模式，无条件更新且上锁
+                let localCurrentComponent = findComponent(application.controls,
+                    (item) => {return item.id === componentServerSide.id})
+                console.log("Get local current component:", localCurrentComponent)
+                let rootComponent = findRootComponent(application, localCurrentComponent)
+                console.log("Root component:", rootComponent)
+                // 从根元素开始一路向下锁
+                lockComponents(application, rootComponent.id)
+                // 再同步变化
+                level_syncComponentTransforms(application, componentJSON)
+            }else if(change.action === 'delete'){
+                // 无条件删除本地内容
+                let componentJSON = change.oldValue
+                deleteCollaborateComponent(application, componentJSON)
+            }
+        })
+    })
+
+    sharedPreviewDocMap.set(file_id, collaboratePrototypeConfig)
+    console.log("End collaboratePreviewPrototypeConfig")
+    return collaboratePrototypeConfig
+}
+
 export function level_getCollaboratePrototype(application, file_id){
 
     if(sharedDocMap.get(file_id)){
@@ -242,6 +313,7 @@ export function level_getCollaboratePrototype(application, file_id){
                 // 只针对其他用户的更改实时更改本地渲染
                 if(!(componentServerSide.usedBy === '__none__' ||
                     componentServerSide.usedBy === application.$store.state.user.id)) {
+                    // 是其他用户的渲染，或是在预览模式
                     // 本地对应的所有层次元素都需要上锁
                     let localCurrentComponent = findComponent(application.controls,
                         (item) => {return item.id === componentServerSide.id})
@@ -258,11 +330,11 @@ export function level_getCollaboratePrototype(application, file_id){
                 let componentJSON = change.oldValue
                 let componentServerSide = JSON.parse(componentJSON)
                 componentServerSide = componentServerSide[0]
-                // 如果是自己删除的，就直接返回
+                // 如果是自己删除的，并且也不在预览模式，就直接返回
                 if(componentServerSide.usedBy === application.$store.state.user.id){
                     return
                 }
-                // 如果不是自己删除的，那么还需要在画布上展示
+                // 如果不是自己删除的，那么还需要在画布上更改
                 deleteCollaborateComponent(application, componentJSON)
             }
         })
@@ -284,36 +356,74 @@ export function level_getCollaboratePrototype(application, file_id){
  * @returns {number}
  */
 
-export function level_updateCollaborateComponent(application, file_id, component){
-    if(sharedDocMap.get(file_id)){
-        let componentJSON = parseControlsCollaborate([component])
-        let collaborateConfig = sharedDocMap.get(file_id)
-        let collaborateMap = collaborateConfig.map
-        console.log("Update:", componentJSON)
-        collaborateMap.set(component.id, componentJSON)
+export function level_updateCollaborateComponent(application, file_id, component, isPreview=0){
+    if(isPreview){
+        if(sharedPreviewDocMap.get(file_id)){
+            let componentJSON = parseControlsCollaborate([component])
+            let collaborateConfig = sharedPreviewDocMap.get(file_id)
+            let collaborateMap = collaborateConfig.map
+            console.log("Update:", componentJSON)
+            collaborateMap.set(component.id, componentJSON)
+        }else{
+            return -1
+        }
     }else{
-        return -1
+        if(sharedDocMap.get(file_id)){
+            let componentJSON = parseControlsCollaborate([component])
+            let collaborateConfig = sharedDocMap.get(file_id)
+            let collaborateMap = collaborateConfig.map
+            console.log("Update:", componentJSON)
+            collaborateMap.set(component.id, componentJSON)
+        }else{
+            return -1
+        }
     }
+
 }
 
-export function level_deleteCollaborateComponent(application, file_id, componentId){
-    if(sharedDocMap.get(file_id)){
-        console.log("Ready to delete", componentId)
-        let collaborateConfig = sharedDocMap.get(file_id)
-        let collaborateMap = collaborateConfig.map
-        collaborateMap.delete(componentId)
+export function level_deleteCollaborateComponent(application, file_id, componentId, isPreview=0){
+    if(isPreview){
+        if(sharedPreviewDocMap.get(file_id)){
+            console.log("Ready to delete", componentId)
+            let collaborateConfig = sharedPreviewDocMap.get(file_id)
+            let collaborateMap = collaborateConfig.map
+            collaborateMap.delete(componentId)
+        }else{
+            return -1
+        }
     }else{
-        return -1
+        if(sharedDocMap.get(file_id)){
+            console.log("Ready to delete", componentId)
+            let collaborateConfig = sharedDocMap.get(file_id)
+            let collaborateMap = collaborateConfig.map
+            collaborateMap.delete(componentId)
+        }else{
+            return -1
+        }
     }
+
 }
 
-
-
-export function level_switchPage(application, newPageFileId){
+/**
+ * 连接指定文件id的页面，并断开与之前页面的连接
+ * @param application DesignApp实例
+ * @param newPageFileId 新的页面的文件id
+ */
+export function level_switchPage(application, newPageFileId, isPreview=0){
     // 断开与之前页面的连接
-    let collaborateConfig = sharedDocMap.get(application.currentPage.page_file_id)
+    let collaborateConfig = null
+    if(isPreview){
+        collaborateConfig = sharedPreviewDocMap.get(application.previewPageId)
+    }else{
+        collaborateConfig = sharedDocMap.get(application.currentPage.page_file_id)
+    }
     let collaborateDoc = collaborateConfig.doc
-    sharedDocMap.delete(application.currentPage.page_file_id)
+    if(isPreview){
+        sharedPreviewDocMap.delete(application.currentPage.page_file_id)
+    }else{
+        sharedDocMap.delete(application.currentPage.page_file_id)
+    }
+
     collaborateDoc.destroy()
     // 清除本地画布及所有的选择状态
     application.setControls([])
