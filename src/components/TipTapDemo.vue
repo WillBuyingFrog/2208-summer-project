@@ -12,8 +12,29 @@
         </template>
       </div>
       <div class="editor__name">
-        <button @click="setTemplate()">
-          点击我保存模板（模板名称等可以直接到数据库里调）
+                <el-dialog
+                  title="上传模板"
+                  v-model="uploadVisible"
+                  width="550px">
+                    <el-form :label-position="labelPosition"
+                      label-width="100px"
+                      :model="formLabelAlign"
+                      style="max-width: 460px">
+                      <el-form-item label="模板名称">
+                        <el-input v-model="template_name"  style="width: 400px;">
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item label="模板类型">
+                        <el-radio-group v-model="template_type">
+                          <el-radio label="1">私用</el-radio>
+                          <el-radio label="0">公用</el-radio>
+                        </el-radio-group>
+                      </el-form-item>
+                    </el-form>    
+                    <button  @click="setTemplate()">确定</button>
+                </el-dialog>
+        <button @click="uploadVisible = true">
+          上传模板
         </button>
         <button>
           {{ currentUser.name }}
@@ -68,7 +89,7 @@ export default {
       this.provider.destroy()
       console.log("Switch to new file:", newFileId)
       this.createEditorRoom()
-    }
+    },
   },
   data() {
     return {
@@ -80,6 +101,9 @@ export default {
       editor: null,
       status: 'connecting',
       room: 'loading',
+      uploadVisible: false,
+      template_name:'',
+      template_type:'1',
     }
   },
   mounted() {
@@ -167,17 +191,18 @@ export default {
       ])
     },
     setTemplate(){
-      let templateName = prompt("给定一个模板名称：")
+      console.log(this.editor.getHTML())
       this.$http
       .post('/template/DocNew', {
-        template_name: templateName.toString(),
+        template_name: this.template_name,
         content: this.editor.getHTML(),
-        type: "0"
+        type: this.template_type
       })
       .then(res => {
         switch (res.data.code){
           case 200:
-            alert('成功创建文档模板。')
+            this.uploadVisible = false
+            alert('成功创建文档模板！')
         }
       })
     }

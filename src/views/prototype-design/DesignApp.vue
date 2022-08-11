@@ -505,7 +505,17 @@ export default {
       level_switchPage(this, newPageFileId)
     },
     handleSaveImage() {
+      let usedByMap = new Map()
+      this.controls.map((control) => {
+        control.active = false
+        usedByMap.set(control.id, control.extra.usedBy)
+        control.extra.usedBy = '__none__'
+        // console.log("Altered",control.id, control)
+      })
       getSnapShot("root-editor-view")
+      this.controls.map((control) => {
+        control.extra.usedBy = usedByMap.get(control.id)
+      })
     }
   },
   created() {
@@ -545,8 +555,8 @@ export default {
           })
       .then(res => {
         let allPages = res.data.data
-        this.initWidth = allPages[0].width
-        this.initHeight = allPages[0].height
+        this.initWidth = allPages[0].height
+        this.initHeight = allPages[0].width
       })
 
       // 只需要一个函数进行初始化
