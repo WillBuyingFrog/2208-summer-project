@@ -801,7 +801,7 @@ export default {
     border-bottom: 1px solid #D3D3D3;
 }
 .demoimg {
-  height: 90px;
+  height: 100px;
   margin-top:10px
 }
 .modename {
