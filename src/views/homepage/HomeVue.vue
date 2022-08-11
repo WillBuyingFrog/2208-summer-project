@@ -204,7 +204,7 @@
             <el-row style="height:100%">
                 <el-col :span="14">
                     <el-carousel arrow="always" height="400px">
-                        <el-carousel-item v-for="item in p1" :key="item">
+                        <el-carousel-item v-for="item in p4" :key="item">
                         <img v-bind:src="item.url" style="width: 100%;height: 100%">
                         </el-carousel-item>
                     </el-carousel>
@@ -275,6 +275,9 @@
                 {url:require('../../assets/home/3-1.jpg')},
                 {url:require('../../assets/home/3-2.jpg')},
                 {url:require('../../assets/home/3-3.jpg')},
+              ],
+              p4:[
+                {url:require('../../assets/home/4-1.jpg')},
               ]
             }
         },
