@@ -138,8 +138,8 @@
         <el-card  class="card3">
             <el-row style="height:100%">
                 <el-col :span="14">
-                    <el-carousel :interval="4000" height="400px" type="card">
-                        <el-carousel-item v-for="item in p1" :key="item">
+                    <el-carousel :interval="4000" height="400px" direction="vertical">
+                        <el-carousel-item v-for="item in p2" :key="item">
                         <img v-bind:src="item.url" style="width: 100%;height: 100%">
                         </el-carousel-item>
                     </el-carousel>
@@ -192,8 +192,8 @@
                         立即体验</el-button> 
                 </el-col>
                 <el-col :span="14">
-                    <el-carousel height="400px" direction="vertical" >
-                        <el-carousel-item v-for="item in p1" :key="item">
+                    <el-carousel height="400px" type="card">
+                        <el-carousel-item v-for="item in p3" :key="item">
                         <img v-bind:src="item.url" style="width: 100%;height: 100%">
                         </el-carousel-item>
                     </el-carousel>
@@ -264,6 +264,17 @@
               p1:[
                 {url:require('../../assets/home/1-1.png')},
                 {url:require('../../assets/home/1-2.jpg')},
+              ],
+              p2:[
+                {url:require('../../assets/home/2-1.jpg')},
+                {url:require('../../assets/home/2-2.jpg')},
+                {url:require('../../assets/home/2-3.jpg')},
+                {url:require('../../assets/home/2-4.jpg')},
+              ],
+              p3:[
+                {url:require('../../assets/home/3-1.jpg')},
+                {url:require('../../assets/home/3-2.jpg')},
+                {url:require('../../assets/home/3-3.jpg')},
               ]
             }
         },

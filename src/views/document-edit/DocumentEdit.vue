@@ -42,40 +42,7 @@
                 </template>
               </el-dialog>
             </el-col>
-            <el-col :span="1">
-                <el-button
-                    class="drawer-btn"
-                    color="#859dda"
-                    :dark="isDark"
-                    plain
-                    @click="uploadVisible = true">
-                  <el-icon><Upload /></el-icon>
-                  上传模板
-                </el-button>
-                <el-dialog
-                  title="上传模板"
-                  v-model="uploadVisible"
-                  width="550px">
-                    <el-form :label-position="labelPosition"
-                      label-width="100px"
-                      :model="formLabelAlign"
-                      style="max-width: 460px">
-                      <el-form-item label="模板名称">
-                        <el-input v-model="template_name"  style="width: 400px;">
-                        </el-input>
-                      </el-form-item>
-                      <el-form-item label="模板类型">
-                        <el-radio-group v-model="template_type">
-                          <el-radio label="1">私用</el-radio>
-                          <el-radio label="0">公用</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-                    </el-form>    
-                    <el-button  @click="upload()" color="rgb(133,157,218)" 
-                     style="margin-top:10px;color:white;border-radius:10px;">确定</el-button>
-                </el-dialog>
-            </el-col>
-            <el-col :span="2">
+            <el-col :span="3">
               <el-button
                   class="drawer-btn"
                   color="#859dda"
@@ -274,26 +241,7 @@ export default {
       console.log("toggle");
       console.log(this.activeIndex);
       // 标题和内容更改
-    },
-    getContent(content){
-      this.content = content;
-    },
-    upload(){
-        const self = this;
-        console.log(this.content)
-        self.$http.post('/template/DocNew', {
-            template_name: this.template_name,
-            content: this.content,
-            type: this.template_type
-        }).then(res=>{
-          console.log(res.data)
-          if(res.data.code == 200){
-            ElMessage.success('创建模板成功！');
-            this.uploadVisible = false;
-            this.template_name = '';
-          }
-        })
-    },
+    },    
   }
 }
 </script>
