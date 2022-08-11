@@ -80,6 +80,7 @@
           <el-menu
               default-active="activeIndex"
               class="docs"
+
           >
             <el-sub-menu index="1">
 
@@ -97,6 +98,7 @@
                     v-for="(file,index) in project.file"
                     :key="file.file_id"
                     :index="`1-${project.index}-${index}`"
+                    @click="toggle(file)"
                 >
                   <el-icon><Document /></el-icon>
                   <span>{{file.name}}</span>
@@ -192,6 +194,7 @@
                   v-for="(file,index) in folder.file"
                   :key="file.file_id"
                   :index="`${folder.index}-${index}`"
+                  @click="toggle(file)"
               >
                 <el-icon><Document /></el-icon>
                 <span>{{file.file_name}}</span>
@@ -216,6 +219,7 @@
                 v-for="(file,index) in rootFile"
                 :key="file.file_id"
                 :index="`${index+folderNum}`"
+                @click="toggle(file)"
             >
               <el-icon><Document /></el-icon>
               <span>{{file.file_name}}</span>
@@ -298,7 +302,9 @@
           </el-dialog>
         </el-aside>
         <el-main>
-          <tip-tap-demo></tip-tap-demo>
+          <div class="tiptap">
+            <TipTapDemo :file-id="file_id" :file-name="doc_name" @getContent="getContent"></TipTapDemo>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -308,7 +314,7 @@
 <script>
 import 'element-plus/dist/index.css'
 import {ElMessage} from "element-plus";
-// import TipTapDemo from "@/components/TipTapDemo";
+import TipTapDemo from "@/components/TipTapDemo";
 function Folder(index, folder_id, folder_name) {
   this.index = index;
   this.file_id = folder_id;
@@ -335,12 +341,15 @@ function File(type, file_id, id, name) {
 
 export default {
   name: "DocumentCenter",
-  // components: {TipTapDemo},
+  components: {TipTapDemo},
   data() {
     return {
       team_id: '',
       root_id: '',
       activeIndex: '',
+
+      file_id: '',
+      doc_name: '',
 
       dialogVisible: false,
       dialogVisible1: false,
@@ -676,7 +685,15 @@ export default {
       }
       this.deleteVisible = false;
     },
-
+    getContent(content){
+      this.content = content;
+    },
+    toggle(doc){
+      this.doc_name = doc.file_name;
+      this.file_id = doc.file_id;
+      console.log("toggle");
+      // 标题和内容更改
+    },
   },
 }
 
