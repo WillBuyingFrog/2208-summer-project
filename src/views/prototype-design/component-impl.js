@@ -251,6 +251,10 @@ const Label = {
     render() {
         return (
             <div draggable="false" class="match-parent" style={{zIndex: 99999}}>
+                <span draggable="false" className="notice-bar"
+                      style={{display: this.params.usedBy === '__none__' ? "none" : "block"}}>
+                    {this.params.usedBy}
+                </span>
                 {this.params.value}
             </div>
         )
@@ -292,6 +296,10 @@ const Select = {
     render() {
         return (
             <select class="match-parent" value={this.params.url}>
+                <span draggable="false" className="notice-bar"
+                      style={{display: this.params.usedBy === '__none__' ? "none" : "block"}}>
+                    {this.params.usedBy}
+                </span>
                 {this.params.options.map((item) => (
                     <option value={item.value} key={item.value}>
                         {item.label}

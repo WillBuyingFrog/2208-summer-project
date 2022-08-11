@@ -160,13 +160,13 @@ export default {
      * @params {{components:Array,parentId:string?}}
      */
     addControl({components, parentId, isReload = 0}) {
-      console.log("Into addControl function.")
+      //-console.log("Into addControl function.")
       let controls = []
       let newComponents = null
       if (isReload) {
-        console.log("This function is in reload mode.")
+        //-console.log("This function is in reload mode.")
         newComponents = this.reloadComponents(components, parentId)
-        // console.log("newComponents:", newComponents)
+        // //-console.log("newComponents:", newComponents)
       } else {
         newComponents = this.getComponents(components, parentId)
       }
@@ -180,17 +180,17 @@ export default {
         controls = this.controls.concat(newComponents)
       }
       this.setControls(controls)
-      console.log("New set of controls:", controls)
+      //-console.log("New set of controls:", controls)
 
       // 默认选中最后一个
       let {component} = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
 
-      console.log("Newly added component:", component)
+      //-console.log("Newly added component:", component)
 
       // isReload=2代表协作模式，协作模式下跳过选中环节
       // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
       if (isReload === 2 || isReload === 1) {
-        // console.log("This function is in special mode.")
+        // //-console.log("This function is in special mode.")
         // level_updateCollaborateComponent(this, this.currentPage.page_id, component)
         return
       }
@@ -226,14 +226,14 @@ export default {
      */
     updateControlValue(key, value, isExtra) {
       let controls = updateTreeIn(this.controls, this.currentPath, (item) => {
-        console.log("[->updateTreeIn callback]", key, value.x, value.y, isExtra)
+        //-console.log("[->updateTreeIn callback]", key, value.x, value.y, isExtra)
         if (['x', 'y', 'width', 'height', 'rotation'].includes(key)) {
-          console.log("[updateTreeIn callback]update transform related value", key)
+          //-console.log("[updateTreeIn callback]update transform related value", key)
           let transform = {...item.transform}
           transform[key] = value
           item.transform = transform
           item[key] = value
-          console.log("edited transform is", item.transform.x, item.transform.y)
+          //-console.log("edited transform is", item.transform.x, item.transform.y)
           return item
         } else if (isExtra) {
           let extra = {...item.extra}
@@ -258,7 +258,7 @@ export default {
         let realComponent = findComponent(this.controls, (item) => {
           return this.controlled.id === item.id
         })
-        console.log("The currently controlled element is at", realComponent.transform.x, realComponent.transform.y)
+        //-console.log("The currently controlled element is at", realComponent.transform.x, realComponent.transform.y)
         realComponent.x = realComponent.transform.x
         realComponent.y = realComponent.transform.y
         realComponent.height = realComponent.transform.height
@@ -281,7 +281,7 @@ export default {
     },
     //  组件选中，右侧展示属性编辑器
     handleSelect({control, needUpdate = 0}) {
-      console.log("handleSelect called", control.usedBy, this.$store.state.user.id)
+      //-console.log("handleSelect called", control.usedBy, this.$store.state.user.id)
       if (!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)) {
         // 被别的用户控制
         // 直接return
@@ -299,7 +299,7 @@ export default {
         let deepCopyCurrentComponent = findComponent(this.controls, (item) => {
           return item.id === control.id
         })
-        console.log("Need update when handleSelect ends.", deepCopyCurrentComponent)
+        //-console.log("Need update when handleSelect ends.", deepCopyCurrentComponent)
         level_updateCollaborateComponent(this, this.currentPage.page_id, deepCopyCurrentComponent)
       }
 
@@ -333,8 +333,8 @@ export default {
     },
     // 属性编辑器变化后同步到组件中
     handleChange({keyName, value, extra}) {
-      console.log("[handleChange] Currently controlled:",
-          this.controlled.transform.x, this.controlled.transform.y, this.controlled.x)
+      //-console.log("[handleChange] Currently controlled:",
+      //    this.controlled.transform.x, this.controlled.transform.y, this.controlled.x)
       if (!this.currentId) {
         return
       }
@@ -348,14 +348,14 @@ export default {
       let realComponent = findComponent(this.controls, (item) => {
         return this.controlled.id === item.id
       })
-      console.log("The currently controlled element is at", realComponent.transform.x, realComponent.transform.y)
+      //-console.log("The currently controlled element is at", realComponent.transform.x, realComponent.transform.y)
       realComponent.x = realComponent.transform.x
       realComponent.y = realComponent.transform.y
       realComponent.height = realComponent.transform.height
       realComponent.width = realComponent.transform.width
       this.controlled = realComponent
-      console.log("[handleChange] Currently controlled after updateControlValue:",
-          this.controlled.transform.x, this.controlled.transform.y, this.controlled.x)
+      //-console.log("[handleChange] Currently controlled after updateControlValue:",
+      //    this.controlled.transform.x, this.controlled.transform.y, this.controlled.x)
       level_updateCollaborateComponent(this, this.currentPage.page_id, this.controlled)
     },
     getActiveComponent(ctls) {
@@ -363,7 +363,7 @@ export default {
     },
     setControls(controls, needRecordHistory = true) {
       this.controls = controls
-      // console.log("[->setControls]", this.controls[0].transform.x, this.controls[0].transform.y)
+      // //-console.log("[->setControls]", this.controls[0].transform.x, this.controls[0].transform.y)
       if (needRecordHistory) {
         historys = historys.slice(0, historyPointer + 1)
         historys.push(this.controls)
@@ -394,7 +394,7 @@ export default {
      * @description 删除当前选中的组件
      */
     deleteComponent() {
-      console.log("hello")
+      //-console.log("hello")
       if (!this.currentId) {
         return
       }
@@ -486,13 +486,13 @@ export default {
       }
       if (componentJSON === "") return
       componentJSON = JSON.parse(componentJSON)
-      // console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
+      // //-console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
       componentJSON = componentJSON['components']
       componentJSON.map((item) => {
         this.addControl({components: [item], parentId: item.parentId, isReload: 1})
         if (item.hasChild === false) {
           // 没有子元素
-          // console.log("[ParseJSON] This element has no child component.")
+          // //-console.log("[ParseJSON] This element has no child component.")
         } else {
           // 有子元素
           let childJSON = item.childrenJSON
@@ -501,7 +501,7 @@ export default {
       })
     },
     handleSwitchPage({newPageFileId}) {
-      console.log("Ready to switch new page:", newPageFileId)
+      //-console.log("Ready to switch new page:", newPageFileId)
       level_switchPage(this, newPageFileId)
     },
     handleSaveImage() {
@@ -510,7 +510,7 @@ export default {
         control.active = false
         usedByMap.set(control.id, control.extra.usedBy)
         control.extra.usedBy = '__none__'
-        // console.log("Altered",control.id, control)
+        // //-console.log("Altered",control.id, control)
       })
       getSnapShot("root-editor-view")
       this.controls.map((control) => {
@@ -576,7 +576,7 @@ export default {
       this.$store.state.user.id = prompt("输入测试用户名")
       this.$store.state.user.name = this.$store.state.user.id + "---"
       level_getCollaboratePrototype(this, this.currentPage.page_id)
-      console.log("[OFFLINE MULTIPAGE]You shouldn't see this in an official release.")
+      //-console.log("[OFFLINE MULTIPAGE]You shouldn't see this in an official release.")
     }
   }
 }

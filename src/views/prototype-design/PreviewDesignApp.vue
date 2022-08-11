@@ -64,7 +64,7 @@ export default {
   watch: {
     previewPageId(newPageId, oldPageId){
       this.lastPageId = oldPageId
-     console.log("Ready to switch new page:", newPageId, oldPageId)
+     //-console.log("Ready to switch new page:", newPageId, oldPageId)
       level_switchPage(this, newPageId, 1)
     }
   },
@@ -118,13 +118,13 @@ export default {
      * @params {{components:Array,parentId:string?}}
      */
     addControl({ components, parentId, isReload=0 }) {
-      // console.log("Into addControl function.")
+      // //-console.log("Into addControl function.")
       let controls = []
       let newComponents = null
       if(isReload){
-        // console.log("This function is in reload mode.")
+        // //-console.log("This function is in reload mode.")
         newComponents = this.reloadComponents(components, parentId)
-        // console.log("newComponents:", newComponents)
+        // //-console.log("newComponents:", newComponents)
       }else{
         newComponents = this.getComponents(components, parentId)
       }
@@ -138,17 +138,17 @@ export default {
         controls = this.controls.concat(newComponents)
       }
       this.setControls(controls)
-      console.log("New set of controls:", controls)
+      //-console.log("New set of controls:", controls)
 
       // 默认选中最后一个
       let { component } = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
 
-      console.log("Newly added component:", component)
+      //-console.log("Newly added component:", component)
 
       // isReload=2代表协作模式，协作模式下跳过选中环节
       // idReload=1代表这个组件是初始阶段由静态数据库传入到画布上的，跳过选中环节
       if(isReload === 2 || isReload === 1){
-        // console.log("This function is in special mode.")
+        // //-console.log("This function is in special mode.")
         // level_updateCollaborateComponent(this, this.previewPageId, component, 1)
         return
       }
@@ -204,14 +204,14 @@ export default {
     // handleTransform({ transform, type }) {
     //   this.controlled = { ...this.controlled, ...transform }
     //   if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
-    //     console.log("Detected transform type", type)
+    //     //-console.log("Detected transform type", type)
     //     this.updateControlValue('transform', transform, false)
     //     // 需要将usedBy传入组件中
     //     // 为了显示美观，这里传入用户名
     //     this.updateControlValue('usedBy', this.$store.state.user.name, true)
     //
     //     let realComponent = findComponent(this.controls, (item) => {return this.controlled.id === item.id})
-    //     console.log("The currently controlled element is", realComponent)
+    //     //-console.log("The currently controlled element is", realComponent)
     //     // 实时协作中，需要更新组件信息
     //     this.controlled.usedBy = this.$store.state.user.id
     //     level_updateCollaborateComponent(this, this.previewPageId, realComponent, 1)
@@ -230,7 +230,7 @@ export default {
     },
     //  组件选中，右侧展示属性编辑器
     handleSelect({control, needUpdate=0}) {
-      console.log("handleSelect called")
+      //-console.log("handleSelect called")
       if(!(control.usedBy === '__none__' || control.usedBy === this.$store.state.user.id)){
         // 被别的用户控制
         // 直接return
@@ -243,7 +243,7 @@ export default {
       this.updateControlStatus(true)
 
       // 在实时协作文档中同步内容
-      // console.log("okokok")
+      // //-console.log("okokok")
       if(needUpdate){
         let deepCopyCurrentComponent = findComponent(this.controls, (item) => {
           return item.id === control.id
@@ -279,7 +279,7 @@ export default {
     },
     // 属性编辑器变化后同步到组件中
     handleChange({ keyName, value, extra }) {
-      console.log("hello!", keyName, value, extra)
+      //-console.log("hello!", keyName, value, extra)
       if (!this.currentId) {
         return
       }
@@ -327,7 +327,7 @@ export default {
      * @description 删除当前选中的组件
      */
     deleteComponent() {
-      console.log("hello")
+      //-console.log("hello")
       if (!this.currentId) {
         return
       }
@@ -350,7 +350,7 @@ export default {
       this.setCurrentControl(this.getActiveComponent(this.controls))
     },
     handleUnselect() {
-      console.log("HandleUnselect")
+      //-console.log("HandleUnselect")
       if (!this.currentId) return
       let realComponent = findComponent(this.controls, (item) => {return this.currentId === item.id})
       realComponent.usedBy = '__none__'
@@ -377,13 +377,13 @@ export default {
       }
       if(componentJSON === "") return
       componentJSON = JSON.parse(componentJSON)
-      // console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
+      // //-console.log("Parent ID:", parentId, "componentJSON:", componentJSON)
       componentJSON = componentJSON['components']
       componentJSON.map((item) => {
         this.addControl({components: [item], parentId: item.parentId, isReload: 1})
         if (item.hasChild === false) {
           // 没有子元素
-          // console.log("[ParseJSON] This element has no child component.")
+          // //-console.log("[ParseJSON] This element has no child component.")
         } else {
           // 有子元素
           let childJSON = item.childrenJSON
