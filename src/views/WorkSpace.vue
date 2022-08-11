@@ -582,7 +582,7 @@ html,body{
   margin-left: 20px;
 }
 .title{
-    width: 110px;
+    width: 120px;
     margin-left: 50px;
     margin-top: 15px;
     padding-bottom: 8px;
