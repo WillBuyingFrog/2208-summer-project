@@ -37,7 +37,7 @@
             </el-table>
         </el-aside>
         <el-main style="background: #f6f6f6">
-            <PreviewApp :previewPageId=page_id  id="img" class="preview"></PreviewApp>
+            <PreviewApp :previewPageId=page_id  id="img" class="preview" style="background:white"></PreviewApp>
         </el-main>
       </el-container>
     </el-container>
