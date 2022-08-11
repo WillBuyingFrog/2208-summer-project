@@ -70,7 +70,7 @@
                 </div>
                 <div class="paneChoose" v-for="(item, index) in demoList1" :class="{'active':currentDemo1==(index + 1)}" @click="chooseDemo1(index + 1)" :key="index">
                     <div class="demoimage">
-                    <img class="demoimg" :src="imgsrcDemo1[index]">
+                    <img class="demoimg" :src="imgsrcDemo1[index % 2]">
                     </div>
                     <div class="modename">{{item.template_name}}</div>
                 </div>
@@ -106,10 +106,9 @@
                 </div>
                 <div class="paneChoose" v-for="(item, index) in demoList0" :class="{'active':currentDemo0==(index + 1)}" @click="chooseDemo0(index + 1)" :key="index">
                     <div class="demoimage">
-                    <img>
-                    <!--  src="imgsrcDemo0[index - 1]" -->
+                    <img class="demoimg" :src="imgsrcDemo0[index % 8]">
                     </div>
-                    <div class="modename" >{{item.template_name}}</div>
+                    <div class="modename">{{item.template_name}}</div>
                 </div>
             </el-form-item>
         </el-form>
@@ -285,7 +284,10 @@ export default {
                 demo0_id: '',
                 demo1_id: '',
             },
-            imgsrcDemo0: [require('../../assets/images/d1.png'),],//文档模板图片路径
+            imgsrcDemo0: [require('../../assets/images/d1.png'),require('../../assets/images/d2.png'),
+            require('../../assets/images/d3.png'),require('../../assets/images/d4.png'),
+            require('../../assets/images/d5.png'),require('../../assets/images/d6.png'),
+            require('../../assets/images/d7.png'),require('../../assets/images/d8.png')],//文档模板图片路径
             imgsrcDemo1: [require('../../assets/images/demo1.png'),require('../../assets/images/demo2.png')],//原型模板图片路径
             demoList0: [],//文档模板
             demoList1: [],//原型模板

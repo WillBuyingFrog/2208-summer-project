@@ -103,6 +103,7 @@ export default {
     return (
           <DragCell
               ref="cell"
+              style={{border: 'none'}}
               data-component={true}
               grid={item.grid}
               axis={item.axis}

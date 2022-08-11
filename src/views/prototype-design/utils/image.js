@@ -5,7 +5,12 @@ export const getSnapShot = async (elementId) => {
     if (!snapShotElement) return ''
     const canvas = await html2canvas(snapShotElement, {
         allowTaint: false,
-        useCORS: true
+        useCORS: true,
+        ignoreElements: (element) => {
+            if(element.className == 'notice-bar') return true
+            if(element.className == 'resize-handler-wrapper') return true
+            return false
+        }
     })
     console.log(elementId)
     canvas.toBlob(function(blob) {
@@ -14,11 +19,11 @@ export const getSnapShot = async (elementId) => {
             let url = window.URL.createObjectURL(new Blob(binaryData))
             const a = document.createElement('a')
             a.href = url
-            a.download = "事例.png"
+            a.download = "export.png"
             a.click()
             return url
     });
-    
+
 
     // const shot = canvas.toDataURL('image/png')
     // console.log(shot)
