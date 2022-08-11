@@ -499,6 +499,7 @@ export default {
               break
             }
           }
+          this.getTeam()
         })
       },
     },
