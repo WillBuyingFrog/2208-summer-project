@@ -642,7 +642,7 @@ export default {
             .then(res => {
               switch (res.data.code) {
                 case 200:
-                  ElMessage.success('删除成功！');
+                  ElMessage.success('重命名成功！');
                   this.getAllFile();
                   break;
                 case 500:
