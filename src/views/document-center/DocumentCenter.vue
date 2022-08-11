@@ -690,8 +690,9 @@ export default {
     },
     toggle(doc){
       this.doc_name = doc.file_name;
+      if(!this.doc_name) this.doc_name = doc.name
       this.file_id = doc.file_id;
-      console.log("toggle");
+      console.log("toggle, new doc_name is", this.doc_name, doc);
       // 标题和内容更改
     },
   },

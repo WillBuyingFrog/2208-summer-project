@@ -362,7 +362,7 @@ export default {
         console.log(res.data.data)
         if(res.data.code == 200){
           self.linkVisible = true
-          self.link = 'http://localhost:8080/#/preview?link=' + res.data.data
+          self.link = 'http://49.232.135.90:8080/inkbook/#/preview?link=' + res.data.data
           console.log(self.link)
         }
       })
