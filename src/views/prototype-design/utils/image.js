@@ -18,7 +18,7 @@ export const getSnapShot = async (elementId) => {
             a.click()
             return url
     });
-    
+
 
     // const shot = canvas.toDataURL('image/png')
     // console.log(shot)

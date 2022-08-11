@@ -505,7 +505,17 @@ export default {
       level_switchPage(this, newPageFileId)
     },
     handleSaveImage() {
+      let usedByMap = new Map()
+      this.controls.map((control) => {
+        control.active = false
+        usedByMap.set(control.id, control.extra.usedBy)
+        control.extra.usedBy = '__none__'
+        // console.log("Altered",control.id, control)
+      })
       getSnapShot("root-editor-view")
+      this.controls.map((control) => {
+        control.extra.usedBy = usedByMap.get(control.id)
+      })
     }
   },
   created() {
