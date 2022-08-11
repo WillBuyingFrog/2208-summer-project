@@ -555,8 +555,8 @@ export default {
           })
       .then(res => {
         let allPages = res.data.data
-        this.initWidth = allPages[0].width
-        this.initHeight = allPages[0].height
+        this.initWidth = allPages[0].height
+        this.initHeight = allPages[0].width
       })
 
       // 只需要一个函数进行初始化
