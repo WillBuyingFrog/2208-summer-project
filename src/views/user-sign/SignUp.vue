@@ -239,7 +239,7 @@ export default {
       if (!value) {
         return callback(new Error('邮箱为必填项'));
       } else {
-        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        var reg=/^[.A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
         if (!reg.test(value)) {
           callback(new Error('请输入有效邮箱'));
         } else {
